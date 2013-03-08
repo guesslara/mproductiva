@@ -184,7 +184,8 @@ class diario {
 	    $resproyecto=mysql_query($sqlproyecto,$this->conectar_matriz()) or die(mysql_error());
 	    $rowproyecto=mysql_fetch_array($resproyecto);
 ?>
-	    <table border="0" cellpadding="1" cellspacing="1" width="700" style="font-size: 12px;border: 0px solid #666;margin: 5px; " >
+	    <input type="hidden" name="txtIdActividad" id="txtIdActividad" value="<?=$listaact;?>" />
+		<table border="0" cellpadding="1" cellspacing="1" width="700" style="font-size: 12px;border: 0px solid #666;margin: 5px; " >
 		<tr>
 		    <td width="150" class="cabeceraTitulosTabla">Proyecto:</td><td width="550" class="resultadosTablaBusqueda"><strong><?=$rowproyecto['nom_proyecto']?></strong></td>
 		</tr>
