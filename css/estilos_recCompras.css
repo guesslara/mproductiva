@@ -1,0 +1,67 @@
+/* CSS Document */
+.fondo3{
+	background-image:url(../img/header-background.png);
+}	
+.style1 {	
+	font-size: 18pt;
+	font-weight: bold;
+}
+.style5 {
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+	font-weight: bold; font-size: 16px; 
+}
+.style6 {
+	font-size: 12px; color: #FFFFFF; 
+	font-family: Geneva, Arial, Helvetica, sans-serif;
+}
+.Estilo50 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+.style10 {
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+	font-size: 12px; 
+}
+.style8 {	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #FFFFFF;
+	font-size: 12px;
+	font-weight: bold;
+}
+.Estilo56 {
+	font-size: 10px; font-weight: bold; 
+	font-family: Verdana, Arial, Helvetica, sans-serif; 
+}
+.Estilo57 {
+	color: #FF0000;
+}
+.Estilo59 {
+	color: #FFFFFF; 
+	font-weight: bold; 
+}
+.Estilo60 {
+	font-size: 10px; 
+	color: #999999; 
+	font-family: Geneva, Arial, Helvetica, sans-serif; 
+}
+.Estilo61 {
+	color: #000000;
+}
+.Estilo1 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
+}
+.Estilo2 {
+	font-size: 20px;
+	color: #0000FF;
+}
+.marcacelda {
+	border-top-style: dotted;
+	border-right-style: dotted;
+	border-bottom-style: dotted;
+	border-left-style: dotted;
+	border-top-color: #000000;
+	border-right-color: #000000;
+	border-bottom-color: #000000;
+	border-left-color: #000000;
+}

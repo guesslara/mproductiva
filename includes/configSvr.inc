@@ -1,0 +1,10 @@
+error_reporting(0);
+ini_set("expose.php",0);
+ini_set("session.gc_probability",10);
+ini_set("session.gc_divisor",100);
+ini_set("session.cookie_httponly",1);
+ini_set("session.hash_function",1);
+ini_set("session.use_cookies",1);
+ini_set("session.use_only_cookies",1);
+ini_set("session.gc_maxlifetime",600);
+ini_set("session.cache_expire",1080000);

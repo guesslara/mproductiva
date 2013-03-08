@@ -1,0 +1,26 @@
+@charset "utf-8";
+/* CSS Document */
+/*tabs*/
+body{margin:4px; font-family:Verdana, Geneva, sans-serif; font-size:12px; background:#FFF;}
+
+.bordeDiv{border:1px solid #CCC; background:#f0f0f0; float:left; height:17px; padding:4px; margin-left:2px;}
+.bordeDiv:hover{background:#FFF; font-weight:bold;}
+.bordeDivActivo{border:2px solid #CCC; background:#CCC; float:left; height:17px; padding:4px; margin-left:2px; font-weight:bold;}
+
+.separador{border-bottom:1px solid #999; clear:both;}
+.enlacesTabs{text-decoration:none; color:#000;}
+.tabActivo{border:1px solid #CCC; background:#F00; float:left; padding:5px; margin-left:2px; font-weight:bold;}
+
+#contenedor{ float:left; height:25px; overflow:hidden; border-right:1px solid #000; width:96%; z-index:3; position:relative;}
+.contenedorTabs{ float:left; height:31px; overflow:hidden; width:auto; z-index:2; position:absolute;}
+
+#contenidoTab{ height:95%; border-left:1px solid #000;border-right:1px solid #000;border-bottom:1px solid #000; overflow:auto; padding:2px;}
+.contenidoTabs{ height:auto; width:99.5%; clear:both; margin-bottom:5px; border:1px solid #FFF; }
+
+/*boton cerrar*/
+.btnCerrar{background:url(../img/x.png) no-repeat; float:right; width:15px; margin:0px 0px 5px 10px;}
+.btnCerrar:hover{cursor:pointer;}
+/*fin boton cerrar*/
+
+/*botones desplazamiento*/
+.botonesDesp{width:15px;}
