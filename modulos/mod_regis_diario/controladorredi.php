@@ -1,6 +1,6 @@
 <?
 	include_once("claseredi.php");
-	$registroDiario = new diario();
+	$registroDiario = new diario();	
 	switch($_POST["action"]){ 
 		case "insertar":
 			$registroDiario->form();
@@ -29,5 +29,14 @@
 			$listaact=$_POST["listaact"];
 			$registroDiario->muestraStatus($listaact);
 		exit;
+		case "guardaRegistroDiario":
+			//print_r($_POST);
+			$idEmpleado=$_POST["idEmpleado"];
+			$idStatus=$_POST["idStatus"];
+			$fechaReg=$_POST["fechaReg"];
+			$horaReg=$_POST["horaReg"];
+			$valorStatus =$_POST["valorStatus"];
+			$registroDiario->insertaRegistroDiario($idEmpleado,$idStatus,$fechaReg,$horaReg,$valorStatus);
+		break;
 	break;
 }

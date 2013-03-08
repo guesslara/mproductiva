@@ -138,7 +138,7 @@ class diario {
                 <td width="150" class="cabeceraTitulosTabla">Actividad:</td>
                 <td width="350" class="resultadosTablaBusqueda">         
                 <select id="listaact" name="listaact" onchange="muestraStatus()" class="styled-select">
-                <option value="undefined">Seleccione una actividad</option>
+                <option value="">Seleccione una actividad</option>
 <?
 		while($rowActividades=mysql_fetch_array($resActividades)){
 		    $sqlNombreAct="SELECT * FROM SAT_ACTIVIDAD WHERE id_actividad='".$rowActividades['id_actividad']."'";
@@ -157,6 +157,7 @@ class diario {
 	    </tr>
         </table><br>
 	<div id="status_act"></div>                                
+	<div id="msgGuardado" style="border:1px solid #ff0000;"></div>
 	<script type="application/javascript">
 	    ponerdatos('<?=$id_empleado?>','<?=$nombre?>','<?=$a_paterno?>','<?=$a_materno?>','<?=$rowMuestraDatos['horas_la'];?>','<?=$rowMuestraDatos['meta_pro'];?>');
 	</script>

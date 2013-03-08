@@ -88,22 +88,25 @@ function verificaTecla(contador,evento){
 function guardarDatosRegistro(){
 	var valorStatus="";
 	if(confirm("La informacion es Correcta?")){
+		$("#btnRegistroDiario").blur();
 		//se procede a recuperar los valores del formulario y los datos para la insercion		
 		var idEmpleado=$("#no_empleado").val();
-		var idStatus=$("txtIdActividad").val();
+		var idStatus=$("#listaact").val();		
 		var fechaReg=$("#fecha").val();
 		var horaReg=$("#hora").val();
 		//se procede a recuperar los status
 		var nroRepeticiones=$("#hdnContador").val();
-		/*for(var i=0;i<nroRepeticiones;i++){
+		for(var i=0;i<nroRepeticiones;i++){
 			var nombreCaja="#txtStatus"+i;
 			if(valorStatus==""){
 				valorStatus=$(nombreCaja).val();
 			}else{
 				valorStatus=valorStatus+","+$(nombreCaja).val();
 			}
-		}*/
-		//parametros="action=guardaRegistroDiario&idEmpleado="+idEmpleado+"&idStatus="+idStatus+"fechaReg="+fechaReg+"&horaReg="+horaReg+"&valorStatus="+valorStatus;
-		//alert(parametros);
+		}
+		parametros="action=guardaRegistroDiario&idEmpleado="+idEmpleado+"&idStatus="+idStatus+"&fechaReg="+fechaReg+"&horaReg="+horaReg+"&valorStatus="+valorStatus;
+		alert(parametros);
+		//se envian los datos al servidor
+		ajaxApp("msgGuardado","controladorredi.php",parametros,"POST");
 	}
 }
