@@ -110,3 +110,6 @@ function guardarDatosRegistro(){
 		ajaxApp("msgGuardado","controladorredi.php",parametros,"POST");
 	}
 }
+function consultaRegistros(){
+	ajaxApp("muestraasignaciones","controladorredi.php","action=consultaRegistros","POST");
+}

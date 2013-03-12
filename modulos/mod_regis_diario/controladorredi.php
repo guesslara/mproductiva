@@ -38,5 +38,9 @@
 			$valorStatus =$_POST["valorStatus"];
 			$registroDiario->insertaRegistroDiario($idEmpleado,$idStatus,$fechaReg,$horaReg,$valorStatus);
 		break;
+		case "consultaRegistros":
+			print_r($_POST);
+			$registroDiario->consultarRegistroDiario();
+		break;
 	break;
 }

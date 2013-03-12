@@ -52,7 +52,7 @@
 	<div id="contenedorEnsamble3">
 		<div id="barraOpcionesEnsamble">
 			<div class="opcionesEnsamble" onclick="captura_actividad();" title="">Captura_Actividad</div>
-			<div class="opcionesEnsamble" onclick="consultaregis();" title="">Consultar Registros</div>
+			<div class="opcionesEnsamble" onclick="consultaRegistros();" title="">Consultar Registros</div>
 			<div class="opcionesEnsamble" onclick="modificar();" title="">Modificar Registros</div>
 		<!--<div id="cargadorEmpaque" style="float:right;width:200px;height:20px;padding:5px;background:#FFF;border:1px solid #CCC;font-size:13px;text-align:right;"></div>-->
 		</div>

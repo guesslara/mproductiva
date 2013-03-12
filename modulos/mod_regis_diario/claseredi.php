@@ -21,6 +21,54 @@ class diario {
     	return $conexion;
     }
     
+    private function dameNombreEmpleado($noEmpleado){
+	$sqlE="SELECT * FROM cat_personal WHERE no_empleado='".$noEmpleado."'";
+	$resE=mysql_query($sqlE,$this->conectar_cat_personal());
+	$rowE=mysql_fetch_array($resE);
+	return $rowE["nombres"]." ".$rowE["a_paterno"]." ".$rowE["a_materno"];
+    }
+    
+    private function dameNombreActividad($idActividad){
+	$sqlA="SELECT * FROM SAT_ACTIVIDAD WHERE id_actividad='".$idActividad."'";
+	$resA=mysql_query($sqlA,$this->conectar_matriz());
+	if(mysql_num_rows($resA)==0){
+	    echo "Error en la aplicacion";
+	}else{
+	    while($rowA=mysql_fetch_array($resA)){
+		echo "<p>".$rowA["nom_actividad"]."</p>";
+	    }
+	}
+    }
+    
+    public function consultarRegistroDiario(){
+	$sqlRD="SELECT * FROM detalle_captura_registro";
+	$resRD=mysql_query($sqlRD,$this->conectar_matriz());
+	if(mysql_num_rows($resRD)==0){
+	    echo "( 0 ) registros en la base de datos.";
+	}else{
+?>
+	    <table border="1" cellpadding="1" cellspacing="1" width="900">
+		<tr>
+		    <td>Empleado</td>
+		    <td>Actividad</td>
+		    <td>Registros</td>
+		</tr>
+<?
+	    while($rowRD=mysql_fetch_array($resRD)){
+?>
+		<tr>
+		    <td><? echo $this->dameNombreEmpleado($rowRD["no_empleado"]); ?></td>
+		    <td><? $this->dameNombreActividad($rowRD["id_actividad"]); ?></td>
+		    <td><?=$rowRD["status"];?></td>
+		</tr>
+<?
+	    }
+?>
+	    </table>
+<?
+	}
+    }
+    
     public function insertaRegistroDiario($idEmpleado,$idStatus,$fechaReg,$horaReg,$valorStatus){
     	$sqlR="INSERT INTO detalle_captura_registro(no_empleado,id_actividad,status,fecha,hora) VALUES ('".$idEmpleado."','".$idStatus."','".$valorStatus."','".$fechaReg."','".$horaReg."')";
 	$resR=mysql_query($sqlR,$this->conectar_matriz());
