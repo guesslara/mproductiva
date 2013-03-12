@@ -1,4 +1,4 @@
-<?	
+<?php	
 	/*include("includes/conf_inicial.php");	
 	$sitioActivo=verificaMantto();
 	if($sitioActivo[0]=="No"){*/

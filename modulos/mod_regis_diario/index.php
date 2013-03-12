@@ -18,17 +18,13 @@
 <!--fin inclusion grid-->
 <!--calendario-->
 <link rel="stylesheet" type="text/css" media="all"  href="js/calendar-green.css"  title="win2k-cold-1" />
-
-  <!-- librería principal del calendario -->
+<!-- librería principal del calendario -->
 <script type="text/javascript" src="js/calendar.js"></script>
-  <!-- librería para cargar el lenguaje deseado -->
+<!-- librería para cargar el lenguaje deseado -->
 <script type="text/javascript" src="js/calendar-es.js"></script>
-   <!-- librería que declara la función Calendar.setup, que ayuda a generar un calendario en unas pocas líneas de código -->
+<!-- librería que declara la función Calendar.setup, que ayuda a generar un calendario en unas pocas líneas de código -->
 <script type="text/javascript" src="js/calendar-setup.js"></script>
 <!--fin calendario-->
-
-
-
 <link rel="stylesheet" type="text/css" media="all" href="css/estilos.css" />  
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -60,31 +56,21 @@
 			<div class="opcionesEnsamble" onclick="modificar();" title="">Modificar Registros</div>
 		<!--<div id="cargadorEmpaque" style="float:right;width:200px;height:20px;padding:5px;background:#FFF;border:1px solid #CCC;font-size:13px;text-align:right;"></div>-->
 		</div>
-		<!--abrir('transparenciaGeneral1');-->
-		
+		<!--abrir('transparenciaGeneral1');-->		
 		<!--<div id="infoEnsamble3"></div>-->
 	<div id="muestraasignaciones" style="  float: left;width:880px; height: 790px;margin: 5px; border: 1px solid #CCC;background: #FFF; overflow: auto" >
 		
 	</div>
     </div>
     </div>
-		
-	
-	
-        
 </div>
 </div>
-
 <div id="divMensajeCaptura" class="ventanaDialogo" style="display: none;" onclick="limpiarse();">
 	<div id="barraTitulo1VentanaDialogoValidacion" class="barraTitulo1VentanaDialogoValidacion">Asignaci&oacute;n</div>
-	<div id="listadoinEmpaqueValidacion" style="border:1px solid #CCC; margin:4px; font-size:10px;height:90%; overflow:auto;">	
-		</div>
-	</div>
-
-
-
+	<div id="listadoinEmpaqueValidacion" style="border:1px solid #CCC; margin:4px; font-size:10px;height:90%; overflow:auto;"></div>
+</div>
 <div id="buscarEmpleado" style="border:1px solid #000;background-color:#FFF;height:508px;width:900px;left: 50%;top: 50%;margin-left: -450px;margin-top: -254px;position:absolute;;/*sombra*/-webkit-box-shadow:10px 10px 5px #CCC;-moz-box-shadow:10px 10px 5px #CCC;filter: shadow(color=#CCC, direction=135,strength=2); display: none;"  >
-<div id="barraTituloBuscar" class="barraTitulo1VentanaDialogoValidacion">Seleccionar...<div id="btnCerrarVentanaDialogo"><a href="#" onclick="cerrarVentana('buscarEmpleado');" title="Cerrar Ventana"><img src="../../img/close.gif" border="0" /></a></div></div>
+	<div id="barraTituloBuscar" class="barraTitulo1VentanaDialogoValidacion">Seleccionar...<div id="btnCerrarVentanaDialogo"><a href="#" onclick="cerrarVentana('buscarEmpleado');" title="Cerrar Ventana"><img src="../../img/close.gif" border="0" /></a></div></div>
 	<div id="listadoResultados" style="border:1px solid #CCC; margin:4px; font-size:10px;height:92%; overflow:hidden;">
 		<br>
 		<br>
@@ -96,4 +82,4 @@
 		<div id="ListarEmpleados" style="border: 0px solid #ff0000;background:#fff; height: 87%;width: 99%;font-size:12px;margin:3px;overflow: auto;"></div>
 	
 	</div>
-	</div>
+</div>
