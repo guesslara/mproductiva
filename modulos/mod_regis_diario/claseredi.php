@@ -23,6 +23,16 @@ class diario {
     			return $conexion;
     }
     
+    public function insertaRegistroDiario($idEmpleado,$idStatus,$fechaReg,$horaReg,$valorStatus){
+    	$sqlR="INSERT INTO detalle_captura_registro(no_empleado,id_actividad,status,fecha,hora) VALUES ('".$idEmpleado."','".$idStatus."','".$valorStatus."','".$fechaReg."','".$horaReg."')";
+	$resR=mysql_query($sqlR,$this->conectar_matriz());
+	if($resR){
+		echo "<script type='text/javascript'> alert('Datos Guardados'); capturaActividad(); abrir('buscarEmpleado');  </script>";
+	}else{
+		echo "<script type='text/javascript'> alert('Error al Guardar la informacion'); </script>";
+	}
+    }
+
     public function form(){
 	date_default_timezone_set("Mexico/General");
 	$hoy = date('H:i:s ',time());
