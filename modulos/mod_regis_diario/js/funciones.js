@@ -105,7 +105,7 @@ function guardarDatosRegistro(){
 			}
 		}
 		parametros="action=guardaRegistroDiario&idEmpleado="+idEmpleado+"&idStatus="+idStatus+"&fechaReg="+fechaReg+"&horaReg="+horaReg+"&valorStatus="+valorStatus;
-		alert(parametros);
+		//alert(parametros);
 		//se envian los datos al servidor
 		ajaxApp("msgGuardado","controladorredi.php",parametros,"POST");
 	}
