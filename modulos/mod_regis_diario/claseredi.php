@@ -3,31 +3,29 @@ class diario {
     
     
     public function conectar_matriz(){
-		$link=mysql_connect('localhost','root','xampp');
-		if($link==false){
-			echo "Error en la conexion a la base de datos";
-		}else{
-			mysql_select_db('2013_matriz_productiva');
-			return $link;
-		}
-            
-	}
+	$link=mysql_connect('localhost','root','xampp');
+	if($link==false){
+	    echo "Error en la conexion a la base de datos";
+	}else{
+	    mysql_select_db('2013_matriz_productiva');
+	    return $link;
+	}    
+    }
     public function conectar_cat_personal(){
-            $conexion=@mysql_connect('localhost','root','xampp') or die ("no se pudo conectar al servidor<br>".mysql_error());
-		if(!$conexion){
-                     echo "Error al conectarse al servidor";	
+        $conexion=@mysql_connect('localhost','root','xampp') or die ("no se pudo conectar al servidor<br>".mysql_error());
+	if(!$conexion){
+	    echo "Error al conectarse al servidor";	
+    	}else{
+	    @mysql_select_db('iqe_rrhh_2010') or die ("No se puede conectar a la base de datos<br>".mysql_error());
     	}
-		else{
-                     @mysql_select_db('iqe_rrhh_2010') or die ("No se puede conectar a la base de datos<br>".mysql_error());
-    	}
-    			return $conexion;
+    	return $conexion;
     }
     
     public function insertaRegistroDiario($idEmpleado,$idStatus,$fechaReg,$horaReg,$valorStatus){
     	$sqlR="INSERT INTO detalle_captura_registro(no_empleado,id_actividad,status,fecha,hora) VALUES ('".$idEmpleado."','".$idStatus."','".$valorStatus."','".$fechaReg."','".$horaReg."')";
 	$resR=mysql_query($sqlR,$this->conectar_matriz());
 	if($resR){
-		echo "<script type='text/javascript'> alert('Datos Guardados'); capturaActividad(); abrir('buscarEmpleado');  </script>";
+		echo "<script type='text/javascript'> alert('Datos Guardados');  window.location.href='index.php'; </script>";//capturaActividad(); abrir('buscarEmpleado');
 	}else{
 		echo "<script type='text/javascript'> alert('Error al Guardar la informacion'); </script>";
 	}
