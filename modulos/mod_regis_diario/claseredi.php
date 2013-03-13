@@ -58,7 +58,22 @@ class diario {
 ?>
 		<tr>
 		    <td><? echo $this->dameNombreEmpleado($rowRD["no_empleado"]); ?></td>
-		    <td><? $this->dameNombreActividad($rowRD["id_actividad"]); ?></td>
+		    <td>
+<?
+		$this->dameNombreActividad($rowRD["id_actividad"]);
+		//mostrar los nombres de los status
+		//$sqlS="SELECT * FROM ACTIVIDAD_STATUS where id_actividad='".$rowRD["id_actividad"]."'";
+		echo $sqlS="SELECT * FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status WHERE ACTIVIDAD_STATUS.id_actividad='".$rowRD["id_actividad"]."'";
+		$resS=mysql_query($sqlS,$this->conectar_matriz());
+		if(mysql_num_rows($resS)==0){
+		    echo "( 0 ) registros encontrados.";
+		}else{
+		    while($rowS=mysql_fetch_array($resS)){
+			//se busca el nombre de los status			
+		    }
+		}
+?>
+		    </td>
 		    <td><?=$rowRD["status"];?></td>
 		</tr>
 <?
