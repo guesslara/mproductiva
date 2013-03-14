@@ -47,34 +47,47 @@ class diario {
 	    echo "( 0 ) registros en la base de datos.";
 	}else{
 ?>
-	    <table border="1" cellpadding="1" cellspacing="1" width="900">
+	    <table border="1" cellpadding="1" cellspacing="1" width="900" style="font-size:10px;">
 		<tr>
-		    <td>Empleado</td>
-		    <td>Actividad</td>
-		    <td>Registros</td>
+		    <td width="300">Empleado</td>
+		    <td width="400">Actividad</td>
+		    <td width="200">Fecha Registro</td>
 		</tr>
 <?
 	    while($rowRD=mysql_fetch_array($resRD)){
 ?>
 		<tr>
-		    <td><? echo $this->dameNombreEmpleado($rowRD["no_empleado"]); ?></td>
-		    <td>
+		    <td style="text-align: left;"><? echo $this->dameNombreEmpleado($rowRD["no_empleado"]); ?></td>
+		    <td style="text-align: center;">
 <?
 		$this->dameNombreActividad($rowRD["id_actividad"]);
 		//mostrar los nombres de los status
-		//$sqlS="SELECT * FROM ACTIVIDAD_STATUS where id_actividad='".$rowRD["id_actividad"]."'";
-		echo $sqlS="SELECT * FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status WHERE ACTIVIDAD_STATUS.id_actividad='".$rowRD["id_actividad"]."'";
+		$sqlS="SELECT * FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status WHERE ACTIVIDAD_STATUS.id_actividad='".$rowRD["id_actividad"]."'";
 		$resS=mysql_query($sqlS,$this->conectar_matriz());
 		if(mysql_num_rows($resS)==0){
 		    echo "( 0 ) registros encontrados.";
 		}else{
+		    $valorStatus=explode(",",$rowRD["status"]);
+		    echo "<table width='350' border='1' cellpadding='1' cellspacing='1' style='font-size:10px;'>
+			    <tr>
+				<td width='250'>Status</td>
+				<td width='100'>Registros</td>
+			    </tr>";
+		    $i=0;
 		    while($rowS=mysql_fetch_array($resS)){
-			//se busca el nombre de los status			
+			//se busca el nombre de los status
+			//echo $rowS["nom_status"]."<br>";
+			echo "<tr>
+				<td>".$rowS["nom_status"]."</td>
+				<td>".$valorStatus[$i]."</td>
+			    </tr>";
+			$i+=1;
 		    }
+		    echo "</table>";
 		}
 ?>
 		    </td>
-		    <td><?=$rowRD["status"];?></td>
+		    <td style="text-align: center;"><?=$rowRD["fecha"];?></td>
 		</tr>
 <?
 	    }
