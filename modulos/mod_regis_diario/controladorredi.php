@@ -7,11 +7,12 @@
 		break;
 		case "buscarempleado":
 			$empleado=$_POST["buscar"];
-			$registroDiario->buscarempleado($empleado);
+			$opcionB=$_POST["opcionB"];
+			$registroDiario->buscarempleado($empleado,$opcionB);
 		break;
 		case "otro":
 			$empp=$_POST["id_empleado"];
-			print_r($empp);
+			//print_r($empp);
 		exit;
 		case "otro":
 			$empp=$_POST["id_empleado"];
@@ -38,9 +39,16 @@
 			$valorStatus =$_POST["valorStatus"];
 			$registroDiario->insertaRegistroDiario($idEmpleado,$idStatus,$fechaReg,$horaReg,$valorStatus);
 		break;
+		case "mostrarForm":
+			$registroDiario->formBusquedaRegistro();
+		break;
 		case "consultaRegistros":
-			print_r($_POST);
+			//print_r($_POST);
 			$registroDiario->consultarRegistroDiario();
 		break;
-	break;
-}
+		case "buscarRegistros":
+			//print_r($_POST);
+			$registroDiario->consultarRegistroDiario($_POST["noEmpleado"],$_POST["fecha1"],$_POST["fecha2"]);
+		break;
+	}
+?>

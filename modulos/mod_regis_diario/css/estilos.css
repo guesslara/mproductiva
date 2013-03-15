@@ -70,21 +70,9 @@ html,body,document{position:absolute;margin:0px;height:100%; width:100%; margin:
 .resultadosEntregasCajas:hover{background: #FFF;}
 .opcionesEnsambleFinalizar{border: 1px solid #FFF;background: red;color: #FFF;font-size: 12px;font-weight: bold;height: 18px;padding: 5px;width: 150px;text-align: center;position: absolute;left: 700px;top: 50px;}
 .opcionesEnsambleFinalizar:hover{background:#FFF;color: #000;cursor:pointer;}
-.cabeceraTitulosTabla{border: 1px solid #CCC;background: #f0f0f0;font-weight: bold;font-size: 12px;height: 15px;padding: 5px;text-align: center;}
+.cabeceraTitulosTabla{border: 1px solid #CCC;background: #f0f0f0;font-weight: bold;font-size: 10px;height: 15px;padding: 5px;text-align: left;}
 .resultadosTablaBusqueda{height: 15px;padding: 5px;background: #FFF;border-bottom: 1px solid #CCC;background: #FFF;}
-.cabeceraTitulosTabla{border: 1px solid #CCC;background: #f0f0f0;font-weight: bold;font-size: 12px;height: 15px;padding: 5px;text-align: left;}
+/*.cabeceraTitulosTabla{border: 1px solid #CCC;background: #f0f0f0;font-weight: bold;font-size: 12px;height: 15px;padding: 5px;text-align: left;}*/
 .resultadosTablaBusqueda{height: 15px;padding: 5px;background: #FFF;border-bottom: 1px solid #CCC;background: #FFF;}
 .resultadosTablaBusqueda:hover{background: #f0f0f0;}
 .resultadosTablaBusqueda1{height: 15px;padding: 5px;background: #FFF;border-bottom: 1px solid #CCC;background: #FFF;}
-/***********/
-.styled-select select {
-   background: transparent;
-   width: 268px;
-   padding: 5px;
-   font-size: 16px;
-   line-height: 1;
-   border: 0;
-   border-radius: 0;
-   height: 34px;
-   -webkit-appearance: none;
-   }

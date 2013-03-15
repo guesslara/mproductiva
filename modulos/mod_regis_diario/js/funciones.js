@@ -21,9 +21,10 @@ function ajaxApp(divDestino,url,parametros,metodo){
 function captura_actividad(){
 	ajaxApp("muestraasignaciones","controladorredi.php","action=insertar","post");
 }
-function abrir(div){	
+function abrir(div,opcion){	
 	$("#"+div).show("fast");
 	if(div=="buscarEmpleado"){
+		$("#txtOpcionBusqueda").attr("value",opcion);
 		$("#buscar").focus();
 	}
 }
@@ -32,7 +33,8 @@ function cerrarVentana(div){
 }
 function buscarEmpleado(){
 	var buscar=$("#buscar").val();
-	ajaxApp("ListarEmpleados","controladorredi.php","action=buscarempleado&buscar="+buscar,"POST");	
+	var opcionB=$("#txtOpcionBusqueda").val();
+	ajaxApp("ListarEmpleados","controladorredi.php","action=buscarempleado&buscar="+buscar+"&opcionB="+opcionB,"POST");	
 }
 function insertarempleado(id_empleado,nombre,a_paterno,a_materno){
 	var fecha=$("#fecha").val();
@@ -41,6 +43,10 @@ function insertarempleado(id_empleado,nombre,a_paterno,a_materno){
 	}else{
 	ajaxApp("resultadosEvaluadores","controladorredi.php","action=insertarempleado&fecha="+fecha+"&id_empleado="+id_empleado+"&nombre="+nombre+"&a_paterno="+a_paterno+"&a_materno="+a_materno,"POST");
 	}
+}
+function ponerDAtosEmpleado2(no_empleado,nombre,apaterno,amaterno){	
+	$("#nombreBCompleto").html(nombre+" "+apaterno+" "+amaterno);
+	$("#txtBNoEmpleado").attr("value",no_empleado);
 }
 function ponerdatos(id_empleado,nombre,a_paterno,a_materno,horas_produc,meta_produc){
 	$("#no_empleado").attr("value",id_empleado);
@@ -111,5 +117,12 @@ function guardarDatosRegistro(){
 	}
 }
 function consultaRegistros(){
-	ajaxApp("muestraasignaciones","controladorredi.php","action=consultaRegistros","POST");
+	//ajaxApp("muestraasignaciones","controladorredi.php","action=consultaRegistros","POST");
+	ajaxApp("muestraasignaciones","controladorredi.php","action=mostrarForm","POST");
+}
+function buscarRegistros(){
+	var noEmpleado=$("#txtBNoEmpleado").val();
+	var fecha1=$("#busquedaRegistro1").val();
+	var fecha2=$("#busquedaRegistro2").val();
+	ajaxApp("resultadosBusqueda","controladorredi.php","action=buscarRegistros&noEmpleado="+noEmpleado+"&fecha1="+fecha1+"&fecha2="+fecha2,"POST");
 }

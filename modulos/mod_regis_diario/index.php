@@ -30,7 +30,7 @@
 	$(document).ready(function(){
 		redimensionar();
 		captura_actividad();
-		abrir('buscarEmpleado')
+		abrir('buscarEmpleado','N/A')
 	});	
 	function redimensionar(){
 		var altoDiv=$("#contenedorEnsamble3").height();
@@ -75,11 +75,11 @@
 		<br>
 		<br>
 		<center>
+		<input type="hidden" name="txtOpcionBusqueda" id="txtOpcionBusqueda">
 		<form>
 		Buscar:<input type="text" name="buscar"  id="buscar" onkeypress="buscarEmpleado();"></i>
 		 <input type="button" name="buscar" id="buscar"value="buscar" onclick="">
 		</form></center>
-		<div id="ListarEmpleados" style="border: 0px solid #ff0000;background:#fff; height: 87%;width: 99%;font-size:12px;margin:3px;overflow: auto;"></div>
-	
+		<div id="ListarEmpleados" style="border: 0px solid #ff0000;background:#fff; height: 87%;width: 99%;font-size:12px;margin:3px;overflow: auto;"></div>		
 	</div>
 </div>

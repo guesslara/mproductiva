@@ -35,32 +35,88 @@ class diario {
 	    echo "Error en la aplicacion";
 	}else{
 	    while($rowA=mysql_fetch_array($resA)){
-		echo "<p>".$rowA["nom_actividad"]."</p>";
+		echo "<p style='font-weight:bold;text-align:left;height:15px;padding:5px;background:#f0f0f0;border:1px solid #CCC;'>Actividad - ".$rowA["nom_actividad"]."</p>";
 	    }
 	}
     }
     
-    public function consultarRegistroDiario(){
-	$sqlRD="SELECT * FROM detalle_captura_registro";
+    public function formBusquedaRegistro(){
+?>
+	<table border="0" cellpadding="1" cellspacing="1" width="600" style="font-size: 10px;margin: 10px;">
+	    <tr>
+		<td colspan="2">Buscar Registros</td>
+	    </tr>
+	    <tr>
+		<td width="100" class="cabeceraTitulosTabla">No Empleado</td>
+		<td width="500"><input type="text" readonly="readonly" name="txtBNoEmpleado" id="txtBNoEmpleado"><input type="button" value="Buscar" onclick="abrir('buscarEmpleado','busqueda')" ></td>
+	    </tr>
+	    <tr>
+		<td width="100" class="cabeceraTitulosTabla">Nombre</td>
+		<td><span id="nombreBCompleto"></span></td>
+	    </tr>
+	    <tr>
+		<td class="cabeceraTitulosTabla">Fecha</td>
+		<td>
+		<input type="text" name="busquedaRegistro1" id="busquedaRegistro1" >
+		    <input type="button" id="lanzadorB1"  value="..." />
+                    <!-- script que define y configura el calendario-->
+                    <script type="text/javascript">
+                        Calendar.setup({
+                            inputField     :    "busquedaRegistro1",      // id del campo de texto
+                            ifFormat       :    "%Y-%m-%d",       // formato de la fecha, cuando se escriba en el campo de texto
+                            button         :    "lanzadorB1"   // el id del botón que lanzará el calendario
+                        });
+                    </script>
+		    <input type="text" name="busquedaRegistro2" id="busquedaRegistro2" >
+		    <input type="button" id="lanzadorB2"  value="..." />
+                    <!-- script que define y configura el calendario-->
+                    <script type="text/javascript">
+                        Calendar.setup({
+                            inputField     :    "busquedaRegistro2",      // id del campo de texto
+                            ifFormat       :    "%Y-%m-%d",       // formato de la fecha, cuando se escriba en el campo de texto
+                            button         :    "lanzadorB2"   // el id del botón que lanzará el calendario
+                        });
+                    </script>
+		</td>
+	    </tr>
+	    <tr>
+		<td colspan="2"><hr style="background: #CCC;"></td>
+	    </tr>
+	    <tr>
+		<td colspan="2" style="text-align: right;"><input type="button" value="Buscar..." onclick="buscarRegistros()"</td>
+	    </tr>
+	</table>
+	<div id="resultadosBusqueda" style="margin: 10px;width: 950px;border: 0px solid #CCC;background: #FFF;"></div>
+<?
+    }
+    
+    public function consultarRegistroDiario($noEmpleado,$fecha1,$fecha2){
+	$sqlRD="SELECT * FROM detalle_captura_registro WHERE fecha BETWEEN '".$fecha1."' AND '".$fecha2."' and no_empleado='".$noEmpleado."'";
 	$resRD=mysql_query($sqlRD,$this->conectar_matriz());
 	if(mysql_num_rows($resRD)==0){
 	    echo "( 0 ) registros en la base de datos.";
 	}else{
 ?>
-	    <table border="1" cellpadding="1" cellspacing="1" width="900" style="font-size:10px;">
+	    <table border="0" cellpadding="1" cellspacing="1" width="900" style="font-size:10px;">
 		<tr>
-		    <td width="300">Empleado</td>
-		    <td width="400">Actividad</td>
-		    <td width="200">Fecha Registro</td>
+		    <td colspan="3" style="text-align: left;font-size: 12px;">Resultados de la B&uacute;squeda:</td>
+		</tr>
+		<tr>
+		    <td width="300" class="cabeceraTitulosTabla">Nombre</td>
+		    <td width="100" class="cabeceraTitulosTabla">Fecha Registro</td>
+		    <td width="500" class="cabeceraTitulosTabla">Detalle de la actividad</td>		    
 		</tr>
 <?
 	    while($rowRD=mysql_fetch_array($resRD)){
 ?>
 		<tr>
+		    <td colspan="3"><?=$this->dameNombreActividad($rowRD["id_actividad"]);?></td>
+		</tr>
+		<tr>		    
 		    <td style="text-align: left;"><? echo $this->dameNombreEmpleado($rowRD["no_empleado"]); ?></td>
+		    <td style="text-align: center;"><?=$rowRD["fecha"];?></td>
 		    <td style="text-align: center;">
-<?
-		$this->dameNombreActividad($rowRD["id_actividad"]);
+<?		
 		//mostrar los nombres de los status
 		$sqlS="SELECT * FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status WHERE ACTIVIDAD_STATUS.id_actividad='".$rowRD["id_actividad"]."'";
 		$resS=mysql_query($sqlS,$this->conectar_matriz());
@@ -70,8 +126,8 @@ class diario {
 		    $valorStatus=explode(",",$rowRD["status"]);
 		    echo "<table width='350' border='1' cellpadding='1' cellspacing='1' style='font-size:10px;'>
 			    <tr>
-				<td width='250'>Status</td>
-				<td width='100'>Registros</td>
+				<td width='250' class='cabeceraTitulosTabla'>Status</td>
+				<td width='100' class='cabeceraTitulosTabla'>Registros</td>
 			    </tr>";
 		    $i=0;
 		    while($rowS=mysql_fetch_array($resS)){
@@ -86,8 +142,7 @@ class diario {
 		    echo "</table>";
 		}
 ?>
-		    </td>
-		    <td style="text-align: center;"><?=$rowRD["fecha"];?></td>
+		    </td>		    
 		</tr>
 <?
 	    }
@@ -131,14 +186,14 @@ class diario {
 		    </td>
 		</tr>
 		<tr>
-		    <td style="height: 15px;padding: 5px;text-align: right;"><a href="#" onclick="abrir('buscarEmpleado')"> Buscar Empleado a Evaluar</a></td>
+		    <td style="height: 15px;padding: 5px;text-align: right;"><a href="#" onclick="abrir('buscarEmpleado','N/A')"> Buscar Empleado a Evaluar</a></td>
 		</tr>
 	    </table>
 	</form>
 	<div id="resultadosEvaluadores"></div>   
 <?
     }
-    public function buscarempleado($empleado){
+    public function buscarempleado($empleado,$opcionB){
 	$sqlListado=" SELECT nombres,a_paterno,a_materno,no_empleado FROM cat_personal  WHERE nombres LIKE '%".$empleado."%' AND activo='1'";
 	//$esta="SELECT * FROM cat_personal";
 	$resListado=mysql_query($sqlListado,$this->conectar_cat_personal()) or die(mysql_error());
@@ -166,7 +221,19 @@ class diario {
 		while($rowListado=mysql_fetch_array($resListado)){
 ?>
 	    <tr>  
-		<td class="resultadosTablaBusqueda"><a href="#" onclick="insertarempleado('<?=$rowListado["no_empleado"];?>','<?=$rowListado["nombres"];?>','<?=$rowListado["a_paterno"];?>','<?=$rowListado["a_materno"];?>'),cerrarVentana('buscarEmpleado')" ><?=$rowListado["no_empleado"];?></a></td>
+		<td class="resultadosTablaBusqueda">
+<?
+	    if($opcionB!="N/A"){
+?>
+		    <a href="#" onclick="ponerDAtosEmpleado2('<?=$rowListado["no_empleado"];?>','<?=$rowListado["nombres"];?>','<?=$rowListado["a_paterno"];?>','<?=$rowListado["a_materno"];?>'),cerrarVentana('buscarEmpleado')" ><?=$rowListado["no_empleado"];?></a>
+<?
+	    }else{
+?>
+		    <a href="#" onclick="insertarempleado('<?=$rowListado["no_empleado"];?>','<?=$rowListado["nombres"];?>','<?=$rowListado["a_paterno"];?>','<?=$rowListado["a_materno"];?>'),cerrarVentana('buscarEmpleado')" ><?=$rowListado["no_empleado"];?></a>
+<?
+	    }
+?>
+		</td>
 		<td class="resultadosTablaBusqueda"><?=$rowListado["nombres"];?></td>
 		<td class="resultadosTablaBusqueda"><?=$rowListado["a_paterno"]?></td>
 		<td class="resultadosTablaBusqueda"><?=$rowListado["a_materno"];?></td>
