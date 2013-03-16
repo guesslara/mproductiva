@@ -553,8 +553,10 @@
 			}else{
 				$color="#EEEEEE";
 				while($row = mysql_fetch_array($resulta)){
-					$sqlResp="SELECT * FROM ASIG_ACT WHERE id_actividad='".$row["id_actividad"]."' AND status='Activo'";
+					$sqlResp="SELECT * FROM ASIG_ACT WHERE id_actividad='".$row["id_actividad"]."' AND status='Activo'";					
 					$resResp=mysql_query($sqlResp,$this->conectarBd());
+					$sqlResp1="SELECT * FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status WHERE id_actividad='".$row["id_actividad"]."'";
+					$resResp1=mysql_query($sqlResp1,$this->conectarBd());
 ?>
 					<div class="resultadosAvisos" style="margin: 3px;height: auto; background: <?=$color?>;" title="" onclick="ver();">
 						<table border="0" cellpadding="1" cellspacing="1" width="98%" style="font-size: 10px;">
@@ -564,14 +566,28 @@
 							</tr>
 							<tr>
 								<td>Descripcion:</td>
-								<td><?=substr($row["descripcion"],0,30)."..."; ?></td>
+								<td><?=$row["descripcion"];?></td>
 							</tr>
 							<tr>
 								<td>Producto</td>
 								<td><?=$row["nom_producto"];?></td>
 							</tr>
 							<tr>
-								<td colspan="2">Responsable(s):&nbsp;[ <a href="#" onclick="nuevaAsignacion('SAT_ACTIVIDAD','actividad','<?=$row["id_actividad"]?>','<?=$id_proceso;?>')" style="color:blue;text-decoration: none;" title="Responsable">Agregar Responsable</a> ]</td>						
+								<td>Status</td>
+								<td>
+<?
+						if(mysql_num_rows($resResp1)==0){
+							echo "<br>No existen Status Asociados";
+						}else{
+							while($rowResp1=mysql_fetch_array($resResp1)){
+								echo "<strong>".$rowResp1["nom_status"]."</strong><br>";
+							}
+						}
+?>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="2">Responsable(s):&nbsp;[ <a href="#" onclick="nuevaAsignacion('SAT_ACTIVIDAD','actividad','<?=$row["id_actividad"]?>','<?=$id_proceso;?>')" style="color:blue;text-decoration: none;" title="Responsable">Agregar Operario</a> ]</td>
 							</tr>
 							<tr>
 								<td colspan="2">
@@ -632,7 +648,7 @@
 								<td><?=substr($row["descripcion"],0,30)."..."; ?></td>
 							</tr>
 							<tr>
-								<td colspan="2">Responsable(s):&nbsp;[ <a href="#" onclick="nuevaAsignacion('SAT_PROCESO','proceso','<?=$row["id_proceso"]?>','<?=$id_proyecto;?>')" style="color:blue;text-decoration: none;" title="Responsable">Agregar Responsable</a> ]</td>						
+								<td colspan="2">Responsable(s):&nbsp;[ <a href="#" onclick="nuevaAsignacion('SAT_PROCESO','proceso','<?=$row["id_proceso"]?>','<?=$id_proyecto;?>')" style="color:blue;text-decoration: none;" title="Responsable">Agregar Suprevisor</a> ]</td>
 							</tr>
 							<tr>
 								<td colspan="2">
@@ -686,7 +702,7 @@
 						       <td><?=$row["nom_pais"];?></td>
 					    </tr>
 					    <tr>
-						       <td colspan="2">Responsable(s):&nbsp;[ <a href="#" onclick="nuevaAsignacion('SAT_PROYECTO','proyecto','<?=$row["id_proyecto"]?>')" style="color:blue;text-decoration: none;" title="Responsable">Agregar Responsable</a> ]</td>						
+						       <td colspan="2">Responsable(s):&nbsp;[ <a href="#" onclick="nuevaAsignacion('SAT_PROYECTO','proyecto','<?=$row["id_proyecto"]?>')" style="color:blue;text-decoration: none;" title="Responsable">Agregar Lider de Proyecto</a> ]</td>
 					    </tr>
 					    <tr>
 						       <td colspan="2">

@@ -35,7 +35,7 @@ class diario {
 	    echo "Error en la aplicacion";
 	}else{
 	    while($rowA=mysql_fetch_array($resA)){
-		echo "<p style='font-weight:bold;text-align:left;height:15px;padding:5px;background:#f0f0f0;border:1px solid #CCC;'>Actividad - ".$rowA["nom_actividad"]."</p>";
+		echo "<p style='font-weight:bold;text-align:left;height:15px;padding:5px;background:#CCC;border:1px solid #E1E1E1;'>Actividad - ".$rowA["nom_actividad"]."</p>";
 	    }
 	}
     }
@@ -100,22 +100,22 @@ class diario {
 	    <table border="0" cellpadding="1" cellspacing="1" width="900" style="font-size:10px;">
 		<tr>
 		    <td colspan="3" style="text-align: left;font-size: 12px;">Resultados de la B&uacute;squeda:</td>
+		</tr>		
+<?
+	    while($rowRD=mysql_fetch_array($resRD)){
+?>
+		<tr>
+		    <td colspan="3"><br><?=$this->dameNombreActividad($rowRD["id_actividad"]);?></td>
 		</tr>
 		<tr>
 		    <td width="300" class="cabeceraTitulosTabla">Nombre</td>
 		    <td width="100" class="cabeceraTitulosTabla">Fecha Registro</td>
 		    <td width="500" class="cabeceraTitulosTabla">Detalle de la actividad</td>		    
 		</tr>
-<?
-	    while($rowRD=mysql_fetch_array($resRD)){
-?>
-		<tr>
-		    <td colspan="3"><?=$this->dameNombreActividad($rowRD["id_actividad"]);?></td>
-		</tr>
 		<tr>		    
-		    <td style="text-align: left;"><? echo $this->dameNombreEmpleado($rowRD["no_empleado"]); ?></td>
-		    <td style="text-align: center;"><?=$rowRD["fecha"];?></td>
-		    <td style="text-align: center;">
+		    <td style="text-align: left;border-bottom: 1px solid #CCC;border-left:1px solid #CCC;"><? echo $this->dameNombreEmpleado($rowRD["no_empleado"]); ?></td>
+		    <td style="text-align: center;border-bottom: 1px solid #CCC;"><?=$rowRD["fecha"];?></td>
+		    <td style="text-align: center;border-bottom: 1px solid #CCC;border-right: 1px solid #CCC;">
 <?		
 		//mostrar los nombres de los status
 		$sqlS="SELECT * FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status WHERE ACTIVIDAD_STATUS.id_actividad='".$rowRD["id_actividad"]."'";
@@ -124,21 +124,23 @@ class diario {
 		    echo "( 0 ) registros encontrados.";
 		}else{
 		    $valorStatus=explode(",",$rowRD["status"]);
-		    echo "<table width='350' border='1' cellpadding='1' cellspacing='1' style='font-size:10px;'>
+		    echo "<table width='350' border='0' cellpadding='1' cellspacing='1' style='font-size:10px;'>
 			    <tr>
 				<td width='250' class='cabeceraTitulosTabla'>Status</td>
 				<td width='100' class='cabeceraTitulosTabla'>Registros</td>
 			    </tr>";
-		    $i=0;
+		    $i=0; $color="#E1E1E1";
 		    while($rowS=mysql_fetch_array($resS)){
 			//se busca el nombre de los status
 			//echo $rowS["nom_status"]."<br>";
 			echo "<tr>
-				<td>".$rowS["nom_status"]."</td>
-				<td>".$valorStatus[$i]."</td>
+				<td style='background:<?=$color;?>;' class='resultadosTablaBusqueda'>".$rowS["nom_status"]."</td>
+				<td style='background:<?=$color;?>;' class='resultadosTablaBusqueda'>".$valorStatus[$i]."</td>
 			    </tr>";
 			$i+=1;
+			($color=="#E1E1E1") ? $color="#FFF" : $color="#E1E1E1"; 
 		    }
+		    echo "<tr><td colspan='2'>&nbsp;</td></tr>";
 		    echo "</table>";
 		}
 ?>
