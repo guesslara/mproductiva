@@ -16,8 +16,8 @@
 		$("#left").click(function(){			
 		  $("#contenedorTabs").animate({"left": "+=100px"}, "fast");
 		  verificaMovIzq();	  
-		  //posicionReal = $("#contenedorTabs").offset();
-		  //alert(posicionReal.left);
+		  posicionReal = $("#contenedorTabs").offset();
+		  alert(posicionReal.left);
 		});
 	
 		$("#right").click(function(){

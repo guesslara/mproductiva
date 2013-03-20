@@ -1,3 +1,4 @@
+var tabAux=2;
 function ajaxApp(divDestino,url,parametros,metodo){	
 	$.ajax({
 	async:true,
@@ -40,5 +41,13 @@ function buscarDatosMatriz(){
 	var noEmpleado=$("#txtBNoEmpleado").val();
 	var fecha1=$("#busquedaRegistro1").val();
 	var fecha2=$("#busquedaRegistro2").val();
-	ajaxApp("infoEnsamble3","controladorEnsamble.php","action=buscarDatosMatriz&noEmpleado="+noEmpleado+"&fecha1="+fecha1+"&fecha2="+fecha2,"POST");
+	if(tabAux==2){
+		//se carga en el primer div el predeterminado
+		ajaxApp("contentTab1","controladorEnsamble.php","action=buscarDatosMatriz&noEmpleado="+noEmpleado+"&fecha1="+fecha1+"&fecha2="+fecha2,"POST");
+		tabAux+=1;
+	}else{
+		//se coloca el siguiente tab		
+		parametros="action=buscarDatosMatriz&noEmpleado="+noEmpleado+"&fecha1="+fecha1+"&fecha2="+fecha2;
+		addTab("Resultados","controladorEnsamble.php",parametros,"POST");
+	}	
 }

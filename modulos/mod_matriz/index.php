@@ -13,10 +13,10 @@
 <link rel="stylesheet" type="text/css" href="css/estilosEmpaque.css" />
 <script type="text/javascript" src="js/funcionesEnsamble.js"></script>
 <script type="text/javascript" src="../../clases/jquery-1.3.2.min.js"></script>
-<!--se incluyen los recursos para el grid-->
-<script type="text/javascript" src="../../recursos/grid/grid.js"></script>
-<link rel="stylesheet" type="text/css" href="../../recursos/grid/grid.css" />
-<!--fin inclusion grid-->
+<!--Inclusion de los tabs-->
+<script type="text/javascript" src="../../recursos/tabs/js/tabs.js"></script>
+<link rel="stylesheet" type="text/css" href="../../recursos/tabs/css/tabs.css" />
+<!--Fin inclusion de los tabs-->
 <!--calendario-->
 <link rel="stylesheet" type="text/css" media="all"  href="js/calendar-green.css"  title="win2k-cold-1" />
 <!-- librería principal del calendario -->
@@ -29,15 +29,25 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 		redimensionar();
-		//listarProyectos();
-		//mostrarFormMetrica(9);
+		
+		$("#left").click(function(){			
+		  $("#contenedorTabs").animate({"left": "+=100px"}, "fast");
+		  verificaMovIzq();	  
+		  posicionReal = $("#contenedorTabs").offset();
+		  alert(posicionReal.left);
+		});
+	
+		$("#right").click(function(){
+		  $("#contenedorTabs").animate({"left": "-=100px"}, "fast");
+		  verificaMovDer();  
+		});
 	});
 	
 	function redimensionar(){
 		var altoDiv=$("#contenedorEnsamble3").height();
 		var anchoDiv=$("#contenedorEnsamble3").width();
 		var altoCuerpo=altoDiv-52;		
-		$("#infoEnsamble3").css("height",(altoCuerpo-30)+"px");
+		$("#infoEnsamble3").css("height",(altoCuerpo-15)+"px");
 	}
 	
 	window.onresize=redimensionar;
@@ -98,18 +108,23 @@
 			<!--<div id="cargadorEmpaque" style="float:right;width:600px;height:20px;padding:5px;background:#FFF;border:1px solid #CCC;font-size:13px;text-align:right;"></div>-->
 		</div>
 		<div id="infoEnsamble3">
-			<!--<div id="contenido1" style="float: left;border:1px solid #e1e1e1;background:#fff; height:95%;width:32%;font-size:12px;margin:3px;">
-				<div class="tituloDivNuevo">Proyectos <div style="float: right;margin-right: 3px;margin-top: 3px;">Nuevo Proyecto</div></div>
-				<div id="contenido11" style="overflow: auto;"></div>
+			<!--Area de los tabs-->
+			<div id="contenedor">
+				<div id="contenedorTabs" class="contenedorTabs">
+				    <div id="tab1" class="bordeDiv"><a href="javascript:void(0)" onclick="mostrarTab('1','contentTab1')" class="enlacesTabs">Resultados</a> <div class="btnCerrar" onclick="cierraTab('tab1')">&nbsp;</div></div>
+				</div>
+			</div>    
+			<input type="button" id="left" class="botonesDesp" value="<" />
+			<input type="button" id="right" class="botonesDesp" value=">" />
+			<div class="separador"></div>
+			<div id="contenedorContenidos">
 			</div>
-			<div id="contenido2" style="float: left;border:1px solid #e1e1e1;background:#fff; height:95%;width:32%;font-size:12px;margin:3px;">
-				<div class="tituloDivNuevo">Procesos</div>
-				<div id="contenido12" style="overflow: auto;"></div>
+			    <div id="contenidoTab">
+			    <div id="contentTab1" class="contenidoTabs">
+				<p align="center" style="margin-top: 150px;font-size: 15px;">Introduzca los Datos de B&uacute;squeda en la parte Posterior</p>
+			    </div>
 			</div>
-			<div id="contenido3" style="float: left;border:1px solid #e1e1e1;background:#fff; height:95%;width:32%;font-size:12px;margin:3px;">
-				<div class="tituloDivNuevo">Actividades</div>
-				<div id="contenido13" style="overflow: auto;"></div>
-			</div>-->			
+			<!--Fin Area de los tabs-->
 		</div>
 	</div>
 </div>
@@ -193,6 +208,20 @@
 		</div>
 	</div>
 </div>
+
+<!--<div id="contenido1" style="float: left;border:1px solid #e1e1e1;background:#fff; height:95%;width:32%;font-size:12px;margin:3px;">
+	<div class="tituloDivNuevo">Proyectos <div style="float: right;margin-right: 3px;margin-top: 3px;">Nuevo Proyecto</div></div>
+	<div id="contenido11" style="overflow: auto;"></div>
+</div>
+<div id="contenido2" style="float: left;border:1px solid #e1e1e1;background:#fff; height:95%;width:32%;font-size:12px;margin:3px;">
+	<div class="tituloDivNuevo">Procesos</div>
+	<div id="contenido12" style="overflow: auto;"></div>
+</div>
+<div id="contenido3" style="float: left;border:1px solid #e1e1e1;background:#fff; height:95%;width:32%;font-size:12px;margin:3px;">
+	<div class="tituloDivNuevo">Actividades</div>
+	<div id="contenido13" style="overflow: auto;"></div>
+</div>-->			
+
 <?
 include ("../../includes/pie.php");
 ?>

@@ -111,7 +111,7 @@ function cierraTab(divTab,contentTab){
 function verificaMovIzq(){
 	try{
 		posicioncontenedorTabs = $("#contenedorTabs").offset();		
-		//alert(posicioncontenedorTabs.left);
+		alert(posicioncontenedorTabs.left);
 		if( (posicioncontenedorTabs.left==-5)||(posicioncontenedorTabs.left==-95) || (posicioncontenedorTabs.left==4)){
 			$('#left').attr('disabled','-1');
 		}
