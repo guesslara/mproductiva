@@ -1,5 +1,5 @@
 <?
-	session_start();
+	session_start();	
 	class modeloEnsamble{
 
 		private function conectarBd(){
@@ -25,31 +25,43 @@
 		}
 		
 		public function armarMatriz($noEmpleado,$fecha1,$fecha2){
+			$fecha1x=explode("-",$fecha1);
+			$fecha2x=explode("-",$fecha2);
+			if($fecha1x[1] != $fecha2x[1]){
+				echo "Verifique que las fechas concuerden con el mes a Buscar";
+			}else{
+				//se buscan los datos del empleado en la tabla CAPTURA-MES
+				echo "<br>".$sqlCapMes="SELECT * FROM CAP_MES WHERE no_empleado='".$noEmpleado."' AND mes='".$fecha1x[1]."'";
+				$resCapMes=mysql_query($sqlCapMes,$this->conectarBd());
+				$rowCapMes=mysql_fetch_array($resCapMes);
+				$meses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+			}
+			
 ?>
 			<table border="1" cellpadding="1" cellspacing="1" width="300" style="font-size: 10px;margin: 5px;">
 				<tr>
 					<td width="230">Mes</td>
-					<td width="70">&nbsp;</td>
+					<td width="70"><? echo $meses[$fecha1x[1]-1]; ?></td>
 				</tr>
 				<tr>
 					<td>Jornada Laboral</td>
-					<td>&nbsp;</td>
+					<td><? echo $rowCapMes["jorna_lab"];?></td>
 				</tr>
 				<tr>
 					<td>Dias Laborables</td>
-					<td>&nbsp;</td>
+					<td><? echo $rowCapMes["dias_lab"]; ?></td>
 				</tr>
 				<tr>
 					<td>Dias con Licencia</td>
-					<td>&nbsp;</td>
+					<td><? echo $rowCapMes["dias_li"]; ?></td>
 				</tr>
 				<tr>
 					<td>TE (Hrs)</td>
-					<td>&nbsp;</td>
+					<td><? echo $rowCapMes["tiem_ex"]; ?></td>
 				</tr>
 				<tr>
 					<td>Meta Productiva</td>
-					<td>&nbsp;</td>
+					<td><? echo $rowCapMes["meta_pro"]; ?></td>
 				</tr>
 				<tr>
 					<td>Dias Laborados (Admin)</td>

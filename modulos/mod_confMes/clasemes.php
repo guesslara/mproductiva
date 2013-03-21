@@ -1,4 +1,5 @@
-<?
+<?php
+    
 class mes{
 
 
@@ -44,8 +45,7 @@ class mes{
 	$clase_obligaria="campo_obligatorio";
   
 ?>
-   <div id="delimitador" style="border: 0px solid #ff0000;height: 99%;position: relative;overflow: auto;">
-	<form id="asig_mes" >
+   <div id="delimitador" style="border: 0px solid #ff0000;height: 99%;position: relative;overflow: auto;">	
 	<table border="0" width="900" cellpadding="1" cellspacing="1" style="margin: 5px;font-size: 12px;">
 	    <tr>
 		<td><div id="divVerificacion"></div></td>
@@ -82,7 +82,7 @@ class mes{
 	    </tr>
 	    <tr>
 		<td>
-		    <table style="font-size: 12px;">
+		    <table style="font-size: 12px;" border="1" width="450">
                         <tr>
 			    <td>Mes:</td>
 			    <td><select  name="mes" id="mes" onchange="verificaMes()" class="<?=$clase_obligaria?>" <?=$sol?>>
@@ -104,8 +104,20 @@ class mes{
 			</tr>
 			<tr>
 			    <td>
-			    Dias laborables:</td><td><input type="text" name="dias_lab" id="dias_lab" value="0"  onkeyup="calcular();"class="<?=$clase_obligaria?>" style="width: 50px;">    
+				Dias laborables:
+			    </td>
+			    <td>
+				<input type="text" name="dias_lab" id="dias_lab" value="0"  onkeyup="calcular();"class="<?=$clase_obligaria?>" style="width: 50px;">				
 			    </td>    
+			</tr>
+			<tr>
+			    <td colspan="2">
+				<form id="asig_mes" name=""id="" action="" method="post" >
+				<div id="calendarioDiasSeleccionados" style="height: 250px;width: 430px;border: 1px solid #CCC;overflow: auto;"></div>
+				<div title="Agregar Dias Seleccionados" onclick="agregarDiasSeleccionados()" style="border: 1px solid #CCC;background: #f0f0f0;height: 15px;padding: 5px;text-align: center;margin: 3px;">Agregar D&iacute;as</div>
+				</form>
+				Dias Seleccionados: <input type="text" name="" id="" />				
+			    </td>
 			</tr>
 			<tr>
 			    <td>
@@ -138,8 +150,7 @@ class mes{
 	    <tr>
 		<td colspan="2" style="text-align: right;"><input type="button" name="Registrar" id="RegistrarConf" value="Registrar" onclick="VALIDAR('<?=$cap_mes;?>');" style="height: 35px;padding: 5px;display: none;"/></td>
 	    </tr>
-	</table>
-	</form>
+	</table>	
         </div>
 <?  
     

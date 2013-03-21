@@ -18,33 +18,25 @@ function ajaxApp(divDestino,url,parametros,metodo){
 	});
 }
 
-
 function abrir(div){
 	//alert(div);
 	//exit;
 	$("#"+div).show("fast");
-	
-
 }
 
 function cerrarVentana(div){
 	$("#"+div).hide();
 }
 
-
-
 function nuevoregis(){
-
-ajaxApp("muestraasignaciones","controladormes.php","action=formregis","POST");
-
+	ajaxApp("muestraasignaciones","controladormes.php","action=formregis","POST");
 }
 
 function buscarEmpleado(){
-
-emp=document.getElementById("si").value;
-
-ajaxApp("ListarEmpleados","controladormes.php","action=consultarempleado&emp="+emp,"POST");
+	emp=document.getElementById("si").value;
+	ajaxApp("ListarEmpleados","controladormes.php","action=consultarempleado&emp="+emp,"POST");
 }
+
 function insertarEmpleado(idEmpleado,nombres,apellidoP,apellidoM){
 	//alert(idEmpleado);
 	$("#no_empleado").attr("value",idEmpleado);
@@ -130,72 +122,63 @@ function VALIDAR(tabla){
 
 function calcular(){
 
+	a=document.getElementById("dias_lab").value;
+	//alert(a);
+	b=document.getElementById("jorna_lab").value;
+	c=document.getElementById("dias_li").value;
+	d=document.getElementById("tiem_ex").value;
 
-a=document.getElementById("dias_lab").value;
-//alert(a);
-b=document.getElementById("jorna_lab").value;
-c=document.getElementById("dias_li").value;
-d=document.getElementById("tiem_ex").value;
+	if(isNaN(a)||isNaN(b)||isNaN(c)||isNaN(d)){
+		alert("Error: El campo Dias Laborables solo admite numeros");
+		return false;
+	}else{
+		aa=parseInt(a);
+		
+		bb=parseInt(b);
+		
+		cc=parseInt(c);
+		
+		dd=parseFloat(d);
+		//alert(dd);
+		//exit
+		
+		diasli=cc*bb;
+		resu=aa*bb;
+		otro=resu-diasli;
+		////otromas=float
+		otromas= otro+dd;
+		//alert(otromas);
+		
+		
+		$("#horas_la").attr("value",otromas);
 
-if(isNaN(a)||isNaN(b)||isNaN(c)||isNaN(d)){
-	alert("Error: El campo Dias Laborables solo admite numeros");
-	return false;
+	}
+	f=document.getElementById("meta_pro").value;
+	if(f>100){
+		alert(" En el campo Meta Productiva debe ingresar un porcentaje entre 1 y 100 ");
+	}
 }
 
-else{
-aa=parseInt(a);
-
-bb=parseInt(b);
-
-cc=parseInt(c);
-
-dd=parseFloat(d);
-//alert(dd);
-//exit
-
-diasli=cc*bb;
-resu=aa*bb;
-otro=resu-diasli;
-////otromas=float
-otromas= otro+dd;
-//alert(otromas);
-
-
-$("#horas_la").attr("value",otromas);
-
-}
-f=document.getElementById("meta_pro").value;
-
-if(f>100){
-alert(" En el campo Meta Productiva debe ingresar un porcentaje entre 1 y 100 ");
-}
-}
-
-
-
-
-function consultaregis(){
-	
+function consultaregis(){	
 	ajaxApp("muestraasignaciones","controladormes.php","action=consultar","POST");
 }
 
 function modificar(){
-ajaxApp("muestraasignaciones","controladormes.php","action=modificar","post");
+	ajaxApp("muestraasignaciones","controladormes.php","action=modificar","post");
 }
+
 function formmodi(idcap){
-//alert(idcap);
-//exit;
-ajaxApp("muestraasignaciones","controladormes.php","action=formmodi&idcap="+idcap,"post");
-
-
+	//alert(idcap);
+	//exit;
+	ajaxApp("muestraasignaciones","controladormes.php","action=formmodi&idcap="+idcap,"post");
 }
 
 function ACTUALIZAR(tac,id){
-//alert(id);exit;
-      var campos=new Array();
-      var valores=new Array();
-      var sql_valores="";
-      var ubicacion;
+	//alert(id);exit;
+	var campos=new Array();
+	var valores=new Array();
+	var sql_valores="";
+	var ubicacion;
 	var caracteres = "abcdefghijklmnopqrstuvwxyzñ1234567890ü ABCDEFGHIJKLMNOPQRSTUVWXYZÑáéíóúÁÉÍÓÚÜ/-()&.:-,_";
 	
        for (var i=0;i<$("#asig_mes_modi  input:text").length;i++){
@@ -268,4 +251,25 @@ function verificaMes(){
 	noEmpleado=$("#no_empleado").val();//se recupera el numero del empleado
 	mesVerificar=$("#mes").val()//se recupera el mes
 	ajaxApp("divVerificacion","controladormes.php","action=verificarEmpleado&noEmpleado="+noEmpleado+"&mes="+mesVerificar,"POST");
+	ajaxApp("calendarioDiasSeleccionados","controladormes.php","action=verMesConfiguracion&mes="+mesVerificar,"POST");
+}
+function agregarDiasSeleccionados(){
+	var diasSel="";
+
+	for (var i=0;i<document.asig_mes.elements.length;i++){
+		if (document.asig_mes.elements[i].type=="checkbox"){
+			if (document.asig_mes.elements[i].checked){
+				//alert("Variable claves=["+claves+"]");
+				if (diasSel=="")
+					diasSel=diasSel+document.asig_mes.elements[i].value;
+				else
+					diasSel=diasSel+","+document.asig_mes.elements[i].value;
+			}	
+		}
+	}
+	if(diasSel==""){
+		alert('Seleccione por lo menos un dia para realizar la operacion');
+	}else{
+		alert(diasSel);
+	}
 }

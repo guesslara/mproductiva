@@ -1,5 +1,5 @@
 <?      
-	session_start();
+	/*session_start();
 	session_regenerate_id(true);
 	include("../../includes/txtApp.php");
 	include("../../clases/regLog.php");
@@ -8,7 +8,7 @@
 	if(!isset($_SESSION[$txtApp['session']['idUsuario']])){
 		echo "<script type='text/javascript'> alert('Su sesion ha terminado por inactividad'); window.location.href='../mod_login/index.php'; </script>";
 		exit;
-	}
+	}*/
 ?>
 <link rel="stylesheet" type="text/css" href="css/estilosEmpaque.css" />
 <script type="text/javascript" src="js/funcionesEnsamble.js"></script>
