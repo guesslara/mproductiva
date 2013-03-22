@@ -261,3 +261,6 @@ function agregarDiasSeleccionados(){
 		$("#dias_lab").attr("value",cuantosDias);
 	}
 }
+function muestraCalendarioMod(anio,mes,dia){
+	ajaxApp("calendarioDiasSeleccionadosMods","controladormes.php","action=verMesConfiguracion&mes="+mes,"POST");
+}

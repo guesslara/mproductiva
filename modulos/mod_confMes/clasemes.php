@@ -343,50 +343,42 @@ class mes{
     }
     
     public function formmodi($id){
-	$consultita="select cat_personal.no_empleado,nombres, a_paterno, a_materno,id_cap,CAP_MES.no_empleado,dias_lab,jorna_lab,dias_li,tiem_ex,horas_la,meta_pro,mes from iqe_rrhh_2010.cat_personal,2013_matriz_productiva.CAP_MES where iqe_rrhh_2010.cat_personal.no_empleado=2013_matriz_productiva.CAP_MES.id_empleado and  id_cap='$id' order by id_cap";
+	echo "<br>".$consultita="select cat_personal.no_empleado,nombres, a_paterno, a_materno,id_cap,CAP_MES.no_empleado,dias_lab,jorna_lab,dias_li,tiem_ex,horas_la,meta_pro,mes,numerosDias from iqe_rrhh_2010.cat_personal,2013_matriz_productiva.CAP_MES where iqe_rrhh_2010.cat_personal.no_empleado=2013_matriz_productiva.CAP_MES.no_empleado and  id_cap='$id' order by id_cap";
 	$ejeconsultita=mysql_query($consultita,$this->conectarBd()) or die(mysql_error());
 	$clase_obligaria="campo_obligatorio";
 	$capmes="CAP_MES";
-        while($todas=mysql_fetch_array($ejeconsultita)){
-	    $idcapp=$todas["id_cap"];
-	    $idem=$todas["no_empleado"];
-	    $nom=$todas["nombres"];
-	    $apaterno=$todas["a_paterno"];
-	    $amaterno=$todas["a_materno"];
-	    $diaslab=$todas["dias_lab"];
-	    $jornadalab=$todas["jorna_lab"];
-	    $vacacion=$todas["dias_li"];
-	    $tiempo=$todas["tiem_ex"];
-	    $horas=$todas["horas_la"];
-	    $metaal=$todas["meta_pro"];
-	    $meses=$todas["mes"];
-	}
+        $todas=mysql_fetch_array($ejeconsultita);
+	$idcapp=$todas["id_cap"];
+	$idem=$todas["no_empleado"];
+	$nom=$todas["nombres"];
+	$apaterno=$todas["a_paterno"];
+	$amaterno=$todas["a_materno"];
+	$diaslab=$todas["dias_lab"];
+	$jornadalab=$todas["jorna_lab"];
+	$vacacion=$todas["dias_li"];
+	$tiempo=$todas["tiem_ex"];
+	$horas=$todas["horas_la"];
+	$metaal=$todas["meta_pro"];
+	$meses=$todas["mes"];
+	$numerosDias=$todas["numerosDias"];
 ?>
-   <div id="modi" style="border: 1px solid #ff0000;">
-	       <br>
-	       <br>
-	        <FORM id="asig_mes_modi" >
-		                   
-		      <bR>
-		    <br>
-			 <br>
-		 
-		 
-		 
+	<script type="text/javascript">
+	    muestraCalendarioMod('<?=date("Y");?>','<?=$meses;?>','<?=date("d");?>');
+	</script>
+	<div id="modi" style="border: 1px solid #ff0000;">
+	    <FORM id="asig_mes_modi" >
+		<br> 
 		 <!--<input type="hidden" name="action" id="action" value="insertar">-->	
 		    <fieldset style="width: 700px; height: 150px; " >
 		    <table align="center" cellspacing="5">
-			     <legend>Datos Personales</legend>     
+			<legend>Datos Personales</legend>     
 			 <tr>
-			 <td>Id Empleado:</td>
-			 <td><input type="text" name="id_empleado" id="no_empleado"  value="<?=$idem;?>"class="<?=$clase_obligaria?>" readonly></td>
+			    <td>Id Empleado:</td>
+			    <td><input type="text" name="id_empleado" id="no_empleado"  value="<?=$idem;?>"class="<?=$clase_obligaria?>" readonly></td>
 			 </tr>
-			 
 			 <tr>
-			 <td>Nombre:</td>
-			 <td><input type="text" name="nombres" id="nombres" value="<?=$nom;?>" class="<?=$clase_obligaria?>" readonly></td>
-			 <td> 
-			 
+			    <td>Nombre:</td>
+			    <td><input type="text" name="nombres" id="nombres" value="<?=$nom;?>" class="<?=$clase_obligaria?>" readonly></td>			 
 			 </tr>
 			 <tr>
 			 <td>Apellido Paterno:</td>
@@ -403,24 +395,36 @@ class mes{
                     <table>
                         <tr>
                     <td>Mes:
-                    </td><td><select  name="mes" id="mes" class="<?=$clase_obligaria?>" <?=$sol?>>
+                    </td><td><select  name="mes" id="mes" onchange="muestraCalendarioMod()" class="<?=$clase_obligaria?>" <?=$sol?>>
                     <option value="<?=$meses;?>"><?=$meses;?></option>
 		    <option value="undefined">Seleccione un Mes</option>
-                    <option value="Enero">Enero</option>
-                    <option value="Febrero">Febrero</option>
-                    <option value="Marzo">Marzo</option>
-                    <option value="Abril">Abril</option>
-                    <option value="Mayo">Mayo</option>
-                    <option value="Junio">Junio</option>
-                    <option value="Julio">Julio</option>
-                    <option value="Agosto">Agosto</option>
-                    <option value="Septiembre">Septiembre</option>
-                    <option value="Octubre">Octubre</option>
-                    <option value="Noviembre">Noviembre</option>
-                    <option value="Diciembre">Diciembre</option>
+                    <option value="01">Enero</option>
+                    <option value="02">Febrero</option>
+                    <option value="03">Marzo</option>
+                    <option value="04">Abril</option>
+                    <option value="05">Mayo</option>
+                    <option value="06">Junio</option>
+                    <option value="07">Julio</option>
+                    <option value="08">Agosto</option>
+                    <option value="09">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
                     </select>
                     </td></tr>
+		    <tr>
+			    <td colspan="2">				
+				<div id="calendarioDiasSeleccionadosMods" style="height: 250px;width: 430px;border: 1px solid #CCC;overflow: auto;"></div>
+				<div title="Agregar Dias Seleccionados" onclick="agregarDiasSeleccionados()" style="float: right;width: 110px;border: 1px solid #CCC;background: #e1e1e1;height: 15px;padding: 5px;text-align: center;margin: 3px;">Agregar D&iacute;as</div>				
+				<div style="clear: both;">&nbsp;</div>
+			    </td>
+			</tr>
                     <tr>
+                    <td>
+                    Dias Seleccionados:</td><td><textarea name="txtDiasSeleccionados" id="txtDiasSeleccionados" rows="3" cols="30"><?=$numerosDias;?></textarea>    
+                    </td>    
+                    </tr>
+		    <tr>
                     <td>
                     Dias laborables:</td><td><input type="text" name="dias_lab" id="dias_lab"  class="<?=$clase_obligaria?>"  value="<?=$diaslab;?>"onkeyup="calcular();" >    
                     </td>    
