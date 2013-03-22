@@ -45,7 +45,8 @@ class mes{
 	$clase_obligaria="campo_obligatorio";
   
 ?>
-   <div id="delimitador" style="border: 0px solid #ff0000;height: 99%;position: relative;overflow: auto;">	
+    <form id="frmAsignacionMes" name="frmAsignacionMes" action="" method="post" >
+   <!--<div id="delimitador" style="border: 0px solid #ff0000;height: 99%;position: relative;overflow: auto;">	-->
 	<table border="0" width="900" cellpadding="1" cellspacing="1" style="margin: 5px;font-size: 12px;">
 	    <tr>
 		<td><div id="divVerificacion"></div></td>
@@ -75,14 +76,14 @@ class mes{
 			 </tr>
 		    </table>
 		</td>
-		<td width="450" rowspan="3" style="text-align: center;"><div style="border: 1px solid #CCC;height: 350px;width: 300px;"></div></td>		
+		<td width="450" rowspan="3" valign="top" style="text-align: center;"><div style="border: 1px solid #CCC;height: 350px;width: 300px;"></div></td>		
 	    </tr>
 	    <tr>
 		<td style="border: 1px solid #CCC;background: #f0f0f0;">Informaci&oacute;n adicional:</td>		
 	    </tr>
 	    <tr>
 		<td>
-		    <table style="font-size: 12px;" border="1" width="450">
+		    <table style="font-size: 12px;" border="0" width="450">
                         <tr>
 			    <td>Mes:</td>
 			    <td><select  name="mes" id="mes" onchange="verificaMes()" class="<?=$clase_obligaria?>" <?=$sol?>>
@@ -101,6 +102,21 @@ class mes{
                     <option value="12">Diciembre</option>
                     </select>
 			    </td>
+			</tr>			
+			<tr>
+			    <td colspan="2">				
+				<div id="calendarioDiasSeleccionados" style="height: 250px;width: 430px;border: 1px solid #CCC;overflow: auto;"></div>
+				<div title="Agregar Dias Seleccionados" onclick="agregarDiasSeleccionados()" style="float: right;width: 110px;border: 1px solid #CCC;background: #e1e1e1;height: 15px;padding: 5px;text-align: center;margin: 3px;">Agregar D&iacute;as</div>				
+				<div style="clear: both;">&nbsp;</div>
+			    </td>
+			</tr>
+			<tr>
+			    <td>
+				Dias Seleccionados:
+			    </td>
+			    <td>
+				<textarea name="txtDiasSeleccionados" id="txtDiasSeleccionados" rows="3" cols="30"></textarea>								
+			    </td>    
 			</tr>
 			<tr>
 			    <td>
@@ -109,15 +125,6 @@ class mes{
 			    <td>
 				<input type="text" name="dias_lab" id="dias_lab" value="0"  onkeyup="calcular();"class="<?=$clase_obligaria?>" style="width: 50px;">				
 			    </td>    
-			</tr>
-			<tr>
-			    <td colspan="2">
-				<form id="asig_mes" name=""id="" action="" method="post" >
-				<div id="calendarioDiasSeleccionados" style="height: 250px;width: 430px;border: 1px solid #CCC;overflow: auto;"></div>
-				<div title="Agregar Dias Seleccionados" onclick="agregarDiasSeleccionados()" style="border: 1px solid #CCC;background: #f0f0f0;height: 15px;padding: 5px;text-align: center;margin: 3px;">Agregar D&iacute;as</div>
-				</form>
-				Dias Seleccionados: <input type="text" name="" id="" />				
-			    </td>
 			</tr>
 			<tr>
 			    <td>
@@ -151,7 +158,8 @@ class mes{
 		<td colspan="2" style="text-align: right;"><input type="button" name="Registrar" id="RegistrarConf" value="Registrar" onclick="VALIDAR('<?=$cap_mes;?>');" style="height: 35px;padding: 5px;display: none;"/></td>
 	    </tr>
 	</table>	
-        </div>
+        <!--</div>-->
+	</form>
 <?  
     
                 }
@@ -238,133 +246,108 @@ class mes{
      
      }
      
-    public function consultar_mes(){
-    
-    $seleccion="select * from CAP_MES";
-    $ejesele=mysql_query($seleccion,$this->conectarBd()) or die(mysql_error());
-    
-    ?>
-    <table align="center" width="90%" BORDER="1" CELLPADDING="0" CELLSPACING="0" style="font-size: 12px;">
-         <tr>
-         <td colspan="15"><center><strong>CAP_MES</strong></center></td>
-	 </tr>
-         <tr>
-         <td class="cabeceraTitulosTabla">No_Captura</td>
-	 <td class="cabeceraTitulosTabla">N°_empleado</td>
-	 <td class="cabeceraTitulosTabla">D&iacute;as Laborables</td>
-	 <td class="cabeceraTitulosTabla">Jornada Laboral</td>
-	 <td class="cabeceraTitulosTabla">D&iacute;as Vacaciones</td>
-	 <td class="cabeceraTitulosTabla">Tiempo Extra</td>
-	 <td class="cabeceraTitulosTabla">Horas Laborables</td>
-	 <td class="cabeceraTitulosTabla">Meta Productiva</td>
-	 <td class="cabeceraTitulosTabla">Mes</td>
-        </tr>
-    
-    <?
-     while($li=mysql_fetch_array($ejesele)){
-	$idcap=$li["id_cap"];
-	$idemp=$li["no_empleado"];
-	$dias_lab=$li["dias_lab"];
-	$jornada=$li["jorna_lab"];
-	$vacaciones=$li["dias_li"];
-	$tiempo_extra=$li["tiem_ex"];
-	$horas_lab=$li["horas_la"];
-	$meta=$li["meta_pro"];
-	$mes=$li["mes"];
-	
-    
-	?>
-	<tr>
-	<td class="resultadosTablaBusqueda1"><?=$idcap;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$idemp;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$dias_lab;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$jornada;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$vacaciones;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$tiempo_extra;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$horas_lab;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$meta;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$mes;?></td>
-	</tr>
-    
-    
-    <?
-    
-
-    }
-    ?>
-    </table>            
-     <?           
-    
+    public function consultar_mes(){    
+	$seleccion="select * from CAP_MES";
+	$ejesele=mysql_query($seleccion,$this->conectarBd()) or die(mysql_error());
+?>
+	<table align="center" width="90%" BORDER="1" CELLPADDING="0" CELLSPACING="0" style="font-size: 12px;">
+	     <tr>
+	     <td colspan="15"><center><strong>CAP_MES</strong></center></td>
+	     </tr>
+	     <tr>
+	     <td class="cabeceraTitulosTabla">No_Captura</td>
+	     <td class="cabeceraTitulosTabla">N°_empleado</td>
+	     <td class="cabeceraTitulosTabla">D&iacute;as Laborables</td>
+	     <td class="cabeceraTitulosTabla">Jornada Laboral</td>
+	     <td class="cabeceraTitulosTabla">D&iacute;as Vacaciones</td>
+	     <td class="cabeceraTitulosTabla">Tiempo Extra</td>
+	     <td class="cabeceraTitulosTabla">Horas Laborables</td>
+	     <td class="cabeceraTitulosTabla">Meta Productiva</td>
+	     <td class="cabeceraTitulosTabla">Mes</td>
+	    </tr>
+<?
+	while($li=mysql_fetch_array($ejesele)){
+	    $idcap=$li["id_cap"];
+	    $idemp=$li["no_empleado"];
+	    $dias_lab=$li["dias_lab"];
+	    $jornada=$li["jorna_lab"];
+	    $vacaciones=$li["dias_li"];
+	    $tiempo_extra=$li["tiem_ex"];
+	    $horas_lab=$li["horas_la"];
+	    $meta=$li["meta_pro"];
+	    $mes=$li["mes"];
+?>
+	    <tr>
+		<td class="resultadosTablaBusqueda1"><?=$idcap;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$idemp;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$dias_lab;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$jornada;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$vacaciones;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$tiempo_extra;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$horas_lab;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$meta;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$mes;?></td>
+	    </tr>
+<?
+	}
+?>
+	</table>            
+<?             
     }
     
     
     public function modifica_mes(){
-    
-    $i="select * from CAP_MES";
-    $ieje=mysql_query($i,$this->conectarBd()) or die(mysql_error());
-    
-    ?>
-    <table align="center" width="90%" BORDER="1" CELLPADDING="0" CELLSPACING="0" style="font-size: 12px;">
-         <tr>
-         <td colspan="15"><center><strong>CAP_MES</strong></center></td>
-	 </tr>
-         <tr>
-         <td class="cabeceraTitulosTabla">No_Captura</td>
-	 <td class="cabeceraTitulosTabla">N°_empleado</td>
-	 <td class="cabeceraTitulosTabla">Dias Laborables</td>
-	 <td class="cabeceraTitulosTabla">Jornada Laboral</td>
-	 <td class="cabeceraTitulosTabla">Dias Vacaciones</td>
-	 <td class="cabeceraTitulosTabla">Tiempo Extra</td>
-	 <td class="cabeceraTitulosTabla">Horas Laborables</td>
-	 <td class="cabeceraTitulosTabla">Meta_productiva</td>
-	 <td class="cabeceraTitulosTabla">Mes</td>
-        </tr>
-    
-    <?
-     while($lista=mysql_fetch_array($ieje)){
-	$id_cap=$lista["id_cap"];
-	$id_emp=$lista["no_empleado"];
-	$diaslab=$lista["dias_lab"];
-	$jornada_lab=$lista["jorna_lab"];
-	$vacaciones_li=$lista["dias_li"];
-	$tiempo_extra_li=$lista["tiem_ex"];
-	$horas_lab_li=$lista["horas_la"];
-	$meta_pro=$lista["meta_pro"];
-	$mes_pro=$lista["mes"];
-	
-    
-	?>
-	<tr>
-	<td class="resultadosTablaBusqueda1"><a href="#" style="color: blue;font-size: 14px;" onclick="formmodi('<?=$id_cap;?>');"><?=$id_cap;?></a></td>
-	<td class="resultadosTablaBusqueda1"><?=$id_emp;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$diaslab;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$jornada_lab;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$vacaciones_li;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$tiempo_extra_li;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$horas_lab_li;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$meta_pro;?></td>
-	<td class="resultadosTablaBusqueda1"><?=$mes_pro;?></td>
-    </tr>
-    
-    
-    
-    <?
-    
-    
-    
-    
-    }
-         
-
+	$i="select * from CAP_MES";
+	$ieje=mysql_query($i,$this->conectarBd()) or die(mysql_error());
+?>
+	<table align="center" width="90%" BORDER="1" CELLPADDING="0" CELLSPACING="0" style="font-size: 12px;">
+	    <tr>
+		<td colspan="15"><center><strong>CAP_MES</strong></center></td>
+	    </tr>
+	    <tr>
+		<td class="cabeceraTitulosTabla">No_Captura</td>
+		<td class="cabeceraTitulosTabla">N°_empleado</td>
+		<td class="cabeceraTitulosTabla">Dias Laborables</td>
+		<td class="cabeceraTitulosTabla">Jornada Laboral</td>
+		<td class="cabeceraTitulosTabla">Dias Vacaciones</td>
+		<td class="cabeceraTitulosTabla">Tiempo Extra</td>
+		<td class="cabeceraTitulosTabla">Horas Laborables</td>
+		<td class="cabeceraTitulosTabla">Meta_productiva</td>
+		<td class="cabeceraTitulosTabla">Mes</td>
+	    </tr>
+<?
+	while($lista=mysql_fetch_array($ieje)){
+	    $id_cap=$lista["id_cap"];
+	    $id_emp=$lista["no_empleado"];
+	    $diaslab=$lista["dias_lab"];
+	    $jornada_lab=$lista["jorna_lab"];
+	    $vacaciones_li=$lista["dias_li"];
+	    $tiempo_extra_li=$lista["tiem_ex"];
+	    $horas_lab_li=$lista["horas_la"];
+	    $meta_pro=$lista["meta_pro"];
+	    $mes_pro=$lista["mes"];
+?>
+	    <tr>
+		<td class="resultadosTablaBusqueda1"><a href="#" style="color: blue;font-size: 14px;" onclick="formmodi('<?=$id_cap;?>');"><?=$id_cap;?></a></td>
+		<td class="resultadosTablaBusqueda1"><?=$id_emp;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$diaslab;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$jornada_lab;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$vacaciones_li;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$tiempo_extra_li;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$horas_lab_li;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$meta_pro;?></td>
+		<td class="resultadosTablaBusqueda1"><?=$mes_pro;?></td>
+	    </tr>
+<?    
+	}
     }
     
     public function formmodi($id){
-    $consultita="select cat_personal.no_empleado,nombres, a_paterno, a_materno,id_cap,CAP_MES.no_empleado,dias_lab,jorna_lab,dias_li,tiem_ex,horas_la,meta_pro,mes from iqe_rrhh_2010.cat_personal,2013_matriz_productiva.CAP_MES where iqe_rrhh_2010.cat_personal.no_empleado=2013_matriz_productiva.CAP_MES.id_empleado and  id_cap='$id' order by id_cap";
-    $ejeconsultita=mysql_query($consultita,$this->conectarBd()) or die(mysql_error());
-    $clase_obligaria="campo_obligatorio";
-    $capmes="CAP_MES";
-    
-    while($todas=mysql_fetch_array($ejeconsultita)){
+	$consultita="select cat_personal.no_empleado,nombres, a_paterno, a_materno,id_cap,CAP_MES.no_empleado,dias_lab,jorna_lab,dias_li,tiem_ex,horas_la,meta_pro,mes from iqe_rrhh_2010.cat_personal,2013_matriz_productiva.CAP_MES where iqe_rrhh_2010.cat_personal.no_empleado=2013_matriz_productiva.CAP_MES.id_empleado and  id_cap='$id' order by id_cap";
+	$ejeconsultita=mysql_query($consultita,$this->conectarBd()) or die(mysql_error());
+	$clase_obligaria="campo_obligatorio";
+	$capmes="CAP_MES";
+        while($todas=mysql_fetch_array($ejeconsultita)){
 	    $idcapp=$todas["id_cap"];
 	    $idem=$todas["no_empleado"];
 	    $nom=$todas["nombres"];
@@ -377,10 +360,8 @@ class mes{
 	    $horas=$todas["horas_la"];
 	    $metaal=$todas["meta_pro"];
 	    $meses=$todas["mes"];
-	
-    }
-  
-    ?>
+	}
+?>
    <div id="modi" style="border: 1px solid #ff0000;">
 	       <br>
 	       <br>
@@ -534,6 +515,109 @@ class mes{
     
     
     }
+    
+    private function UltimoDia($anho,$mes){ 
+	   if (((fmod($anho,4)==0) and (fmod($anho,100)!=0)) or (fmod($anho,400)==0)) { 
+		$dias_febrero = 29; 
+	   } else { 
+		   $dias_febrero = 28; 
+	   } 
+	   if(($mes==1) || ($mes==3) || ($mes==5) || ($mes==7) || ($mes==8) || ($mes==10) || ($mes==12)){
+		   $dias_mes="31";
+	   }else if(($mes==4) ||($mes==6) ||($mes==9) ||($mes==11)){
+		   $dias_mes="30";
+	   }else if($mes==2){
+		   $dias_mes=$dias_febrero;
+	   }
+	   return $dias_mes;
+	}
+
+	public function calendarizacion($mes,$anio,$diaActual){		
+	    $mes=$mes;//date("m");
+	    //año de la fecha
+	    $anio=$anio;
+	    //total de dias en el mes
+	    $totalDias=$this->UltimoDia($anio,$mes);
+	    $numeroDia=date("w", mktime (0,0,0,$mes,1,$anio));//mes dia año
+	    $diaFecha=date("j", mktime (0,0,0,$mes,1,$anio));//mes dia año
+	    $dia=1;
+	    /*for($i=0;$i<6;$i++){
+		for($j=0;$j<7;$j++){
+                    if($numeroDia==$j){
+                        echo date("j", mktime (0,0,0,$mes,$dia,$anio));
+			$numeroDia+=1;
+			$dia+=1;
+                    }else{
+			echo "x";
+                    }
+		}
+		$numeroDia=0;
+		echo "<br>";
+            }
+            $dia=1;*/
+	    $meses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+?>
+		<table width="95%" border="0" cellspacing="0" cellpadding="1" style="font-size:10px; margin-left:5px; margin-top:5px; margin-right:5px;">                    
+                    <tr>
+                        <td colspan="7">Seleccione los dias laborables</td>
+                    </tr>
+                    <tr>
+                        <td colspan="7" style="font-size:16px; text-align:center;"><?=$meses[$mes-1]." ".date("Y");?></td>
+                    </tr>
+                    <tr>
+	  		<td width="14%" style="border:1px solid #999; background:#ccc; text-align:center; height:40px;">Domingo</td>
+			<td width="14%" style="border:1px solid #999; background:#ccc; text-align:center; height:40px;">Lunes</td>
+                        <td width="14%" style="border:1px solid #999; background:#ccc; text-align:center; height:40px;">Martes</td>
+                        <td width="14%" style="border:1px solid #999; background:#ccc; text-align:center; height:40px;">Miercoles</td>
+                        <td width="14%" style="border:1px solid #999; background:#ccc; text-align:center; height:40px;">Jueves</td>
+                        <td width="14%" style="border:1px solid #999; background:#ccc; text-align:center; height:40px;">Viernes</td>
+                        <td width="14%" style="border:1px solid #999; background:#ccc; text-align:center; height:40px;">S&aacute;bado</td>
+	  	    </tr>
+<?
+			//se hace el recorrido por las semanas
+			for($i=0;$i<6;$i++){
+?>
+			<tr>
+<?				
+				//se hace el recorrido por los dias de la semana
+				for($j=0;$j<7;$j++){
+				    if($numeroDia==$j){
+					$diaMes=date("j", mktime (0,0,0,$mes,$dia,$anio));
+					($diaMes==$diaActual) ? $clase="diaCalendarioActual" : $clase="diaCalendario";
+						
+?>						
+			    <td valign="middle" style="height:20px; text-align:center;border: 1px solid #CCC;">
+                        	<div class="<?=$clase;?>"><?=$diaMes;?><input type="checkbox" value="<?=$diaMes;?>"></div>
+                            </td>
+<?
+						$numeroDia+=1;
+						$dia+=1;
+					}else{
+?>
+					<td><div class="diaCalendario">&nbsp;</div></td>
+<?						
+					}
+					//se detiene el proceso en caso que sea igual al numero de dias
+					if($diaMes==$totalDias)
+						break;
+				}
+				$numeroDia=0;                                
+?>
+			 </tr>
+<?
+			//se detiene el proceso en caso que sea igual al numero de dias
+						if($diaMes==$totalDias)
+							break;
+                        }
+			$dia=1;			
+			
+?>
+        	</tr>
+        </table>    
+<?
+	}
+    
+    
     
     
 }

@@ -47,29 +47,23 @@ function insertarEmpleado(idEmpleado,nombres,apellidoP,apellidoM){
 }
 
 function VALIDAR(tabla){
-	//alert(tabla);
-	//exit;
-      var campos=new Array();
-      var valores=new Array();
-      var sql_valores="";
-      var ubicacion;
+	var campos=new Array();
+	var valores=new Array();
+	var sql_valores="";
+	var ubicacion;
 	var caracteres = "abcdefghijklmnopqrstuvwxyzñ1234567890ü ABCDEFGHIJKLMNOPQRSTUVWXYZÑáéíóúÁÉÍÓÚÜ/-()&.:-,_";
 	
-       for (var i=0;i<$("#asig_mes  input:text").length;i++){
-
-	campos.push($("#asig_mes  input:text")[i].id);
-	//alert(campos[i=7]);
-	//exit;
-	valores.push($("#asig_mes input:text")[i].value);
-	
+	for (var i=0;i<$("#frmAsignacionMes  input:text").length;i++){
+		campos.push($("#frmAsignacionMes  input:text")[i].id);
+		//alert(campos[i=7]);
+		//exit;
+		valores.push($("#frmAsignacionMes input:text")[i].value);
 	}
-	for(var e=0;e<$("#asig_mes select").length;e++){
-	campos.push($("#asig_mes select")[e].id);
-	//alert(otrosarreglo[e]);
-	      
-	valores.push($("#asig_mes select")[e].value);
-	//alert(valorselect[e]);
-
+	for(var e=0;e<$("#frmAsignacionMes select").length;e++){
+		campos.push($("#frmAsignacionMes select")[e].id);
+		//alert(otrosarreglo[e]);
+		valores.push($("#frmAsignacionMes select")[e].value);
+		//alert(valorselect[e]);
 	}
 	campos.splice(1,1);
 	campos.splice(2,1);
@@ -78,46 +72,38 @@ function VALIDAR(tabla){
 	valores.splice(1,1);
 	valores.splice(2,1);
 	valores.splice(1,1);
-	
-	//alert(valores);
-	//exit;
-	
-	
-	
 	for (var i2=0;i2<campos.length;i2++){
-	//pagina de jquery  http://visualjquery.com/
-        if ($("#"+campos[i2]).attr("class")=="campo_obligatorio"&&(valores[i2]==""||valores[i2]==undefined||valores[i2]==null||valores[i2]=="undefined")){
-        alert("Error: El campo ("+campos[i2]+") es obligatorio.");
-        return;
-	}
-	//alert(campos[i2]);		     
-        for (var j=0;j<valores[i2].length;j++){  // recorrido de string para buscar caracteres no validos en la cadena  
-        ubicacion = valores[i2].substring(j, j + 1)
-        //alert(valores[j]);		
-	//alert(ubicacion);
-	//exit;
-        if (caracteres.indexOf(ubicacion) != -1) {  
-                           
-        }
-
-        else {  
-        alert("ERROR: No se acepta el caracter '" + ubicacion + "'.")  
-        return; 
-        }  
-        }
-        if (sql_valores==""){
-         sql_valores=campos[i2]+"|||"+valores[i2];
-	 } else {
-        sql_valores+="@@@"+campos[i2]+"|||"+valores[i2];
-		
-	}
+		if ($("#"+campos[i2]).attr("class")=="campo_obligatorio"&&(valores[i2]==""||valores[i2]==undefined||valores[i2]==null||valores[i2]=="undefined")){
+			alert("Error: El campo ("+campos[i2]+") es obligatorio.");
+			return;
+		}
+		//alert(campos[i2]);		     
+		for (var j=0;j<valores[i2].length;j++){  // recorrido de string para buscar caracteres no validos en la cadena  
+			ubicacion = valores[i2].substring(j, j + 1)
+			//alert(valores[j]);		
+			//alert(ubicacion);
+			//exit;
+			if (caracteres.indexOf(ubicacion) != -1) {  
+				   
+			}else{  
+				alert("ERROR: No se acepta el caracter '" + ubicacion + "'.")  
+				return; 
+			}  
+		}
+		if (sql_valores==""){
+			sql_valores=campos[i2]+"|||"+valores[i2];
+		} else {
+			sql_valores+="@@@"+campos[i2]+"|||"+valores[i2];
+		}
                      
 	}
-	//alert(sql_valores);
-	//exit;
+	//se recupera los numeros de los dias
+	var numerosDias=$("#txtDiasSeleccionados").val();
+	sql_valores=sql_valores+"@@@numerosDias|||"+numerosDias;
+	
         if (confirm("¿Desea guardar el registro?")){
-                 ajaxApp("muestraasignaciones","controladormes.php","action=insertarregistro&tabla="+tabla+"&valores="+sql_valores,"POST");
-	      }
+		ajaxApp("muestraasignaciones","controladormes.php","action=insertarregistro&tabla="+tabla+"&valores="+sql_valores,"POST");
+	}
 }
 
 function calcular(){
@@ -254,22 +240,24 @@ function verificaMes(){
 	ajaxApp("calendarioDiasSeleccionados","controladormes.php","action=verMesConfiguracion&mes="+mesVerificar,"POST");
 }
 function agregarDiasSeleccionados(){
-	var diasSel="";
-
-	for (var i=0;i<document.asig_mes.elements.length;i++){
-		if (document.asig_mes.elements[i].type=="checkbox"){
-			if (document.asig_mes.elements[i].checked){
-				//alert("Variable claves=["+claves+"]");
+	var diasSel=""; var cuantosDias=0;
+	for (var i=0;i<document.frmAsignacionMes.elements.length;i++){
+		if (document.frmAsignacionMes.elements[i].type=="checkbox"){
+			if (document.frmAsignacionMes.elements[i].checked){
+				cuantosDias+=1;
 				if (diasSel=="")
-					diasSel=diasSel+document.asig_mes.elements[i].value;
+					diasSel=diasSel+document.frmAsignacionMes.elements[i].value;
 				else
-					diasSel=diasSel+","+document.asig_mes.elements[i].value;
+					diasSel=diasSel+","+document.frmAsignacionMes.elements[i].value;
 			}	
 		}
 	}
+	
 	if(diasSel==""){
 		alert('Seleccione por lo menos un dia para realizar la operacion');
 	}else{
-		alert(diasSel);
+		//alert(diasSel);
+		$("#txtDiasSeleccionados").attr("value",diasSel);
+		$("#dias_lab").attr("value",cuantosDias);
 	}
 }

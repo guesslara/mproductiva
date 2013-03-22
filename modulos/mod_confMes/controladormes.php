@@ -43,9 +43,10 @@
         break;
         case "verMesConfiguracion":
             //se incluye la clase y se muestra el calendario
-            include("../../clases/calendarioPage.php");
-            $objCalendario=new calendarioPage();
-            $objCalendario->calendarizacion($_POST["mes"],date("Y"),date("d"));
+            //include("../../clases/calendarioPage.php");
+            //$objCalendario=new calendarioPage();
+            //$objCalendario->calendarizacion($_POST["mes"],date("Y"),date("d"));
+            $uno->calendarizacion($_POST["mes"],date("Y"),date("d"));
         break;
     }
 ?>
