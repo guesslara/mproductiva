@@ -103,7 +103,7 @@ class mes{
                     </select>
 			    </td>
 			</tr>			
-			<tr>
+			<!--<tr>
 			    <td colspan="2">				
 				<div id="calendarioDiasSeleccionados" style="height: 250px;width: 430px;border: 1px solid #CCC;overflow: auto;"></div>
 				<div title="Agregar Dias Seleccionados" onclick="agregarDiasSeleccionados()" style="float: right;width: 110px;border: 1px solid #CCC;background: #e1e1e1;height: 15px;padding: 5px;text-align: center;margin: 3px;">Agregar D&iacute;as</div>				
@@ -117,7 +117,7 @@ class mes{
 			    <td>
 				<textarea name="txtDiasSeleccionados" id="txtDiasSeleccionados" rows="3" cols="30"></textarea>								
 			    </td>    
-			</tr>
+			</tr>-->
 			<tr>
 			    <td>
 				Dias laborables:
@@ -343,7 +343,7 @@ class mes{
     }
     
     public function formmodi($id){
-	echo "<br>".$consultita="select cat_personal.no_empleado,nombres, a_paterno, a_materno,id_cap,CAP_MES.no_empleado,dias_lab,jorna_lab,dias_li,tiem_ex,horas_la,meta_pro,mes,numerosDias from iqe_rrhh_2010.cat_personal,2013_matriz_productiva.CAP_MES where iqe_rrhh_2010.cat_personal.no_empleado=2013_matriz_productiva.CAP_MES.no_empleado and  id_cap='$id' order by id_cap";
+	$consultita="select cat_personal.no_empleado,nombres, a_paterno, a_materno,id_cap,CAP_MES.no_empleado,dias_lab,jorna_lab,dias_li,tiem_ex,horas_la,meta_pro,mes,numerosDias from iqe_rrhh_2010.cat_personal,2013_matriz_productiva.CAP_MES where iqe_rrhh_2010.cat_personal.no_empleado=2013_matriz_productiva.CAP_MES.no_empleado and  id_cap='$id' order by id_cap";
 	$ejeconsultita=mysql_query($consultita,$this->conectarBd()) or die(mysql_error());
 	$clase_obligaria="campo_obligatorio";
 	$capmes="CAP_MES";
@@ -365,12 +365,12 @@ class mes{
 	<script type="text/javascript">
 	    muestraCalendarioMod('<?=date("Y");?>','<?=$meses;?>','<?=date("d");?>');
 	</script>
-	<div id="modi" style="border: 1px solid #ff0000;">
+	<div id="modi" style="border: 0px solid #ff0000;">
 	    <FORM id="asig_mes_modi" >
 		<br> 
 		 <!--<input type="hidden" name="action" id="action" value="insertar">-->	
 		    <fieldset style="width: 700px; height: 150px; " >
-		    <table align="center" cellspacing="5">
+		    <table border="0" align="left" cellspacing="5" style="margin: 10px; font-size: 12px;">
 			<legend>Datos Personales</legend>     
 			 <tr>
 			    <td>Id Empleado:</td>
@@ -392,9 +392,9 @@ class mes{
 		    </fieldset>
 		    <br>
                         <br>
-                    <table>
+                    <table border="0" cellpadding="1" cellspacing="1" width="700" style="margin: 10px; font-size: 12px;">
                         <tr>
-                    <td>Mes:
+                    <td width="120">Mes:
                     </td><td><select  name="mes" id="mes" onchange="muestraCalendarioMod()" class="<?=$clase_obligaria?>" <?=$sol?>>
                     <option value="<?=$meses;?>"><?=$meses;?></option>
 		    <option value="undefined">Seleccione un Mes</option>
@@ -412,7 +412,7 @@ class mes{
                     <option value="12">Diciembre</option>
                     </select>
                     </td></tr>
-		    <tr>
+		    <!--<tr>
 			    <td colspan="2">				
 				<div id="calendarioDiasSeleccionadosMods" style="height: 250px;width: 430px;border: 1px solid #CCC;overflow: auto;"></div>
 				<div title="Agregar Dias Seleccionados" onclick="agregarDiasSeleccionados()" style="float: right;width: 110px;border: 1px solid #CCC;background: #e1e1e1;height: 15px;padding: 5px;text-align: center;margin: 3px;">Agregar D&iacute;as</div>				
@@ -423,7 +423,7 @@ class mes{
                     <td>
                     Dias Seleccionados:</td><td><textarea name="txtDiasSeleccionados" id="txtDiasSeleccionados" rows="3" cols="30"><?=$numerosDias;?></textarea>    
                     </td>    
-                    </tr>
+                    </tr>-->
 		    <tr>
                     <td>
                     Dias laborables:</td><td><input type="text" name="dias_lab" id="dias_lab"  class="<?=$clase_obligaria?>"  value="<?=$diaslab;?>"onkeyup="calcular();" >    
@@ -451,19 +451,14 @@ class mes{
                     Meta Productiva:</td><td><input type="text" name="meta_pro" id="meta_pro"  value="<?=$metaal;?>" class="<?=$clase_obligaria?>" ><label>%</label>
                     </td>    
                     </tr>
-                    </table>
-                    <br>
-			 <br>
-			      <br>
-				   <br>
-	
-					     <br>
-						  <br>
-						       
-		     <hr align="center" width="80%"  size="3"/>
-		      <h5 align="right"><input type="button" name="Registrar" value="Registrar" onclick="ACTUALIZAR('<?=$capmes;?>','<?=$id;?>');"/>
-                      </h5>
-                </FORM>
+		    <tr>
+			<td colspan="2"><hr align="center" width="99%"  size="3"/></td>
+		    </tr>
+		    <tr>
+			<td colspan="2" style="text-align: right;"><input type="button" name="Registrar" value="Registrar" style="height: 40px;" onclick="ACTUALIZAR('<?=$capmes;?>','<?=$id;?>');"/></td>
+		    </tr>
+                    </table>                    			       
+		     </FORM>
                 </div>
                          <?  
     
@@ -536,7 +531,7 @@ class mes{
 	   return $dias_mes;
 	}
 
-	public function calendarizacion($mes,$anio,$diaActual){		
+	public function calendarizacion($mes,$anio,$diaActual,$diasSeleccionados){		
 	    $mes=$mes;//date("m");
 	    //año de la fecha
 	    $anio=$anio;
@@ -559,6 +554,10 @@ class mes{
 		echo "<br>";
             }
             $dia=1;*/
+	    //se extraen y se configura el calendario con los dias seleccionados
+	    if($diasSeleccionados != "N/A"){
+		//$diasSeleccionados=explode()
+	    }
 	    $meses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 ?>
 		<table width="95%" border="0" cellspacing="0" cellpadding="1" style="font-size:10px; margin-left:5px; margin-top:5px; margin-right:5px;">                    

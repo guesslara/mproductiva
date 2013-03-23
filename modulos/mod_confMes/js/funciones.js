@@ -98,8 +98,8 @@ function VALIDAR(tabla){
                      
 	}
 	//se recupera los numeros de los dias
-	var numerosDias=$("#txtDiasSeleccionados").val();
-	sql_valores=sql_valores+"@@@numerosDias|||"+numerosDias;
+	//var numerosDias=$("#txtDiasSeleccionados").val();
+	//sql_valores=sql_valores+"@@@numerosDias|||"+numerosDias;
 	
         if (confirm("¿Desea guardar el registro?")){
 		ajaxApp("muestraasignaciones","controladormes.php","action=insertarregistro&tabla="+tabla+"&valores="+sql_valores,"POST");
@@ -235,9 +235,9 @@ function ACTUALIZAR(tac,id){
 function verificaMes(){
 	$("#divVerificacion").html("");
 	noEmpleado=$("#no_empleado").val();//se recupera el numero del empleado
-	mesVerificar=$("#mes").val()//se recupera el mes
-	ajaxApp("divVerificacion","controladormes.php","action=verificarEmpleado&noEmpleado="+noEmpleado+"&mes="+mesVerificar,"POST");
-	ajaxApp("calendarioDiasSeleccionados","controladormes.php","action=verMesConfiguracion&mes="+mesVerificar,"POST");
+	//mesVerificar=$("#mes").val()//se recupera el mes
+	//ajaxApp("divVerificacion","controladormes.php","action=verificarEmpleado&noEmpleado="+noEmpleado+"&mes="+mesVerificar,"POST");
+	//ajaxApp("calendarioDiasSeleccionados","controladormes.php","action=verMesConfiguracion&mes="+mesVerificar,"POST");
 }
 function agregarDiasSeleccionados(){
 	var diasSel=""; var cuantosDias=0;
@@ -261,6 +261,6 @@ function agregarDiasSeleccionados(){
 		$("#dias_lab").attr("value",cuantosDias);
 	}
 }
-function muestraCalendarioMod(anio,mes,dia){
+function muestraCalendarioMod(anio,mes,dia,diasSeleccionados){
 	ajaxApp("calendarioDiasSeleccionadosMods","controladormes.php","action=verMesConfiguracion&mes="+mes,"POST");
 }

@@ -35,12 +35,18 @@
 				$resCapMes=mysql_query($sqlCapMes,$this->conectarBd());
 				$rowCapMes=mysql_fetch_array($resCapMes);
 				$meses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+				//se empiezan a hacer los calculos
+				$diasLaboradorAdmin=$rowCapMes["dias_lab"]-$rowCapMes["dias_li"]+($rowCapMes["tiem_ex"]/$rowCapMes["dias_lab"]);
+				//$diasLaboradosOper=
+				$minutosLaborablesxJornada=($rowCapMes["jorna_lab"] * 60) * $rowCapMes["meta_pro"];
+				$horasLaboradasMes=$rowCapMes["jorna_lab"] * ( $rowCapMes["dias_lab"] + ( $rowCapMes["tiem_ex"] / $rowCapMes["jorna_lab"] ) - $rowCapMes["dias_li"] );
+				$horasLaboradasMesProd= $horasLaboradasMes * $rowCapMes["meta_pro"];
 			}
 			
 ?>
 			<table border="1" cellpadding="1" cellspacing="1" width="300" style="font-size: 10px;margin: 5px;">
 				<tr>
-					<td width="230">Mes</td>
+					<td width="230" style="background: #7DC24B;">Mes</td>
 					<td width="70"><? echo $meses[$fecha1x[1]-1]; ?></td>
 				</tr>
 				<tr>
@@ -65,7 +71,7 @@
 				</tr>
 				<tr>
 					<td>Dias Laborados (Admin)</td>
-					<td>&nbsp;</td>
+					<td>&nbsp;<? echo $diasLaboradorAdmin; ?></td>
 				</tr>
 				<tr>
 					<td>Dias Laborados Operativamente</td>
@@ -73,15 +79,15 @@
 				</tr>
 				<tr>
 					<td>Minutos Laborables por Jornada (min)</td>
-					<td>&nbsp;</td>
+					<td>&nbsp;<? echo $minutosLaborablesxJornada; ?></td>
 				</tr>
 				<tr>
 					<td>Horas Laboradas en el Mes al 100 % de Productividad</td>
-					<td>&nbsp;</td>
+					<td>&nbsp;<? echo $horasLaboradasMes; ?></td>
 				</tr>
 				<tr>
 					<td>Horas Laboradas en el Mes al % de Productividad</td>
-					<td>&nbsp;</td>
+					<td>&nbsp;<? echo $horasLaboradasMesProd; ?></td>
 				</tr>
 				<tr>
 					<td>Cumplimiento</td>
