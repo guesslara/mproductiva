@@ -51,3 +51,7 @@ function buscarDatosMatriz(){
 		addTab("Resultados","controladorEnsamble.php",parametros,"POST");
 	}	
 }
+function cargarCapturasMatriz(){
+	var idActividad=$("#cboActividadMatriz").val();
+	alert(idActividad);
+}

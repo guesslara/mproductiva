@@ -34,6 +34,10 @@
 				echo "<br>".$sqlCapMes="SELECT * FROM CAP_MES WHERE no_empleado='".$noEmpleado."' AND mes='".$fecha1x[1]."'";
 				$resCapMes=mysql_query($sqlCapMes,$this->conectarBd());
 				$rowCapMes=mysql_fetch_array($resCapMes);
+				//se buscan las actividades relacionadas al usuario
+				echo "<br>".$sqlAct="SELECT * FROM ASIG_ACT INNER JOIN SAT_ACTIVIDAD ON ASIG_ACT.id_actividad = SAT_ACTIVIDAD.id_actividad WHERE ASIG_ACT.id_empleado = '".$noEmpleado."' AND SAT_ACTIVIDAD.status='Activo'";
+				$resAct=mysql_query($sqlAct,$this->conectarBd());
+				
 				$meses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 				//se empiezan a hacer los calculos
 				$diasLaboradorAdmin=$rowCapMes["dias_lab"]-$rowCapMes["dias_li"]+($rowCapMes["tiem_ex"]/$rowCapMes["dias_lab"]);
@@ -51,23 +55,23 @@
 				</tr>
 				<tr>
 					<td>Jornada Laboral</td>
-					<td><? echo $rowCapMes["jorna_lab"];?></td>
+					<td>&nbsp;<? echo $rowCapMes["jorna_lab"];?></td>
 				</tr>
 				<tr>
 					<td>Dias Laborables</td>
-					<td><? echo $rowCapMes["dias_lab"]; ?></td>
+					<td>&nbsp;<? echo $rowCapMes["dias_lab"]; ?></td>
 				</tr>
 				<tr>
 					<td>Dias con Licencia</td>
-					<td><? echo $rowCapMes["dias_li"]; ?></td>
+					<td>&nbsp;<? echo $rowCapMes["dias_li"]; ?></td>
 				</tr>
 				<tr>
 					<td>TE (Hrs)</td>
-					<td><? echo $rowCapMes["tiem_ex"]; ?></td>
+					<td>&nbsp;<? echo $rowCapMes["tiem_ex"]; ?></td>
 				</tr>
 				<tr>
 					<td>Meta Productiva</td>
-					<td><? echo $rowCapMes["meta_pro"]; ?></td>
+					<td>&nbsp;<? echo $rowCapMes["meta_pro"]; ?></td>
 				</tr>
 				<tr>
 					<td>Dias Laborados (Admin)</td>
@@ -119,6 +123,31 @@
 				</tr>
 			</table>
 <?
+			if(mysql_num_rows($resAct)==0){
+				echo "No hay Actividades Relacionadas al Usuario";
+			}else{
+?>
+			<div style="height: 20px;padding: 5px;background: #f0f0f0;border: 1px solid #CCC;">
+				&nbsp;&nbsp;Seleccione la Actividad:<select name="cboActividadMatriz" id="cboActividadMatriz" onchange="cargarCapturasMatriz()">
+					<option value="">Selecciona:</option>
+<?
+				while($rowAct=mysql_fetch_array($resAct)){
+?>
+					<option value="<?=$rowAct["id_actividad"];?>"><?=$rowAct["nom_actividad"];?></option>
+<?
+				}
+?>
+				</select>
+			</div>
+			<div style="border: 1px solid #ff0000;margin: 5px;"></div>
+			<!--<table border="1" cellpadding="1" cellspacing="1" width="100%">
+				<tr>
+					<td>&Aacute;rea</td>
+					<td></td>
+				</tr>
+			</table>-->
+<?
+			}	
 		}
 		
 		public function buscarempleado($empleado,$opcionB){
