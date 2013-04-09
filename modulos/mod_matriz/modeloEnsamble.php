@@ -139,7 +139,7 @@
 ?>
 				</select>
 			</div>
-			<div style="border: 1px solid #ff0000;margin: 5px;"></div>
+			<div id="" style="border: 1px solid #ff0000;margin: 5px;"></div>
 			<!--<table border="1" cellpadding="1" cellspacing="1" width="100%">
 				<tr>
 					<td>&Aacute;rea</td>

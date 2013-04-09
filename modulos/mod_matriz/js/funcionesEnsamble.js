@@ -54,4 +54,5 @@ function buscarDatosMatriz(){
 function cargarCapturasMatriz(){
 	var idActividad=$("#cboActividadMatriz").val();
 	alert(idActividad);
+	
 }
