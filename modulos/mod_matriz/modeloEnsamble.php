@@ -24,12 +24,63 @@
     			return $conexion;
 		}
 		
-		public function armarMatriz($noEmpleado,$fecha1,$fecha2){
+		public function armaDetalleMatriz($noEmpleado,$fecha1,$fecha2,$idActividad){
+			echo "<br>".$sqlD="SELECT SAT_ACTIVIDAD.id_actividad, SAT_ACTIVIDAD.nom_actividad, SAT_PROCESO.id_proceso, SAT_PROCESO.nom_proceso, SAT_PROYECTO.id_proyecto, SAT_PROYECTO.nom_proyecto
+			FROM (SAT_ACTIVIDAD INNER JOIN SAT_PROCESO ON SAT_ACTIVIDAD.id_proceso = SAT_PROCESO.id_proceso) INNER JOIN SAT_PROYECTO ON SAT_PROCESO.id_proyecto = SAT_PROYECTO.id_proyecto WHERE id_actividad ='".$idActividad."'";
+			$resD=mysql_query($sqlD,$this->conectarBd());
+			$rowD=mysql_fetch_array($resD);
+			echo "<br>Id Proyecto ".$rowD["id_proyecto"];
+			echo "<br>".$sqlP="SELECT nom_proceso,id_proyecto FROM SAT_PROCESO WHERE id_proyecto='".$rowD["id_proyecto"]."'";
+			$resP=mysql_query($sqlP,$this->conectarBd());
+			echo "<br>".$nroProc=mysql_num_rows($resP);
+?>
+			<table border="1" cellpadding="1" cellspacing="1" width="98%">
+				<tr>
+					<td>&Aacute;rea</td>
+					<td style="text-align: center;" colspan="<?=$nroProc;?>"><?=$rowD["nom_proyecto"];?></td>
+				</tr>
+				<tr>
+					<td>Cantidad por Jornada</td>
+					<td colspan="<?=$nroProc;?>">&nbsp;</td>
+				</tr>
+				<tr>
+					<td>Actividad</td>
+<?
+			while($rowP=mysql_fetch_array($resP)){
+?>
+				<td style="text-align: center;"><?=$rowP["nom_proceso"];?></td>
+<?
+			}
+?>					
+				</tr>
+				<tr>
+					<td>Tiempo X Status</td>
+<?
+			for($i=0;$i<$nroProc;$i++){
+?>
+					<td>&nbsp;</td>
+<?
+			}
+?>
+				</tr>
+				<tr>
+					<td>Tiempo X Status (min)</td>
+				</tr>
+				<tr>
+					<td>Status / Fecha</td>
+				</tr>
+			</table>
+<?
+		}
+		
+		public function armarMatriz($noEmpleado,$fecha1,$fecha2,$tab){
 			$fecha1x=explode("-",$fecha1);
 			$fecha2x=explode("-",$fecha2);
 			if($fecha1x[1] != $fecha2x[1]){
 				echo "Verifique que las fechas concuerden con el mes a Buscar";
 			}else{
+				echo "<br>Tab: ".$tab."<br>";
+				$tabMatrizDetalle="tabMatrizDetalle".$tab;
 				//se buscan los datos del empleado en la tabla CAPTURA-MES
 				echo "<br>".$sqlCapMes="SELECT * FROM CAP_MES WHERE no_empleado='".$noEmpleado."' AND mes='".$fecha1x[1]."'";
 				$resCapMes=mysql_query($sqlCapMes,$this->conectarBd());
@@ -48,6 +99,9 @@
 			}
 			
 ?>
+			<input type="hidden" name="txtHdnNoEmpleado" id="txtHdnNoEmpleado" value="<?=$noEmpleado;?>">
+			<input type="hidden" name="txtHdnFecha1" id="txtHdnFecha1" value="<?=$fecha1;?>">
+			<input type="hidden" name="txtHdnFecha2" id="txtHdnFecha2" value="<?=$fecha2;?>">
 			<table border="1" cellpadding="1" cellspacing="1" width="300" style="font-size: 10px;margin: 5px;">
 				<tr>
 					<td width="230" style="background: #7DC24B;">Mes</td>
@@ -128,7 +182,7 @@
 			}else{
 ?>
 			<div style="height: 20px;padding: 5px;background: #f0f0f0;border: 1px solid #CCC;">
-				&nbsp;&nbsp;Seleccione la Actividad:<select name="cboActividadMatriz" id="cboActividadMatriz" onchange="cargarCapturasMatriz()">
+				&nbsp;&nbsp;Seleccione la Actividad:<select name="cboActividadMatriz" id="cboActividadMatriz" onchange="cargarCapturasMatriz('<?=$tabMatrizDetalle;?>')">
 					<option value="">Selecciona:</option>
 <?
 				while($rowAct=mysql_fetch_array($resAct)){
@@ -139,7 +193,7 @@
 ?>
 				</select>
 			</div>
-			<div id="" style="border: 1px solid #ff0000;margin: 5px;"></div>
+			<div id="<?=$tabMatrizDetalle;?>" style="border: 1px solid #ff0000;margin: 5px;"></div>
 			<!--<table border="1" cellpadding="1" cellspacing="1" width="100%">
 				<tr>
 					<td>&Aacute;rea</td>

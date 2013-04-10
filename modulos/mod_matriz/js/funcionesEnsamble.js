@@ -51,8 +51,14 @@ function buscarDatosMatriz(){
 		addTab("Resultados","controladorEnsamble.php",parametros,"POST");
 	}	
 }
-function cargarCapturasMatriz(){
-	var idActividad=$("#cboActividadMatriz").val();
-	alert(idActividad);
-	
+function cargarCapturasMatriz(tabMatrizDetalle){
+	var idActividad=$("#cboActividadMatriz").val();	
+	var noEmpleado=$("#txtHdnNoEmpleado").val();
+	var fecha1=$("#txtHdnFecha1").val();
+	var fecha2=$("#txtHdnFecha2").val();
+	if(noEmpleado=="" || fecha1=="" || fecha2==""){
+		alert("Verifique la informacion proporcionada");
+	}else{
+		ajaxApp(tabMatrizDetalle,"controladorEnsamble.php","action=detalleMatriz&noEmpleado="+noEmpleado+"&fecha1="+fecha1+"&fecha2="+fecha2+"&idActividad="+idActividad,"POST");
+	}
 }
