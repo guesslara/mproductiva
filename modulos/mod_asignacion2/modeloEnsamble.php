@@ -372,11 +372,11 @@
 		public function guardarActividad($id_proceso,$nombre,$descripcion,$id_producto,$status){
 			$sql="INSERT INTO SAT_ACTIVIDAD (nom_actividad,id_proceso,id_producto,status,descripcion) VALUES ('".$nombre."','".$id_proceso."','".$id_producto."','Activo','".$descripcion."')";
 			$res=mysql_query($sql,$this->conectarBd());
+			$status=explode(",",$status);						
 			if($res){
-				//se recupera el ultimo id insertado en la actividad
+				//se recupera el ultimo id insertado en la actividad				
 				$ultimoId=mysql_query("select last_insert_id() AS ultimoId",$this->conectarBd());
-				$rowUltimoId=mysql_fetch_array($ultimoId);
-				$status=explode(",",$status);
+				$rowUltimoId=mysql_fetch_array($ultimoId);								
 				for($i=0;$i<count($status);$i++){
 					$sqlActStatus="INSERT INTO ACTIVIDAD_STATUS (id_actividad,id_status) VALUES ('".$rowUltimoId["ultimoId"]."','".$status[$i]."')";//se ejecuta la consulta sql
 					$resActStatus=mysql_query($sqlActStatus,$this->conectarBd());
@@ -389,6 +389,7 @@
 			}else{
 				echo "<script type='text/javascript'> alert('Error al Guardar al Proceso'); </script>";	
 			}
+			
 		}
 		
 		public function nuevaActividad($id_proceso){

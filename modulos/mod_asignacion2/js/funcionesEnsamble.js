@@ -73,7 +73,8 @@ function guardarActividad(){
 	if(nombre=="" || descripcion=="" || producto=="" || status==""){
 		alert("Error debe llenar todos los campos");
 	}else{
-		ajaxApp("nuevaActividad","controladorEnsamble.php","action=guardarActividad&id_proceso="+id_proceso+"&nombre="+nombre+"&descripcion="+descripcion+"&producto="+producto+"&status="+status,"POST");
+		//ajaxApp("nuevaActividad","controladorEnsamble.php","action=guardarActividad&id_proceso="+id_proceso+"&nombre="+nombre+"&descripcion="+descripcion+"&producto="+producto+"&status="+status,"POST");
+		ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=guardarActividad&id_proceso="+id_proceso+"&nombre="+nombre+"&descripcion="+descripcion+"&producto="+producto+"&status="+status,"POST");
 	}
 }
 function mostrarFormMetrica(ultimoId){

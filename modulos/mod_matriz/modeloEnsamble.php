@@ -40,14 +40,34 @@
 			$nombresStatus=array();
 			$tiempoActividades=array();//tiempo de las actividades
 			$i=0;
+			
 			//se consultan los procesos
 			while($rowP=mysql_fetch_array($resP)){
 				$arrayIds[$i]=$rowP["id_proceso"];
 				$nombresProcesos[$i]=$rowP["nom_proceso"];
 				$i+=1;
 			}
-			//se consulta las actividades para extraer sus nombres y tiempos y guardarlos en un array
+			/*echo "<pre>";
+			print_r($arrayIds);
+			echo "</pre>";*/
+?>
+			<table border="1" cellpadding="1" cellspacing="1" width="120%" style="font-size: 10px;">
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>&Aacute;rea</td>
+					<td style="text-align: center;" colspan="<?=$nroProc;?>"><?=$rowD["nom_proyecto"];?></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>Cantidad por Jornada</td>
+<?
 			for($i=0;$i<$nroProc;$i++){
+?>
+					<td width="auto" style="text-align:center;">
+<?
+			
 				$sqlA="SELECT * FROM SAT_ACTIVIDAD WHERE id_proceso='".$arrayIds[$i]."'";
 				$resA=mysql_query($sqlA,$this->conectarBd());
 				if(mysql_num_rows($resA)==0){
@@ -61,51 +81,24 @@
 						if(mysql_num_rows($resAS)==0){
 							echo "( 0 )";
 						}else{
-							$i=0;
-							while($rowAS=mysql_fetch_array($resAS)){
-								$nombresStatus[$i]=$rowAS["nom_status"];
-								$tiempoActividades[$i]=$rowAS["tiempo"];
-								$i+=1;
+							$k=0;
+							while($rowAS=mysql_fetch_array($resAS)){								
+								echo "<input type='text' name='' id='' value='' style='width:50px;' />";
+								$k+=1;
 							}							
 						}
 					}
 				}
-			}			
 			
-			
-			//verificar consultas para poder ejecutar los resultados sobre las diferentes columnas
-			
-			
-			echo "<pre>";
-			print_r($nombresProcesos);
-			echo "</pre>";
-			
-			echo "<pre>";
-			print_r($nombresStatus);
-			echo "</pre>";
-			
-			echo "<pre>";
-			print_r($tiempoActividades);
-			echo "</pre>";
-			
-			
-?>
-			<table border="1" cellpadding="1" cellspacing="1" width="98%">
-				<tr>
-					<td>&Aacute;rea</td>
-					<td style="text-align: center;" colspan="<?=$nroProc;?>"><?=$rowD["nom_proyecto"];?></td>
-				</tr>
-				<tr>
-					<td>Cantidad por Jornada</td>
-<?
-			for($i=0;$i<$nroProc;$i++){
-?>
-					<td>&nbsp;</td>
+?>						
+					</td>
 <?
 			}
 ?>					
 				</tr>
 				<tr>
+					<td width="190px">Ajuste al Tiempo x Status</td>
+					<td width="50px;"><input type="text" name="" id="" style="width: 50px;"></td>
 					<td>Actividad</td>
 <?
 			foreach($nombresProcesos as $nombreProceso){
@@ -119,37 +112,120 @@
 ?>					
 				</tr>
 				<tr>
+					<td width="190px">Ajuste a la Capacidad de Producci&oacute;n</td>
+					<td width="50px"><input type="text" name="" id="" style="width: 50px;"></td>
 					<td>Tiempo X Status</td>
-					<td>
-						<table border="1" width="99%">
-							<tr>
 <?
-			foreach($tiempoActividades as $tiempoActividad){
-				echo "<td width='33%' style='text-align:center;'>".$tiempoActividad."</td>";
+			for($i=0;$i<$nroProc;$i++){
+?>
+					<td width="auto" style="text-align:center;">						
+<?
+			
+				$sqlA="SELECT * FROM SAT_ACTIVIDAD WHERE id_proceso='".$arrayIds[$i]."'";
+				$resA=mysql_query($sqlA,$this->conectarBd());
+				if(mysql_num_rows($resA)==0){
+					echo "( 0 )";
+				}else{
+					while($rowA=mysql_fetch_array($resA)){						
+						$sqlAS="SELECT nom_actividad,id_proceso,id_producto,tiempo,nom_status
+						FROM (SAT_ACTIVIDAD INNER JOIN ACTIVIDAD_STATUS ON SAT_ACTIVIDAD.id_actividad=ACTIVIDAD_STATUS.id_actividad) INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status=SAT_STATUS.id_status
+						WHERE SAT_ACTIVIDAD.id_actividad='".$rowA["id_actividad"]."'";
+						$resAS=mysql_query($sqlAS,$this->conectarBd());
+						if(mysql_num_rows($resAS)==0){
+							echo "( 0 )";
+						}else{
+							$j=0;
+							while($rowAS=mysql_fetch_array($resAS)){								
+								echo "<input type='text' name='' id='' value='".$tiempoActividades[$i]=$rowAS["tiempo"]."' style='width:50px;' />";
+								$j+=1;
+							}							
+						}
+					}
+				}
+			
+?>						
+					</td>
+<?
 			}
 ?>
-							</tr>
-						</table>
-					</td>
 				</tr>
 				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
 					<td>Tiempo X Status (min)</td>
-				</tr>
-				<tr>
-					<td>Status / Fecha</td>
-					<td>
-						<table border="1" width="99%">
-							<tr>
 <?
-			foreach($nombresStatus as $nombreStatus){
-				echo "<td width='33%' style='text-align:center;'>".$nombreStatus."</td>";
+			for($i=0;$i<$nroProc;$i++){
+?>
+					<td width="auto" style="text-align:center;">
+<?
+			
+				$sqlA="SELECT * FROM SAT_ACTIVIDAD WHERE id_proceso='".$arrayIds[$i]."'";
+				$resA=mysql_query($sqlA,$this->conectarBd());
+				if(mysql_num_rows($resA)==0){
+					echo "( 0 )";
+				}else{
+					while($rowA=mysql_fetch_array($resA)){						
+						$sqlAS="SELECT nom_actividad,id_proceso,id_producto,tiempo,nom_status
+						FROM (SAT_ACTIVIDAD INNER JOIN ACTIVIDAD_STATUS ON SAT_ACTIVIDAD.id_actividad=ACTIVIDAD_STATUS.id_actividad) INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status=SAT_STATUS.id_status
+						WHERE SAT_ACTIVIDAD.id_actividad='".$rowA["id_actividad"]."'";
+						$resAS=mysql_query($sqlAS,$this->conectarBd());
+						if(mysql_num_rows($resAS)==0){
+							echo "( 0 )";
+						}else{
+							$k=0;
+							while($rowAS=mysql_fetch_array($resAS)){								
+								echo "<input type='text' name='' id='' value='' style='width:50px;' />";
+								$k+=1;
+							}							
+						}
+					}
+				}
+			
+?>						
+					</td>
+<?
 			}
 ?>
-							</tr>
-						</table>
-					</td>
 				</tr>
-			</table>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+					<td>Status / Fecha</td>
+<?
+			for($i=0;$i<$nroProc;$i++){
+?>
+					<td width="auto" style="text-align:center;">						
+<?
+			
+				$sqlA="SELECT * FROM SAT_ACTIVIDAD WHERE id_proceso='".$arrayIds[$i]."'";
+				$resA=mysql_query($sqlA,$this->conectarBd());
+				if(mysql_num_rows($resA)==0){
+					echo "( 0 )";
+				}else{
+					while($rowA=mysql_fetch_array($resA)){						
+						$sqlAS="SELECT nom_actividad,id_proceso,id_producto,tiempo,nom_status
+						FROM (SAT_ACTIVIDAD INNER JOIN ACTIVIDAD_STATUS ON SAT_ACTIVIDAD.id_actividad=ACTIVIDAD_STATUS.id_actividad) INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status=SAT_STATUS.id_status
+						WHERE SAT_ACTIVIDAD.id_actividad='".$rowA["id_actividad"]."'";
+						$resAS=mysql_query($sqlAS,$this->conectarBd());
+						if(mysql_num_rows($resAS)==0){
+							echo "( 0 )";
+						}else{
+							$k=0;
+							while($rowAS=mysql_fetch_array($resAS)){								
+								echo "<input type='text' name='' id='' value='".$nombresStatus[$i]=$rowAS["nom_status"]."' style='width:50px;' />";
+								$k+=1;
+							}							
+						}
+					}
+				}
+			
+?>						
+					</td>
+<?
+			}
+?>
+				</tr>
+			</table><br><br>
 <?
 		}
 		
@@ -196,19 +272,19 @@
 					<td>&nbsp;<? echo $rowCapMes["jorna_lab"];?></td>
 				</tr>
 				<tr>
-					<td>Dias Laborables</td>
+					<td style="background: #7DC24B;">Dias Laborables</td>
 					<td>&nbsp;<? echo $rowCapMes["dias_lab"]; ?></td>
 				</tr>
 				<tr>
-					<td>Dias con Licencia</td>
+					<td style="background: #7DC24B;">Dias con Licencia</td>
 					<td>&nbsp;<? echo $rowCapMes["dias_li"]; ?></td>
 				</tr>
 				<tr>
-					<td>TE (Hrs)</td>
+					<td style="background: #7DC24B;">TE (Hrs)</td>
 					<td>&nbsp;<? echo $rowCapMes["tiem_ex"]; ?></td>
 				</tr>
 				<tr>
-					<td>Meta Productiva</td>
+					<td style="background: #7DC24B;">Meta Productiva</td>
 					<td>&nbsp;<? echo $rowCapMes["meta_pro"]; ?></td>
 				</tr>
 				<tr>
@@ -232,31 +308,31 @@
 					<td>&nbsp;<? echo $horasLaboradasMesProd; ?></td>
 				</tr>
 				<tr>
-					<td>Cumplimiento</td>
+					<td style="background: yellow;color: #000;">Cumplimiento</td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td>TE (Hrs)</td>
+					<td style="background: yellow;color: #000;">TE (Hrs)</td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td>Productividad por Dia</td>
+					<td style="background: yellow;color: #000;">Productividad por Dia</td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td>Productividad por Mes</td>
+					<td style="background: yellow;color: #000;">Productividad por Mes</td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td>Rendimiento</td>
+					<td style="background: yellow;color: #000;">Rendimiento</td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td>% de Scrap en el Mes</td>
+					<td style="background: yellow;color: #000;">% de Scrap en el Mes</td>
 					<td>&nbsp;</td>
 				</tr>
 				<tr>
-					<td>% de Rechazo en el Mes</td>
+					<td style="background: yellow;color: #000;">% de Rechazo en el Mes</td>
 					<td>&nbsp;</td>
 				</tr>
 			</table>

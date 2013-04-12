@@ -61,7 +61,7 @@
 		<div id="barraOpcionesEnsamble">
 			<!--<div class="opcionesEnsamble" onclick="nuevaEntrega()" title="Capturar Equipo OK">Nueva Captura</div>			
 			<div class="opcionesEnsambleFinalizar" onclick="generarVentana()" title="Finalizar Entregas">Finalizar Entregas</div>-->
-			<div id="cargadorEmpaque" style="float:right;width:600px;height:20px;padding:5px;background:#FFF;border:1px solid #CCC;font-size:13px;text-align:right;"></div>
+			<div id="cargadorEmpaque" style="float:right;width:600px;height:20px;padding:5px;background:#FFF;border:1px solid #CCC;font-size:13px;text-align:right;overflow: auto;"></div>
 		</div>
 		<div id="infoEnsamble3">
 			<div id="contenido1" style="float: left;border:1px solid #e1e1e1;background:#fff; height:95%;width:32%;font-size:12px;margin:3px;">

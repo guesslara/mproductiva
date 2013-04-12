@@ -24,6 +24,7 @@
 			$objAsig->nuevaActividad($_POST["id_proceso"]);
 		break;
 		case "guardarActividad":
+			//print_r($_POST);
 			$objAsig->guardarActividad($_POST["id_proceso"],$_POST["nombre"],$_POST["descripcion"],$_POST["producto"],$_POST["status"]);
 		break;
 		case "formAsignacion":
