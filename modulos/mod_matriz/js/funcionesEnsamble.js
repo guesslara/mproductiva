@@ -62,3 +62,10 @@ function cargarCapturasMatriz(tabMatrizDetalle){
 		ajaxApp(tabMatrizDetalle,"controladorEnsamble.php","action=detalleMatriz&noEmpleado="+noEmpleado+"&fecha1="+fecha1+"&fecha2="+fecha2+"&idActividad="+idActividad,"POST");
 	}
 }
+function calcularDatosMatriz(){
+	var arrayTiempoStatus=$("#hdnArrayTiempoStatus").val();
+	alert(arrayTiempoStatus);
+	for(i=0;i<arrayTiempoStatus.length;i++){
+		alert(arrayTiempoStatus[i]);
+	}
+}

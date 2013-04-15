@@ -1,4 +1,7 @@
 <?
+	/*
+	 *No me interesa con quien estuviste en el pasado. Solo quiero ser tu presente y que juntos formemos el futuro.
+	*/
 	session_start();	
 	class modeloEnsamble{
 
@@ -39,6 +42,7 @@
 			$nombreActividades=array();//array para los nombres de las actividades
 			$nombresStatus=array();
 			$tiempoActividades=array();//tiempo de las actividades
+			$tiempoPorStatusActividad=array();//array con el tiempo de los status
 			$i=0;
 			
 			//se consultan los procesos
@@ -47,11 +51,10 @@
 				$nombresProcesos[$i]=$rowP["nom_proceso"];
 				$i+=1;
 			}
-			/*echo "<pre>";
-			print_r($arrayIds);
-			echo "</pre>";*/
+			
 ?>
-			<table border="1" cellpadding="1" cellspacing="1" width="120%" style="font-size: 10px;">
+			<input type="button" value="Calcular Matriz" onclick="calcularDatosMatriz()" style="width: 120px;height: 25px;padding: 5px;">
+			<table border="1" cellpadding="1" cellspacing="1" width="1500" style="font-size: 10px;">
 				<tr>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
@@ -82,8 +85,9 @@
 							echo "( 0 )";
 						}else{
 							$k=0;
-							while($rowAS=mysql_fetch_array($resAS)){								
-								echo "<input type='text' name='' id='' value='' style='width:50px;' />";
+							while($rowAS=mysql_fetch_array($resAS)){
+								$cantidadJornada="cantidadJornada".$i.$k;
+								echo "<input type='text' name='".$cantidadJornada."' id='".$cantidadJornada."' value='' style='width:50px;' />";
 								$k+=1;
 							}							
 						}
@@ -98,7 +102,7 @@
 				</tr>
 				<tr>
 					<td width="190px">Ajuste al Tiempo x Status</td>
-					<td width="50px;"><input type="text" name="" id="" style="width: 50px;"></td>
+					<td width="50px;"><input type="text" name="ajusteAlTiempoPorStatus" id="ajusteAlTiempoPorStatus" value="0" style="width: 35px;text-align: center;">%</td>
 					<td>Actividad</td>
 <?
 			foreach($nombresProcesos as $nombreProceso){
@@ -113,7 +117,7 @@
 				</tr>
 				<tr>
 					<td width="190px">Ajuste a la Capacidad de Producci&oacute;n</td>
-					<td width="50px"><input type="text" name="" id="" style="width: 50px;"></td>
+					<td width="50px"><input type="text" name="ajusteCapacidadProduccion" id="ajusteCapacidadProduccion" value="100" style="width: 35px;text-align: center;">%</td>
 					<td>Tiempo X Status</td>
 <?
 			for($i=0;$i<$nroProc;$i++){
@@ -135,8 +139,10 @@
 							echo "( 0 )";
 						}else{
 							$j=0;
-							while($rowAS=mysql_fetch_array($resAS)){								
-								echo "<input type='text' name='' id='' value='".$tiempoActividades[$i]=$rowAS["tiempo"]."' style='width:50px;' />";
+							while($rowAS=mysql_fetch_array($resAS)){																
+								array_push($tiempoPorStatusActividad,$rowAS["tiempo"]);
+								$ajusteCapacidad="ajusteCapacidad".$j.$i;
+								echo "<input type='text' name='".$ajusteCapacidad."' id='".$ajusteCapacidad."' value='".$rowAS["tiempo"]."' style='width:50px;' />";
 								$j+=1;
 							}							
 						}
@@ -173,8 +179,9 @@
 							echo "( 0 )";
 						}else{
 							$k=0;
-							while($rowAS=mysql_fetch_array($resAS)){								
-								echo "<input type='text' name='' id='' value='' style='width:50px;' />";
+							while($rowAS=mysql_fetch_array($resAS)){
+								$tiempoPorStatus="tiempoXStatus".$k.$i;
+								echo "<input type='text' name='".$tiempoPorStatus."' id='".$tiempoPorStatus."' value='' style='width:50px;' />";
 								$k+=1;
 							}							
 						}
@@ -212,7 +219,7 @@
 						}else{
 							$k=0;
 							while($rowAS=mysql_fetch_array($resAS)){								
-								echo "<input type='text' name='' id='' value='".$nombresStatus[$i]=$rowAS["nom_status"]."' style='width:50px;' />";
+								echo "<input type='text' name='' id='' value='".$nombresStatus[$i]=$rowAS["nom_status"]."' style='width:50px;text-align:center;' />";
 								$k+=1;
 							}							
 						}
@@ -226,6 +233,12 @@
 ?>
 				</tr>
 			</table><br><br>
+			<?
+			echo "<pre>";
+			print_r($tiempoPorStatusActividad);
+			echo "</pre>";
+			?>
+			<input type="hidden" name="hdnArrayTiempoStatus" id="hdnArrayTiempoStatus" value="<?=$tiempoPorStatusActividad;?>">
 <?
 		}
 		
@@ -262,6 +275,13 @@
 			<input type="hidden" name="txtHdnNoEmpleado" id="txtHdnNoEmpleado" value="<?=$noEmpleado;?>">
 			<input type="hidden" name="txtHdnFecha1" id="txtHdnFecha1" value="<?=$fecha1;?>">
 			<input type="hidden" name="txtHdnFecha2" id="txtHdnFecha2" value="<?=$fecha2;?>">
+			<input type="hidden" name="txtHdnMes" id="txtHdnMes" value="<?=$meses[$fecha1x[1]-1];?>"_
+			<input type="hidden" name="txtHdnJornadaLaboral" id="txtHdnJornadaLaboral" value="<?=$rowCapMes["jorna_lab"];?>">
+			<input type="hidden" name="txtHdnDiasLaborables" id="txtHdnDiasLaborables" value="<?=$rowCapMes["dias_lab"];?>">
+			<input type="hidden" name="txtHdnDiasLicencia" id="txtHdnDiasLicencia" value="<?=$rowCapMes["dias_li"];?>">
+			<input type="hidden" name="txtHdnTiempoExtra" id="txtHdnTiempoExtra" value="<?=$rowCapMes["tiem_ex"];?>">
+			<input type="hidden" name="txtHdnMetaProd" id="txtHdnMetaProd" value="<?=$rowCapMes["meta_pro"];?>">
+			
 			<table border="1" cellpadding="1" cellspacing="1" width="300" style="font-size: 10px;margin: 5px;">
 				<tr>
 					<td width="230" style="background: #7DC24B;">Mes</td>
