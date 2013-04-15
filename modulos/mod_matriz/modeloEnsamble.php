@@ -42,7 +42,8 @@
 			$nombreActividades=array();//array para los nombres de las actividades
 			$nombresStatus=array();
 			$tiempoActividades=array();//tiempo de las actividades
-			$tiempoPorStatusActividad=array();//array con el tiempo de los status
+			$tiempoPorStatusActividad="";//array con el tiempo de los status
+			$cantidadStatusActividad="";
 			$i=0;
 			
 			//se consultan los procesos
@@ -139,12 +140,23 @@
 							echo "( 0 )";
 						}else{
 							$j=0;
-							while($rowAS=mysql_fetch_array($resAS)){																
-								array_push($tiempoPorStatusActividad,$rowAS["tiempo"]);
+							while($rowAS=mysql_fetch_array($resAS)){																								
+								if($tiempoPorStatusActividad==""){
+									$tiempoPorStatusActividad=$rowAS["tiempo"];
+								}else{
+									$tiempoPorStatusActividad=$tiempoPorStatusActividad.",".$rowAS["tiempo"];
+								}
+								if($cantidadStatusActividad==""){
+									//echo "<script type='text/javascript'>alert('".$j."');</script>";
+									$cantidadStatusActividad=$cantidadStatusActividad.$j;
+								}else{
+									$cantidadStatusActividad=$cantidadStatusActividad.",".$j;
+								}
 								$ajusteCapacidad="ajusteCapacidad".$j.$i;
 								echo "<input type='text' name='".$ajusteCapacidad."' id='".$ajusteCapacidad."' value='".$rowAS["tiempo"]."' style='width:50px;' />";
 								$j+=1;
-							}							
+							}
+							$cantidadStatusActividad=$cantidadStatusActividad."|";
 						}
 					}
 				}
@@ -237,8 +249,11 @@
 			echo "<pre>";
 			print_r($tiempoPorStatusActividad);
 			echo "</pre>";
+			print_r($cantidadStatusActividad);
 			?>
 			<input type="hidden" name="hdnArrayTiempoStatus" id="hdnArrayTiempoStatus" value="<?=$tiempoPorStatusActividad;?>">
+			<input type="hidden" name="hdnCantidadElementos" id="hdnCantidadElementos" value="<?=$nroProc?>">
+			<input type="hidden" name="hdnCantidadStatusTiempo" id="hdnCantidadStatusTiempo" value="<?=$cantidadStatusActividad?>">
 <?
 		}
 		

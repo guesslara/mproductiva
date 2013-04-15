@@ -1,4 +1,5 @@
 var tabAux=2;
+var cantidadJornada="";
 function ajaxApp(divDestino,url,parametros,metodo){	
 	$.ajax({
 	async:true,
@@ -62,10 +63,30 @@ function cargarCapturasMatriz(tabMatrizDetalle){
 		ajaxApp(tabMatrizDetalle,"controladorEnsamble.php","action=detalleMatriz&noEmpleado="+noEmpleado+"&fecha1="+fecha1+"&fecha2="+fecha2+"&idActividad="+idActividad,"POST");
 	}
 }
-function calcularDatosMatriz(){
+function calcularDatosMatriz(){	
 	var arrayTiempoStatus=$("#hdnArrayTiempoStatus").val();
-	alert(arrayTiempoStatus);
-	for(i=0;i<arrayTiempoStatus.length;i++){
-		alert(arrayTiempoStatus[i]);
+	var cantidadElementos=$("#hdnCantidadElementos").val();//cantidad de los procesos
+	var cantidadStatusTiempo=$("#hdnCantidadStatusTiempo").val();//cantidad de los status
+	
+	
+	//alert("Cantidad de Elementos: "+cantidadElementos);
+	
+	var tiempoStatus=cantidadStatusTiempo.split('|');
+	
+	
+	
+	
+	for(var i=0;i<tiempoStatus.length;i++){
+		var repStatus=tiempoStatus[i].split(",");
+		//alert(repStatus);
 	}
+	
+	
+	for(var i=0;i<cantidadElementos;i++){
+		for(j=0;j<repStatus.length;j++){			
+			nombreCaja="cantidadJornada"+j+i;
+			alert(nombreCaja);
+		}
+	}
+	
 }
