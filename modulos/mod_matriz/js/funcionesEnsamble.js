@@ -79,7 +79,7 @@ function calcularDatosMatriz(){
 	
 	
 	
-	alert(arrayTiempoStatus);
+	//alert(arrayTiempoStatus);
 	
 	tiemposPorStatus=arrayTiempoStatus.split(",");
 	
@@ -90,7 +90,10 @@ function calcularDatosMatriz(){
 		tiempoPorStatusMin="tiempoXStatusMin"+i;
 		$("#"+tiempoPorStatusMin).attr("value",valorTiempoXStatusMin);
 		//calculos para sacar la cantidad por jornada
-		valorCantidadPorJornada
+		nombreCajaJornada="cantidadJornada"+i;//nombre de las cajas
+		//valorCantidadPorJornada=$("#"+nombreCajaJornada).val();
+		valorCantidadPorJornada=parseFloat(minutosLaborablesPorJornada) / valorTiempoXStatusMin;
+		$("#"+nombreCajaJornada).attr("value",valorCantidadPorJornada)
 	}
 	
 	

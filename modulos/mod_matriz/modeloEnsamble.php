@@ -60,7 +60,16 @@
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
 					<td>&Aacute;rea</td>
-					<td style="text-align: center;" colspan="<?=$nroProc;?>"><?=$rowD["nom_proyecto"];?></td>
+					<td style="text-align: center;background: #5882FA;color: #FFF;font-weight: bold;" colspan="<?=$nroProc;?>"><?=$rowD["nom_proyecto"];?></td>
+					<td rowspan="6">&nbsp;</td>
+					<td rowspan="6">&nbsp;</td>
+					<td rowspan="6">&nbsp;</td>
+					<td rowspan="6">&nbsp;</td>
+					<td rowspan="6">&nbsp;</td>
+					<td rowspan="6">&nbsp;</td>
+					<td rowspan="6">&nbsp;</td>
+					<td rowspan="6">&nbsp;</td>
+					<td rowspan="6">&nbsp;</td>
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
@@ -70,7 +79,7 @@
 			$m=0;
 			for($i=0;$i<$nroProc;$i++){
 ?>
-					<td width="auto" style="text-align:center;">
+					<td width="auto" style="text-align:center;background: #5882FA;color: #FFF;font-weight: bold;">
 <?
 			
 				$sqlA="SELECT * FROM SAT_ACTIVIDAD WHERE id_proceso='".$arrayIds[$i]."'";
@@ -104,7 +113,7 @@
 ?>					
 				</tr>
 				<tr>
-					<td width="190px">Ajuste al Tiempo x Status</td>
+					<td width="190px" style="background: yellow;color: #000;">Ajuste al Tiempo x Status</td>
 					<td width="50px;"><input type="text" name="ajusteAlTiempoPorStatus" id="ajusteAlTiempoPorStatus" value="0" style="width: 35px;text-align: center;">%</td>
 					<td>Actividad</td>
 <?
@@ -112,14 +121,14 @@
 			
 			
 ?>
-				<td style="text-align: center;"><? echo $nombreProceso;?></td>
+				<td style="text-align: center;background: #5882FA;color: #FFF;font-weight: bold;"><? echo $nombreProceso;?></td>
 <?
 			}
 			
 ?>					
 				</tr>
 				<tr>
-					<td width="190px">Ajuste a la Capacidad de Producci&oacute;n</td>
+					<td width="190px" style="background: yellow;color: #000;">Ajuste a la Capacidad de Producci&oacute;n</td>
 					<td width="50px"><input type="text" name="ajusteCapacidadProduccion" id="ajusteCapacidadProduccion" value="" style="width: 35px;text-align: center;">%</td>
 					<td>Tiempo X Status</td>
 <?
@@ -212,7 +221,7 @@
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
-					<td>&nbsp;</td>
+					<td>D&iacute;as</td>
 					<td>Status / Fecha</td>
 <?
 			for($i=0;$i<$nroProc;$i++){
@@ -247,14 +256,8 @@
 <?
 			}
 ?>
-				</tr>
-			</table><br><br>
-			<?
-			echo "<pre>";
-			print_r($tiempoPorStatusActividad);
-			echo "</pre>";
-			print_r($cantidadStatusActividad);
-			?>
+				</tr>				
+			</table><br><br>			
 			<input type="hidden" name="hdnArrayTiempoStatus" id="hdnArrayTiempoStatus" value="<?=$tiempoPorStatusActividad;?>">
 			<input type="hidden" name="hdnCantidadElementos" id="hdnCantidadElementos" value="<?=$nroProc?>">
 			<input type="hidden" name="hdnCantidadStatusTiempo" id="hdnCantidadStatusTiempo" value="<?=$cantidadStatusActividad?>">
@@ -286,7 +289,7 @@
 				//se empiezan a hacer los calculos
 				$diasLaboradorAdmin=$rowCapMes["dias_lab"]-$rowCapMes["dias_li"]+($rowCapMes["tiem_ex"]/$rowCapMes["dias_lab"]);
 				//$diasLaboradosOper=
-				$minutosLaborablesxJornada=($rowCapMes["jorna_lab"] * 60) * $rowCapMes["meta_pro"];
+				$minutosLaborablesxJornada=(($rowCapMes["jorna_lab"] * 60) * $rowCapMes["meta_pro"]) / 100;
 				$horasLaboradasMes=$rowCapMes["jorna_lab"] * ( $rowCapMes["dias_lab"] + ( $rowCapMes["tiem_ex"] / $rowCapMes["jorna_lab"] ) - $rowCapMes["dias_li"] );
 				$horasLaboradasMesProd= $horasLaboradasMes * $rowCapMes["meta_pro"];
 			}
