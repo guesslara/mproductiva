@@ -66,16 +66,35 @@ function cargarCapturasMatriz(tabMatrizDetalle){
 function calcularDatosMatriz(){	
 	var arrayTiempoStatus=$("#hdnArrayTiempoStatus").val();
 	var cantidadElementos=$("#hdnCantidadElementos").val();//cantidad de los procesos
-	var cantidadStatusTiempo=$("#hdnCantidadStatusTiempo").val();//cantidad de los status
+	var cantidadStatusTiempo=$("#hdnCantidadStatusTiempo").val();//cantidad de los status	
+	var contadoStatusPorMin=$("#hdnContadoStatusPorMin").val();//contador para las operaciones de tiempo x status (min)
+	
+	var ajusteAlTiempoPorStatus=$("#ajusteAlTiempoPorStatus").val();//se recupera la cantidad de ajuste al tiempo
+	
+	var ajusteCapacidadProduccion=1+parseFloat(ajusteAlTiempoPorStatus);
+	$("#ajusteCapacidadProduccion").attr("value",ajusteCapacidadProduccion);
+	
+	var ajusteCapacidadProduccion=$("#ajusteCapacidadProduccion").val();
+	var minutosLaborablesPorJornada=$("#hdnMinutosLaborablesJornada").val();
 	
 	
-	//alert("Cantidad de Elementos: "+cantidadElementos);
 	
-	var tiempoStatus=cantidadStatusTiempo.split('|');
+	alert(arrayTiempoStatus);
+	
+	tiemposPorStatus=arrayTiempoStatus.split(",");
 	
 	
+	for(var i=0;i<tiemposPorStatus.length;i++){
+		//calculos para sacar tiempo x status en minutos
+		valorTiempoXStatusMin=parseFloat(tiemposPorStatus[i]) / parseFloat(ajusteCapacidadProduccion);
+		tiempoPorStatusMin="tiempoXStatusMin"+i;
+		$("#"+tiempoPorStatusMin).attr("value",valorTiempoXStatusMin);
+		//calculos para sacar la cantidad por jornada
+		valorCantidadPorJornada
+	}
 	
 	
+	/*	
 	for(var i=0;i<tiempoStatus.length;i++){
 		var repStatus=tiempoStatus[i].split(",");
 		//alert(repStatus);
@@ -88,5 +107,5 @@ function calcularDatosMatriz(){
 			alert(nombreCaja);
 		}
 	}
-	
+	*/
 }

@@ -67,6 +67,7 @@
 					<td>&nbsp;</td>
 					<td>Cantidad por Jornada</td>
 <?
+			$m=0;
 			for($i=0;$i<$nroProc;$i++){
 ?>
 					<td width="auto" style="text-align:center;">
@@ -87,9 +88,10 @@
 						}else{
 							$k=0;
 							while($rowAS=mysql_fetch_array($resAS)){
-								$cantidadJornada="cantidadJornada".$i.$k;
+								$cantidadJornada="cantidadJornada".$m;
 								echo "<input type='text' name='".$cantidadJornada."' id='".$cantidadJornada."' value='' style='width:50px;' />";
 								$k+=1;
+								$m+=1;
 							}							
 						}
 					}
@@ -118,7 +120,7 @@
 				</tr>
 				<tr>
 					<td width="190px">Ajuste a la Capacidad de Producci&oacute;n</td>
-					<td width="50px"><input type="text" name="ajusteCapacidadProduccion" id="ajusteCapacidadProduccion" value="100" style="width: 35px;text-align: center;">%</td>
+					<td width="50px"><input type="text" name="ajusteCapacidadProduccion" id="ajusteCapacidadProduccion" value="" style="width: 35px;text-align: center;">%</td>
 					<td>Tiempo X Status</td>
 <?
 			for($i=0;$i<$nroProc;$i++){
@@ -172,6 +174,7 @@
 					<td>&nbsp;</td>
 					<td>Tiempo X Status (min)</td>
 <?
+			$n=0;
 			for($i=0;$i<$nroProc;$i++){
 ?>
 					<td width="auto" style="text-align:center;">
@@ -192,9 +195,10 @@
 						}else{
 							$k=0;
 							while($rowAS=mysql_fetch_array($resAS)){
-								$tiempoPorStatus="tiempoXStatus".$k.$i;
+								$tiempoPorStatus="tiempoXStatusMin".$n;
 								echo "<input type='text' name='".$tiempoPorStatus."' id='".$tiempoPorStatus."' value='' style='width:50px;' />";
 								$k+=1;
+								$n+=1;
 							}							
 						}
 					}
@@ -254,6 +258,7 @@
 			<input type="hidden" name="hdnArrayTiempoStatus" id="hdnArrayTiempoStatus" value="<?=$tiempoPorStatusActividad;?>">
 			<input type="hidden" name="hdnCantidadElementos" id="hdnCantidadElementos" value="<?=$nroProc?>">
 			<input type="hidden" name="hdnCantidadStatusTiempo" id="hdnCantidadStatusTiempo" value="<?=$cantidadStatusActividad?>">
+			<input type="hidden" name="hdnContadoStatusPorMin" id="hdnContadoStatusPorMin" value="<?=$n;?>">
 <?
 		}
 		
@@ -332,7 +337,7 @@
 				</tr>
 				<tr>
 					<td>Minutos Laborables por Jornada (min)</td>
-					<td>&nbsp;<? echo $minutosLaborablesxJornada; ?></td>
+					<td>&nbsp;<? echo $minutosLaborablesxJornada; ?><input type="hidden" name="hdnMinutosLaborablesJornada" id="hdnMinutosLaborablesJornada" value="<?=$minutosLaborablesxJornada?>"></td>
 				</tr>
 				<tr>
 					<td>Horas Laboradas en el Mes al 100 % de Productividad</td>
