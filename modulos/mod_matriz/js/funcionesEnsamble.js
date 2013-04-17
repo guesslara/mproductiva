@@ -64,51 +64,35 @@ function cargarCapturasMatriz(tabMatrizDetalle){
 	}
 }
 function calcularDatosMatriz(){	
-	var arrayTiempoStatus=$("#hdnArrayTiempoStatus").val();
-	var cantidadElementos=$("#hdnCantidadElementos").val();//cantidad de los procesos
-	var cantidadStatusTiempo=$("#hdnCantidadStatusTiempo").val();//cantidad de los status	
-	var contadoStatusPorMin=$("#hdnContadoStatusPorMin").val();//contador para las operaciones de tiempo x status (min)
-	
-	var ajusteAlTiempoPorStatus=$("#ajusteAlTiempoPorStatus").val();//se recupera la cantidad de ajuste al tiempo
-	
-	var ajusteCapacidadProduccion=1+parseFloat(ajusteAlTiempoPorStatus);
-	$("#ajusteCapacidadProduccion").attr("value",ajusteCapacidadProduccion);
-	
-	var ajusteCapacidadProduccion=$("#ajusteCapacidadProduccion").val();
-	var minutosLaborablesPorJornada=$("#hdnMinutosLaborablesJornada").val();
-	
-	
-	
-	//alert(arrayTiempoStatus);
-	
-	tiemposPorStatus=arrayTiempoStatus.split(",");
-	
-	
-	for(var i=0;i<tiemposPorStatus.length;i++){
-		//calculos para sacar tiempo x status en minutos
-		valorTiempoXStatusMin=parseFloat(tiemposPorStatus[i]) / parseFloat(ajusteCapacidadProduccion);
-		tiempoPorStatusMin="tiempoXStatusMin"+i;
-		$("#"+tiempoPorStatusMin).attr("value",valorTiempoXStatusMin);
-		//calculos para sacar la cantidad por jornada
-		nombreCajaJornada="cantidadJornada"+i;//nombre de las cajas
-		//valorCantidadPorJornada=$("#"+nombreCajaJornada).val();
-		valorCantidadPorJornada=parseFloat(minutosLaborablesPorJornada) / valorTiempoXStatusMin;
-		$("#"+nombreCajaJornada).attr("value",valorCantidadPorJornada)
-	}
-	
-	
-	/*	
-	for(var i=0;i<tiempoStatus.length;i++){
-		var repStatus=tiempoStatus[i].split(",");
-		//alert(repStatus);
-	}
-	
-	
-	for(var i=0;i<cantidadElementos;i++){
-		for(j=0;j<repStatus.length;j++){			
-			nombreCaja="cantidadJornada"+j+i;
-			alert(nombreCaja);
+	try{
+		var arrayTiempoStatus=$("#hdnArrayTiempoStatus").val();
+		var cantidadElementos=$("#hdnCantidadElementos").val();//cantidad de los procesos
+		var cantidadStatusTiempo=$("#hdnCantidadStatusTiempo").val();//cantidad de los status	
+		var contadoStatusPorMin=$("#hdnContadoStatusPorMin").val();//contador para las operaciones de tiempo x status (min)
+		
+		var ajusteAlTiempoPorStatus=$("#ajusteAlTiempoPorStatus").val();//se recupera la cantidad de ajuste al tiempo
+		
+		var ajusteCapacidadProduccion=1+parseFloat(ajusteAlTiempoPorStatus);
+		$("#ajusteCapacidadProduccion").attr("value",ajusteCapacidadProduccion);
+		
+		var ajusteCapacidadProduccion=$("#ajusteCapacidadProduccion").val();
+		var minutosLaborablesPorJornada=$("#hdnMinutosLaborablesJornada").val();
+		
+		tiemposPorStatus=arrayTiempoStatus.split(",");
+		
+		
+		for(var i=0;i<tiemposPorStatus.length;i++){
+			//calculos para sacar tiempo x status en minutos
+			valorTiempoXStatusMin=parseFloat(tiemposPorStatus[i]) / parseFloat(ajusteCapacidadProduccion);
+			tiempoPorStatusMin="tiempoXStatusMin"+i;
+			$("#"+tiempoPorStatusMin).attr("value",valorTiempoXStatusMin);
+			//calculos para sacar la cantidad por jornada
+			nombreCajaJornada="cantidadJornada"+i;//nombre de las cajas
+			//valorCantidadPorJornada=$("#"+nombreCajaJornada).val();
+			valorCantidadPorJornada=parseFloat(minutosLaborablesPorJornada) / valorTiempoXStatusMin;
+			$("#"+nombreCajaJornada).attr("value",valorCantidadPorJornada)
 		}
+	}catch(err){
+		alert("Error en la Aplicacion");
 	}
-	*/
 }

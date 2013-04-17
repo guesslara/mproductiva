@@ -33,9 +33,15 @@
 			$resD=mysql_query($sqlD,$this->conectarBd());
 			$rowD=mysql_fetch_array($resD);
 			
+			//consulta para los procesos
 			echo "<br>".$sqlP="SELECT id_proceso,nom_proceso,id_proyecto FROM SAT_PROCESO WHERE id_proyecto='".$rowD["id_proyecto"]."'";
 			$resP=mysql_query($sqlP,$this->conectarBd());
-			echo "<br>".$nroProc=mysql_num_rows($resP);
+			
+			echo "<br>".$nroProc=mysql_num_rows($resP);//numero de procesos
+			
+			//consulta con los detalles de las capturas de las actividades
+			echo "<br>".$sqlDR="SELECT * FROM `detalle_captura_registro` WHERE fecha BETWEEN '".$fecha1."' AND '".$fecha2."' AND no_empleado = '".$noEmpleado."' AND id_actividad='".$idActividad."' ORDER BY fecha";
+			$resDR=mysql_query($sqlDR,$this->conectarBd());
 			
 			$arrayIds=array();//array para los ids de los procesos
 			$nombresProcesos=array();//array para guardar los nombres de los procesos
@@ -55,7 +61,7 @@
 			
 ?>
 			<input type="button" value="Calcular Matriz" onclick="calcularDatosMatriz()" style="width: 120px;height: 25px;padding: 5px;">
-			<table border="1" cellpadding="1" cellspacing="1" width="1500" style="font-size: 10px;">
+			<table border="1" cellpadding="1" cellspacing="1" width="1600" style="font-size: 10px;">
 				<tr>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
@@ -256,7 +262,40 @@
 <?
 			}
 ?>
-				</tr>				
+				</tr>
+<?
+			while($rowDR=mysql_fetch_array($resDR)){
+				$fechaB=explode("-",$rowDR['fecha']);						
+				$diaSeg=date("w",mktime(0,0,0,$fechaB[1],$fechaB[2],$fechaB[0]));
+				$mesSeg=date("n",mktime(0,0,0,$fechaB[1],$fechaB[2],$fechaB[0]));
+				$dias= array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","S&aacute;bado");
+				$meses= array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");//<?=$rowBitacora["descripcion"].$rowBitacora["f_registro"];>
+?>
+				<tr>
+					<td>&nbsp;</td>
+					<td><? echo $dias[$diaSeg];?></td>
+					<td><? echo $rowDR["fecha"];?></td>
+<?
+				for($i=0;$i<$nroProc;$i++){
+					$arrayValorStatusDetalle=$rowDR["status"];//se prepara la info de los status
+					$arrayValorStatusDetalle=explode(",",$arrayValorStatusDetalle);
+?>
+					<td>
+<?
+					for($l=0;$l<count($arrayValorStatusDetalle);$l++){
+?>
+						<input type="text" name="" id="" value="<? echo $arrayValorStatusDetalle[$l];?>" style='width:40px;font-size: 10px;text-align:center;'>
+<?
+					}
+?>
+					</td>
+<?
+				}
+?>
+				</tr>
+<?
+			}
+?>
 			</table><br><br>			
 			<input type="hidden" name="hdnArrayTiempoStatus" id="hdnArrayTiempoStatus" value="<?=$tiempoPorStatusActividad;?>">
 			<input type="hidden" name="hdnCantidadElementos" id="hdnCantidadElementos" value="<?=$nroProc?>">
