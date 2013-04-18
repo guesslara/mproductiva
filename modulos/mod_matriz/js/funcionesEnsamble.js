@@ -53,10 +53,13 @@ function buscarDatosMatriz(){
 	}	
 }
 function cargarCapturasMatriz(tabMatrizDetalle){
-	var idActividad=$("#cboActividadMatriz").val();	
-	var noEmpleado=$("#txtHdnNoEmpleado").val();
+	var nombreCombo="#cboActividadMatriz"+tabMatrizDetalle;
+	var noEmpleadoH="#txtHdnNoEmpleado"+tabMatrizDetalle;
+	var idActividad=$(nombreCombo).val();	
+	var noEmpleado=$(noEmpleadoH).val();
 	var fecha1=$("#txtHdnFecha1").val();
 	var fecha2=$("#txtHdnFecha2").val();
+	//alert("Actividad: "+idActividad+"\n\nEmpleado: "+noEmpleado);
 	if(noEmpleado=="" || fecha1=="" || fecha2==""){
 		alert("Verifique la informacion proporcionada");
 	}else{

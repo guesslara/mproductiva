@@ -155,7 +155,7 @@ class mes{
 		<td colspan="2"><hr style="background: #999;"></td>
 	    </tr>
 	    <tr>
-		<td colspan="2" style="text-align: right;"><input type="button" name="Registrar" id="RegistrarConf" value="Registrar" onclick="VALIDAR('<?=$cap_mes;?>');" style="height: 35px;padding: 5px;display: none;"/></td>
+		<td colspan="2" style="text-align: right;"><input type="button" name="Registrar" id="RegistrarConf" value="Registrar" onclick="VALIDAR('<?=$cap_mes;?>');" style="height: 35px;padding: 5px;display: block;"/></td>
 	    </tr>
 	</table>	
         <!--</div>-->
