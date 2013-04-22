@@ -311,8 +311,7 @@
 					<td>&nbsp;</td>
 					<td>Cantidad Total por Status</td>
 <?
-				for($i=0;$i<$nroProc;$i++){
-					//if($arrayIds[$i]==$rowDR["id_proceso"]){
+				for($i=0;$i<$nroProc;$i++){					
 ?>
 					<td style="text-align: center;">
 <?
@@ -323,12 +322,7 @@
 						}
 ?>
 					</td>
-<?
-					//}else{
-?>
-					<!--<td>&nbsp;</td>-->
-<?
-					//}
+<?					
 				}
 ?>					
 				</tr>
