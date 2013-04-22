@@ -279,9 +279,9 @@
 					<td style="text-align: center;"><? echo $rowDR["fecha"];?></td>
 <?
 				for($i=0;$i<$nroProc;$i++){				
-					if($arrayIds[$i]==$rowDR["id_proceso"]){
-					$arrayValorStatusDetalle=$rowDR["status"];//se prepara la info de los status
-					$arrayValorStatusDetalle=explode(",",$arrayValorStatusDetalle);
+					if($arrayIds[$i]==$rowDR["id_proceso"]){//si el id de los arrays es igual al proceso se escriben los valores
+						$arrayValorStatusDetalle=$rowDR["status"];//se prepara la info de los status
+						$arrayValorStatusDetalle=explode(",",$arrayValorStatusDetalle);
 ?>
 					<td style="text-align: center;">
 <?
@@ -312,9 +312,23 @@
 					<td>Cantidad Total por Status</td>
 <?
 				for($i=0;$i<$nroProc;$i++){
+					//if($arrayIds[$i]==$rowDR["id_proceso"]){
 ?>
-					<td>&nbsp;</td>
+					<td style="text-align: center;">
 <?
+						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
+?>
+						<input type="text" name="" id="" style='width:50px;font-size: 10px;text-align:center;'>
+<?
+						}
+?>
+					</td>
+<?
+					//}else{
+?>
+					<!--<td>&nbsp;</td>-->
+<?
+					//}
 				}
 ?>					
 				</tr>
@@ -348,138 +362,140 @@
 			if($fecha1x[1] != $fecha2x[1]){
 				echo "Verifique que las fechas concuerden con el mes a Buscar";
 			}else{
-				echo "<br>Tab: ".$tab."<br>";
 				$tabMatrizDetalle="tabMatrizDetalle".$tab;
 				//se buscan los datos del empleado en la tabla CAPTURA-MES
 				echo "<br>".$sqlCapMes="SELECT * FROM CAP_MES WHERE no_empleado='".$noEmpleado."' AND mes='".$fecha1x[1]."'";
-				$resCapMes=mysql_query($sqlCapMes,$this->conectarBd());
-				$rowCapMes=mysql_fetch_array($resCapMes);				
+				$resCapMes=@mysql_query($sqlCapMes,$this->conectarBd())or die(mysql_error());
+				if(mysql_num_rows($resCapMes)==0){
+					echo "<div style='border-top:2px solid blue;border-bottom:2px solid blue;background:skyblue;height:20px;padding:8px;color:#000;font-weight:bold;'>No existen datos configurados para el mes seleccionado.</div>";
+				}else{					
+					try{
+						$rowCapMes=mysql_fetch_array($resCapMes);				
+						
+						$meses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
+						//se empiezan a hacer los calculos
+						$diasLaboradorAdmin=$rowCapMes["dias_lab"]-$rowCapMes["dias_li"]+($rowCapMes["tiem_ex"]/$rowCapMes["dias_lab"]);
+						//$diasLaboradosOper=
+						$minutosLaborablesxJornada=(($rowCapMes["jorna_lab"] * 60) * $rowCapMes["meta_pro"]) / 100;
+						$horasLaboradasMes=$rowCapMes["jorna_lab"] * ( $rowCapMes["dias_lab"] + ( $rowCapMes["tiem_ex"] / $rowCapMes["jorna_lab"] ) - $rowCapMes["dias_li"] );
+						$horasLaboradasMesProd= $horasLaboradasMes * $rowCapMes["meta_pro"];
+					}catch(Exception $e){
+						echo "<br>Error en el Sistema: ".$e.getMessage();
+					}
+					$hdnNoEmpleado="txtHdnNoEmpleado".$tabMatrizDetalle;
+?>
+					<input type="hidden" name="<?=$hdnNoEmpleado;?>" id="<?=$hdnNoEmpleado;?>" value="<?=$noEmpleado;?>">
+					<input type="hidden" name="txtHdnFecha1" id="txtHdnFecha1" value="<?=$fecha1;?>">
+					<input type="hidden" name="txtHdnFecha2" id="txtHdnFecha2" value="<?=$fecha2;?>">
+					<input type="hidden" name="txtHdnMes" id="txtHdnMes" value="<?=$meses[$fecha1x[1]-1];?>"_
+					<input type="hidden" name="txtHdnJornadaLaboral" id="txtHdnJornadaLaboral" value="<?=$rowCapMes["jorna_lab"];?>">
+					<input type="hidden" name="txtHdnDiasLaborables" id="txtHdnDiasLaborables" value="<?=$rowCapMes["dias_lab"];?>">
+					<input type="hidden" name="txtHdnDiasLicencia" id="txtHdnDiasLicencia" value="<?=$rowCapMes["dias_li"];?>">
+					<input type="hidden" name="txtHdnTiempoExtra" id="txtHdnTiempoExtra" value="<?=$rowCapMes["tiem_ex"];?>">
+					<input type="hidden" name="txtHdnMetaProd" id="txtHdnMetaProd" value="<?=$rowCapMes["meta_pro"];?>">
+			
+					<table border="1" cellpadding="1" cellspacing="1" width="300" style="font-size: 10px;margin: 5px;">
+						<tr>
+							<td width="230" style="background: #7DC24B;">Mes</td>
+							<td width="70"><? echo $meses[$fecha1x[1]-1]; ?></td>
+						</tr>
+						<tr>
+							<td>Jornada Laboral</td>
+							<td>&nbsp;<? echo $rowCapMes["jorna_lab"];?></td>
+						</tr>
+						<tr>
+							<td style="background: #7DC24B;">Dias Laborables</td>
+							<td>&nbsp;<? echo $rowCapMes["dias_lab"]; ?></td>
+						</tr>
+						<tr>
+							<td style="background: #7DC24B;">Dias con Licencia</td>
+							<td>&nbsp;<? echo $rowCapMes["dias_li"]; ?></td>
+						</tr>
+						<tr>
+							<td style="background: #7DC24B;">TE (Hrs)</td>
+							<td>&nbsp;<? echo $rowCapMes["tiem_ex"]; ?></td>
+						</tr>
+						<tr>
+							<td style="background: #7DC24B;">Meta Productiva</td>
+							<td>&nbsp;<? echo $rowCapMes["meta_pro"]; ?></td>
+						</tr>
+						<tr>
+							<td>Dias Laborados (Admin)</td>
+							<td>&nbsp;<? echo $diasLaboradorAdmin; ?></td>
+						</tr>
+						<tr>
+							<td>Dias Laborados Operativamente</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td>Minutos Laborables por Jornada (min)</td>
+							<td>&nbsp;<? echo $minutosLaborablesxJornada; ?><input type="hidden" name="hdnMinutosLaborablesJornada" id="hdnMinutosLaborablesJornada" value="<?=$minutosLaborablesxJornada?>"></td>
+						</tr>
+						<tr>
+							<td>Horas Laboradas en el Mes al 100 % de Productividad</td>
+							<td>&nbsp;<? echo $horasLaboradasMes; ?></td>
+						</tr>
+						<tr>
+							<td>Horas Laboradas en el Mes al % de Productividad</td>
+							<td>&nbsp;<? echo $horasLaboradasMesProd; ?></td>
+						</tr>
+						<tr>
+							<td style="background: yellow;color: #000;">Cumplimiento</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td style="background: yellow;color: #000;">TE (Hrs)</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td style="background: yellow;color: #000;">Productividad por Dia</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td style="background: yellow;color: #000;">Productividad por Mes</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td style="background: yellow;color: #000;">Rendimiento</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td style="background: yellow;color: #000;">% de Scrap en el Mes</td>
+							<td>&nbsp;</td>
+						</tr>
+						<tr>
+							<td style="background: yellow;color: #000;">% de Rechazo en el Mes</td>
+							<td>&nbsp;</td>
+						</tr>
+					</table>
+<?
+					//se buscan las actividades relacionadas al usuario
+					echo "<br>".$sqlAct="SELECT * FROM ASIG_ACT INNER JOIN SAT_ACTIVIDAD ON ASIG_ACT.id_actividad = SAT_ACTIVIDAD.id_actividad WHERE ASIG_ACT.id_empleado = '".$noEmpleado."' AND SAT_ACTIVIDAD.status='Activo'";
+					$resAct=mysql_query($sqlAct,$this->conectarBd());
 				
-				$meses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
-				//se empiezan a hacer los calculos
-				$diasLaboradorAdmin=$rowCapMes["dias_lab"]-$rowCapMes["dias_li"]+($rowCapMes["tiem_ex"]/$rowCapMes["dias_lab"]);
-				//$diasLaboradosOper=
-				$minutosLaborablesxJornada=(($rowCapMes["jorna_lab"] * 60) * $rowCapMes["meta_pro"]) / 100;
-				$horasLaboradasMes=$rowCapMes["jorna_lab"] * ( $rowCapMes["dias_lab"] + ( $rowCapMes["tiem_ex"] / $rowCapMes["jorna_lab"] ) - $rowCapMes["dias_li"] );
-				$horasLaboradasMesProd= $horasLaboradasMes * $rowCapMes["meta_pro"];
-			}
-			$hdnNoEmpleado="txtHdnNoEmpleado".$tabMatrizDetalle;
+					if(mysql_num_rows($resAct)==0){
+						echo "No hay Actividades Relacionadas al Usuario";
+					}else{
+						$nombreCombo="cboActividadMatriz".$tabMatrizDetalle;
 ?>
-			<input type="hidden" name="<?=$hdnNoEmpleado;?>" id="<?=$hdnNoEmpleado;?>" value="<?=$noEmpleado;?>">
-			<input type="hidden" name="txtHdnFecha1" id="txtHdnFecha1" value="<?=$fecha1;?>">
-			<input type="hidden" name="txtHdnFecha2" id="txtHdnFecha2" value="<?=$fecha2;?>">
-			<input type="hidden" name="txtHdnMes" id="txtHdnMes" value="<?=$meses[$fecha1x[1]-1];?>"_
-			<input type="hidden" name="txtHdnJornadaLaboral" id="txtHdnJornadaLaboral" value="<?=$rowCapMes["jorna_lab"];?>">
-			<input type="hidden" name="txtHdnDiasLaborables" id="txtHdnDiasLaborables" value="<?=$rowCapMes["dias_lab"];?>">
-			<input type="hidden" name="txtHdnDiasLicencia" id="txtHdnDiasLicencia" value="<?=$rowCapMes["dias_li"];?>">
-			<input type="hidden" name="txtHdnTiempoExtra" id="txtHdnTiempoExtra" value="<?=$rowCapMes["tiem_ex"];?>">
-			<input type="hidden" name="txtHdnMetaProd" id="txtHdnMetaProd" value="<?=$rowCapMes["meta_pro"];?>">
+					<div style="height: 20px;padding: 5px;background: #f0f0f0;border: 1px solid #CCC;">
+						&nbsp;&nbsp;Seleccione la Actividad:<select name="<?=$nombreCombo;?>" id="<?=$nombreCombo;?>" onchange="cargarCapturasMatriz('<?=$tabMatrizDetalle;?>')">
+						<option value="">Selecciona:</option>
+<?
+						while($rowAct=mysql_fetch_array($resAct)){
+?>
+						<option value="<?=$rowAct["id_actividad"];?>"><?=$rowAct["nom_actividad"];?></option>
+<?
+						}
+?>
+						</select>
+					</div>
+					<div id="<?=$tabMatrizDetalle;?>" style="border: 1px solid #ff0000;margin: 5px;"></div>
 			
-			<table border="1" cellpadding="1" cellspacing="1" width="300" style="font-size: 10px;margin: 5px;">
-				<tr>
-					<td width="230" style="background: #7DC24B;">Mes</td>
-					<td width="70"><? echo $meses[$fecha1x[1]-1]; ?></td>
-				</tr>
-				<tr>
-					<td>Jornada Laboral</td>
-					<td>&nbsp;<? echo $rowCapMes["jorna_lab"];?></td>
-				</tr>
-				<tr>
-					<td style="background: #7DC24B;">Dias Laborables</td>
-					<td>&nbsp;<? echo $rowCapMes["dias_lab"]; ?></td>
-				</tr>
-				<tr>
-					<td style="background: #7DC24B;">Dias con Licencia</td>
-					<td>&nbsp;<? echo $rowCapMes["dias_li"]; ?></td>
-				</tr>
-				<tr>
-					<td style="background: #7DC24B;">TE (Hrs)</td>
-					<td>&nbsp;<? echo $rowCapMes["tiem_ex"]; ?></td>
-				</tr>
-				<tr>
-					<td style="background: #7DC24B;">Meta Productiva</td>
-					<td>&nbsp;<? echo $rowCapMes["meta_pro"]; ?></td>
-				</tr>
-				<tr>
-					<td>Dias Laborados (Admin)</td>
-					<td>&nbsp;<? echo $diasLaboradorAdmin; ?></td>
-				</tr>
-				<tr>
-					<td>Dias Laborados Operativamente</td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td>Minutos Laborables por Jornada (min)</td>
-					<td>&nbsp;<? echo $minutosLaborablesxJornada; ?><input type="hidden" name="hdnMinutosLaborablesJornada" id="hdnMinutosLaborablesJornada" value="<?=$minutosLaborablesxJornada?>"></td>
-				</tr>
-				<tr>
-					<td>Horas Laboradas en el Mes al 100 % de Productividad</td>
-					<td>&nbsp;<? echo $horasLaboradasMes; ?></td>
-				</tr>
-				<tr>
-					<td>Horas Laboradas en el Mes al % de Productividad</td>
-					<td>&nbsp;<? echo $horasLaboradasMesProd; ?></td>
-				</tr>
-				<tr>
-					<td style="background: yellow;color: #000;">Cumplimiento</td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td style="background: yellow;color: #000;">TE (Hrs)</td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td style="background: yellow;color: #000;">Productividad por Dia</td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td style="background: yellow;color: #000;">Productividad por Mes</td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td style="background: yellow;color: #000;">Rendimiento</td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td style="background: yellow;color: #000;">% de Scrap en el Mes</td>
-					<td>&nbsp;</td>
-				</tr>
-				<tr>
-					<td style="background: yellow;color: #000;">% de Rechazo en el Mes</td>
-					<td>&nbsp;</td>
-				</tr>
-			</table>
 <?
-			//se buscan las actividades relacionadas al usuario
-			echo "<br>".$sqlAct="SELECT * FROM ASIG_ACT INNER JOIN SAT_ACTIVIDAD ON ASIG_ACT.id_actividad = SAT_ACTIVIDAD.id_actividad WHERE ASIG_ACT.id_empleado = '".$noEmpleado."' AND SAT_ACTIVIDAD.status='Activo'";
-			$resAct=mysql_query($sqlAct,$this->conectarBd());
-			
-			if(mysql_num_rows($resAct)==0){
-				echo "No hay Actividades Relacionadas al Usuario";
-			}else{
-				$nombreCombo="cboActividadMatriz".$tabMatrizDetalle;
-?>
-			<div style="height: 20px;padding: 5px;background: #f0f0f0;border: 1px solid #CCC;">
-				&nbsp;&nbsp;Seleccione la Actividad:<select name="<?=$nombreCombo;?>" id="<?=$nombreCombo;?>" onchange="cargarCapturasMatriz('<?=$tabMatrizDetalle;?>')">
-					<option value="">Selecciona:</option>
-<?
-				while($rowAct=mysql_fetch_array($resAct)){
-?>
-					<option value="<?=$rowAct["id_actividad"];?>"><?=$rowAct["nom_actividad"];?></option>
-<?
+					}
 				}
-?>
-				</select>
-			</div>
-			<div id="<?=$tabMatrizDetalle;?>" style="border: 1px solid #ff0000;margin: 5px;"></div>
-			<!--<table border="1" cellpadding="1" cellspacing="1" width="100%">
-				<tr>
-					<td>&Aacute;rea</td>
-					<td></td>
-				</tr>
-			</table>-->
-<?
-			}	
+			}
 		}
 		
 		public function buscarempleado($empleado,$opcionB){
