@@ -278,10 +278,12 @@
 					<td style="text-align: left;"><? echo $dias[$diaSeg];?></td>
 					<td style="text-align: center;"><? echo $rowDR["fecha"];?></td>
 <?
+				$arrayTotalS=array(0,0,0);
 				for($i=0;$i<$nroProc;$i++){				
 					if($arrayIds[$i]==$rowDR["id_proceso"]){//si el id de los arrays es igual al proceso se escriben los valores
 						$arrayValorStatusDetalle=$rowDR["status"];//se prepara la info de los status
 						$arrayValorStatusDetalle=explode(",",$arrayValorStatusDetalle);
+						
 ?>
 					<td style="text-align: center;">
 <?
@@ -289,7 +291,9 @@
 							$nombreDatosDetalle="caja_"."proceso_".$arrayIds[$i]."_".$n."_".$l;
 ?>
 						<input type="text" name="<?=$nombreDatosDetalle;?>" id="<?=$nombreDatosDetalle;?>" value="<? echo $arrayValorStatusDetalle[$l];?>" style='width:50px;font-size: 10px;text-align:center;'>
+						
 <?
+							$arrayTotalS[$l]=$arrayTotalS[$l]+$arrayValorStatusDetalle[$l];
 						}
 ?>
 					</td>
@@ -316,8 +320,9 @@
 					<td style="text-align: center;">
 <?
 						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
+							$nombreDatosDetalleTotal="caja_"."proceso_total_".$arrayIds[$i]."_".$n."_".$l;
 ?>
-						<input type="text" name="" id="" style='width:50px;font-size: 10px;text-align:center;'>
+						<input type="text" name="<?=$nombreDatosDetalleTotal;?>" id="<?=$nombreDatosDetalleTotal;?>" value="<?=$arrayTotalS[$l]?>" style='width:50px;font-size: 10px;text-align:center;'>
 <?
 						}
 ?>
@@ -344,6 +349,8 @@
 			<input type="hidden" name="hdnCantidadStatusTiempo" id="hdnCantidadStatusTiempo" value="<?=$cantidadStatusActividad?>">
 			<input type="hidden" name="hdnContadoStatusPorMin" id="hdnContadoStatusPorMin" value="<?=$n;?>">
 <?
+			
+			
 		}
 		
 		

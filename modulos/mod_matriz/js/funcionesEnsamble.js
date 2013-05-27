@@ -84,6 +84,9 @@ function calcularDatosMatriz(){
 		tiemposPorStatus=arrayTiempoStatus.split(",");
 		
 		
+		//alert("Cantidad de los status "+cantidadStatusTiempo);
+		
+		
 		for(var i=0;i<tiemposPorStatus.length;i++){
 			//calculos para sacar tiempo x status en minutos
 			valorTiempoXStatusMin=parseFloat(tiemposPorStatus[i]) / parseFloat(ajusteCapacidadProduccion);
