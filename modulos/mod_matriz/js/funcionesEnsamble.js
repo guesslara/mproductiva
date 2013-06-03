@@ -100,22 +100,6 @@ function calcularDatosMatriz(){
 		/*
 		 *Forma para contabilizar los totales
 		*/
-		/*alert("Numero de Procesos: "+cantidadElementos+"\n\nCantidad de Status por Actividad: "+hdnCantidadNumeroStatus+"\n\ncantidad de Resultados: "+contadoStatusPorMin);
-		
-		
-		for(var i=1;i<=cantidadElementos;i++){			
-			for(var k=0;k<contadoStatusPorMin;k++){				
-				for(var j=0;j<hdnCantidadNumeroStatus;j++){				
-					var cajas="caja_proceso_"+i+"_"+k+"_"+j;
-					alert(cajas);
-				}
-			}
-		}*/
-		
-		//cajaTiempoTotalXStatus
-		
-		//cantidadTotalxStatus
-		
 		for(var i=0;i<cantidadElementos;i++){
 			for(var j=0;j<hdnCantidadNumeroStatus;j++){			
 				var variableCantidadTotalXStatus="#cantidadTotalxStatus_"+i+"_"+j;//se recupera la Cantidad Total x Status
@@ -135,6 +119,32 @@ function calcularDatosMatriz(){
 				
 			}
 		}
+		/*Datos extra en las columnas*/
+		valoresStatusMin=arrayTiempoStatus.split(",");
+		/*for(var i=0;i<cantidadElementos;i++){
+			for(var j=0;j<hdnCantidadNumeroStatus;j++){
+				
+			}
+		}*/
+		for(var i=1;i<=contadoStatusPorMin;i++){
+			for(var j=0;j<cantidadElementos;j++){
+				for(var k=0;k<hdnCantidadNumeroStatus;k++){
+					var caja="#caja_proceso_"+i+"_"+j+"_"+k;					
+					if($(caja).length){
+						//se procede a realizar el calculo
+						var valorMatriz=$(caja).val();						
+						//se extrae el valor de la caja a multiplicar
+						var valorStatus="#tiempoXStatusMin"+k;
+						valorAMulti=$(valorStatus).val();
+						var resultadoValorMulti=(parseFloat(valorMatriz)*parseFloat(valorAMulti)) / 60;
+						//caja a donde se envia el resultado
+						cajaResultado="#statusTotalMulti_"+i+"_"+k;
+						$(cajaResultado).attr("value",resultadoValorMulti);
+					}
+				}
+			}
+		}
+		//alert(contadoStatusPorMin);
 		
 	}catch(err){
 		alert("Error en la Aplicacion");

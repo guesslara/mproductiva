@@ -69,11 +69,11 @@
 			
 ?>
 			<input type="button" value="Calcular Matriz" onclick="calcularDatosMatriz()" style="width: 120px;height: 25px;padding: 5px;">
-			<table border="1" cellpadding="1" cellspacing="1" width="<?=$anchoTabla?>" style="font-size: 10px;">
+			<table border="0" cellpadding="1" cellspacing="1" width="<?=$anchoTabla?>" style="font-size: 10px;border: 1px solid #CCC;background:#f0f0f0;">
 				<tr>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
-					<td>&Aacute;rea</td>
+					<td style="border: 1px solid #CCC;">&Aacute;rea</td>
 					<td style="text-align: center;background: #5882FA;color: #FFF;font-weight: bold;" colspan="<?=$nroProc;?>"><?=$rowD["nom_proyecto"];?></td>
 <?
 				while($rowStatusCuenta=mysql_fetch_array($resStatusCuenta)){
@@ -96,7 +96,7 @@
 				<tr>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
-					<td width="150">Cantidad por Jornada</td>
+					<td width="150" style="border: 1px solid #CCC;">Cantidad por Jornada</td>
 <?
 			$m=0;
 			for($i=0;$i<$nroProc;$i++){
@@ -138,7 +138,7 @@
 				<tr>
 					<td width="190" style="background: yellow;color: #000;">Ajuste al Tiempo x Status</td>
 					<td width="50;"><input type="text" name="ajusteAlTiempoPorStatus" id="ajusteAlTiempoPorStatus" value="0" style="width: 35px;text-align: center;">%</td>
-					<td>Actividad</td>
+					<td style="border: 1px solid #CCC;">Actividad</td>
 <?
 			foreach($nombresProcesos as $nombreProceso){
 			
@@ -153,7 +153,7 @@
 				<tr>
 					<td width="190px" style="background: yellow;color: #000;">Ajuste a la Capacidad de Producci&oacute;n</td>
 					<td width="50px"><input type="text" name="ajusteCapacidadProduccion" id="ajusteCapacidadProduccion" value="" style="width: 35px;text-align: center;">%</td>
-					<td>Tiempo X Status</td>
+					<td style="border: 1px solid #CCC;">Tiempo X Status</td>
 <?
 			for($i=0;$i<$nroProc;$i++){
 ?>
@@ -204,7 +204,7 @@
 				<tr>
 					<td>&nbsp;</td>
 					<td>&nbsp;</td>
-					<td>Tiempo X Status (min)</td>
+					<td style="border: 1px solid #CCC;">Tiempo X Status (min)</td>
 <?
 			$n=0;
 			for($i=0;$i<$nroProc;$i++){
@@ -244,8 +244,8 @@
 				</tr>
 				<tr>
 					<td>&nbsp;</td>
-					<td>D&iacute;as</td>
-					<td>Status / Fecha</td>
+					<td style="border: 1px solid #CCC;">D&iacute;as</td>
+					<td style="border: 1px solid #CCC;">Status / Fecha</td>
 <?
 			for($i=0;$i<$nroProc;$i++){
 ?>
@@ -300,14 +300,14 @@
 					if($arrayIds[$i]==$rowDR["id_proceso"]){//si el id de los arrays es igual al proceso se escriben los valores
 						$arrayValorStatusDetalle=$rowDR["status"];//se prepara la info de los status
 						$arrayValorStatusDetalle=explode(",",$arrayValorStatusDetalle);
-						$this->cantidadNumeroStatus=count($arrayValorStatusDetalle);
+						$this->cantidadNumeroStatus=count($arrayValorStatusDetalle);						
 ?>
 					<td style="text-align: center;">
 <?
 						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
 							$nombreDatosDetalle="caja_"."proceso_".$arrayIds[$i]."_".$n."_".$l;
 ?>
-						<input type="text" name="<?=$nombreDatosDetalle;?>" id="<?=$nombreDatosDetalle;?>" value="<? echo $arrayValorStatusDetalle[$l];?>" style='width:50px;font-size: 10px;text-align:center;'>
+						<input type="text" name="<?=$nombreDatosDetalle;?>" id="<?=$nombreDatosDetalle;?>" value="<? echo $arrayValorStatusDetalle[$l];?>" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;'>
 						
 <?
 							$arrayTotalS[$l]=$arrayTotalS[$l]+$arrayValorStatusDetalle[$l];
@@ -317,7 +317,15 @@
 <?
 					}else{
 ?>
-					<td>&nbsp;</td>
+					<td style="text-align: center;">
+<?
+						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
+?>
+						<input type="text" name="" id="" value="0" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;'>
+<?
+						}
+?>
+					</td>
 <?
 					}
 				}
@@ -343,10 +351,13 @@
 <?
 					$s+=1;
 				}
+				$z=0;
 				while($rowStatusCuenta3=mysql_fetch_array($resColumnasAd1)){
+					$nombreCajaResultStatusMulti="statusTotalMulti_".$n."_".$z;
 ?>
-					<td><input type="text" name="" id="" style="width: 60px;"><?=$rowDR["fecha"];?></td>
+					<td><input type="text" name="<?=$nombreCajaResultStatusMulti;?>" id="<?=$nombreCajaResultStatusMulti;?>" style="width: 60px;" value="0"></td>
 <?
+					$z+=1;
 				}
 ?>
 					
@@ -445,7 +456,8 @@
 			}else{
 				$tabMatrizDetalle="tabMatrizDetalle".$tab;
 				//se buscan los datos del empleado en la tabla CAPTURA-MES
-				echo "<br>".$sqlCapMes="SELECT * FROM CAP_MES WHERE no_empleado='".$noEmpleado."' AND mes='".$fecha1x[1]."'";
+				//echo "<br>".
+				$sqlCapMes="SELECT * FROM CAP_MES WHERE no_empleado='".$noEmpleado."' AND mes='".$fecha1x[1]."'";
 				$resCapMes=@mysql_query($sqlCapMes,$this->conectarBd())or die(mysql_error());
 				if(mysql_num_rows($resCapMes)==0){
 					echo "<div style='border-top:2px solid blue;border-bottom:2px solid blue;background:skyblue;height:20px;padding:8px;color:#000;font-weight:bold;'>No existen datos configurados para el mes seleccionado.</div>";
@@ -551,7 +563,8 @@
 					</table>
 <?
 					//se buscan las actividades relacionadas al usuario
-					echo "<br>".$sqlAct="SELECT * FROM ASIG_ACT INNER JOIN SAT_ACTIVIDAD ON ASIG_ACT.id_actividad = SAT_ACTIVIDAD.id_actividad WHERE ASIG_ACT.id_empleado = '".$noEmpleado."' AND SAT_ACTIVIDAD.status='Activo'";
+					//echo "<br>".
+					$sqlAct="SELECT * FROM ASIG_ACT INNER JOIN SAT_ACTIVIDAD ON ASIG_ACT.id_actividad = SAT_ACTIVIDAD.id_actividad WHERE ASIG_ACT.id_empleado = '".$noEmpleado."' AND SAT_ACTIVIDAD.status='Activo'";
 					$resAct=mysql_query($sqlAct,$this->conectarBd());
 				
 					if(mysql_num_rows($resAct)==0){
@@ -571,7 +584,7 @@
 ?>
 						</select>
 					</div>
-					<div id="<?=$tabMatrizDetalle;?>" style="border: 1px solid #ff0000;margin: 5px;"></div>
+					<div id="<?=$tabMatrizDetalle;?>" style="border: 1px solid #CCC;margin: 5px;"></div>
 			
 <?
 					}
