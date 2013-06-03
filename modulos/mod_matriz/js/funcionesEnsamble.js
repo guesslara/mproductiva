@@ -81,11 +81,10 @@ function calcularDatosMatriz(){
 		var ajusteCapacidadProduccion=$("#ajusteCapacidadProduccion").val();
 		var minutosLaborablesPorJornada=$("#hdnMinutosLaborablesJornada").val();
 		
+		
+		var hdnCantidadNumeroStatus=$("#hdnCantidadNumeroStatus").val();
+		
 		tiemposPorStatus=arrayTiempoStatus.split(",");
-		
-		
-		//alert("Cantidad de los status "+cantidadStatusTiempo);
-		
 		
 		for(var i=0;i<tiemposPorStatus.length;i++){
 			//calculos para sacar tiempo x status en minutos
@@ -98,7 +97,49 @@ function calcularDatosMatriz(){
 			valorCantidadPorJornada=parseFloat(minutosLaborablesPorJornada) / valorTiempoXStatusMin;
 			$("#"+nombreCajaJornada).attr("value",valorCantidadPorJornada)
 		}
+		/*
+		 *Forma para contabilizar los totales
+		*/
+		/*alert("Numero de Procesos: "+cantidadElementos+"\n\nCantidad de Status por Actividad: "+hdnCantidadNumeroStatus+"\n\ncantidad de Resultados: "+contadoStatusPorMin);
+		
+		
+		for(var i=1;i<=cantidadElementos;i++){			
+			for(var k=0;k<contadoStatusPorMin;k++){				
+				for(var j=0;j<hdnCantidadNumeroStatus;j++){				
+					var cajas="caja_proceso_"+i+"_"+k+"_"+j;
+					alert(cajas);
+				}
+			}
+		}*/
+		
+		//cajaTiempoTotalXStatus
+		
+		//cantidadTotalxStatus
+		
+		for(var i=0;i<cantidadElementos;i++){
+			for(var j=0;j<hdnCantidadNumeroStatus;j++){			
+				var variableCantidadTotalXStatus="#cantidadTotalxStatus_"+i+"_"+j;//se recupera la Cantidad Total x Status
+				var valor1=$(variableCantidadTotalXStatus).val();//se recupera el valor
+				//alert("Valor 1 "+valor1);
+				/*******************************************************/
+				var variableTiempoXStatusMin="#tiempoXStatusMin"+j;//se recupera el Tiempo X Status (min)
+				var valor2=$(variableTiempoXStatusMin).val();//se recupera el valor
+				//alert("Valor 2 "+valor2);
+				/*******************************************************/
+				//Se efectua la operacion
+				var tiempoTotalPorStatus=(parseFloat(valor1) * parseFloat(valor2)) / 60;
+				//se manda el resultado de la operacion			
+				var variableTiempoTotalXStatus="#cajaTiempoTotalXStatus"+j;
+				$(variableTiempoTotalXStatus).attr("value",tiempoTotalPorStatus);
+				
+				
+			}
+		}
+		
 	}catch(err){
 		alert("Error en la Aplicacion");
 	}
+}
+function calcularDatos2(){
+	
 }

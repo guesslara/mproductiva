@@ -4,6 +4,7 @@
 	*/
 	session_start();	
 	class modeloEnsamble{
+		private $cantidadNumeroStatus;
 
 		private function conectarBd(){
 			require("../../includes/config.inc.php");
@@ -28,21 +29,28 @@
 		}
 		
 		public function armaDetalleMatriz($noEmpleado,$fecha1,$fecha2,$idActividad){
-			echo "<br>".$sqlD="SELECT SAT_ACTIVIDAD.id_actividad, SAT_ACTIVIDAD.nom_actividad, SAT_PROCESO.id_proceso, SAT_PROCESO.nom_proceso, SAT_PROYECTO.id_proyecto, SAT_PROYECTO.nom_proyecto
+			echo "<br>Consulta 1 ".$sqlD="SELECT SAT_ACTIVIDAD.id_actividad, SAT_ACTIVIDAD.nom_actividad, SAT_PROCESO.id_proceso, SAT_PROCESO.nom_proceso, SAT_PROYECTO.id_proyecto, SAT_PROYECTO.nom_proyecto
 			FROM (SAT_ACTIVIDAD INNER JOIN SAT_PROCESO ON SAT_ACTIVIDAD.id_proceso = SAT_PROCESO.id_proceso) INNER JOIN SAT_PROYECTO ON SAT_PROCESO.id_proyecto = SAT_PROYECTO.id_proyecto WHERE id_actividad ='".$idActividad."'";
 			$resD=mysql_query($sqlD,$this->conectarBd());
 			$rowD=mysql_fetch_array($resD);			
 			//consulta para los procesos
-			echo "<br>".$sqlP="SELECT id_proceso,nom_proceso,id_proyecto FROM SAT_PROCESO WHERE id_proyecto='".$rowD["id_proyecto"]."'";
+			echo "<br>Consulta 2 ".$sqlP="SELECT id_proceso,nom_proceso,id_proyecto FROM SAT_PROCESO WHERE id_proyecto='".$rowD["id_proyecto"]."'";
 			$resP=mysql_query($sqlP,$this->conectarBd());			
 			$nroProc=mysql_num_rows($resP);//numero de procesos
-			$anchoTabla=($nroProc*180)+400;//se calcula en ancho de la tabla
+			$anchoTabla=($nroProc*180)+800;//se calcula en ancho de la tabla
 			//consulta con los detalles de las capturas de las actividades
-			echo "<br>".$sqlDR="SELECT * FROM `detalle_captura_registro` WHERE fecha BETWEEN '".$fecha1."' AND '".$fecha2."' AND no_empleado = '".$noEmpleado."' AND id_actividad='".$idActividad."' ORDER BY fecha";
-			echo "<br>".$sqlDR="SELECT id, no_empleado, detalle_captura_registro.id_actividad, nom_actividad, detalle_captura_registro.status, fecha, hora, SAT_PROCESO.id_proceso, nom_proceso
+			echo "<br> Consulta 3 ".$sqlDR="SELECT * FROM `detalle_captura_registro` WHERE fecha BETWEEN '".$fecha1."' AND '".$fecha2."' AND no_empleado = '".$noEmpleado."' AND id_actividad='".$idActividad."' ORDER BY fecha";
+			echo "<br>Consulta 4 ".$sqlDR="SELECT id, no_empleado, detalle_captura_registro.id_actividad, nom_actividad, detalle_captura_registro.status, fecha, hora, SAT_PROCESO.id_proceso, nom_proceso
 			FROM (detalle_captura_registro INNER JOIN SAT_ACTIVIDAD ON detalle_captura_registro.id_actividad = SAT_ACTIVIDAD.id_actividad) INNER JOIN SAT_PROCESO ON SAT_ACTIVIDAD.id_proceso = SAT_PROCESO.id_proceso
 			WHERE fecha BETWEEN '".$fecha1."' AND '".$fecha2."' AND no_empleado = '".$noEmpleado."' AND detalle_captura_registro.id_actividad = '".$idActividad."'";
 			$resDR=mysql_query($sqlDR,$this->conectarBd());
+			echo "<br> Consulta 5 ".$sqlStatusCuenta="SELECT *
+			FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status
+			WHERE id_actividad = '".$idActividad."'";
+			$resStatusCuenta=mysql_query($sqlStatusCuenta,$this->conectarBd());
+			$resStatusCuenta1=mysql_query($sqlStatusCuenta,$this->conectarBd());
+			$resStatusCuenta2=mysql_query($sqlStatusCuenta,$this->conectarBd());
+			$resStatusCuenta3=mysql_query($sqlStatusCuenta,$this->conectarBd());
 			
 			$arrayIds=array();//array para los ids de los procesos
 			$nombresProcesos=array();//array para guardar los nombres de los procesos
@@ -67,14 +75,22 @@
 					<td>&nbsp;</td>
 					<td>&Aacute;rea</td>
 					<td style="text-align: center;background: #5882FA;color: #FFF;font-weight: bold;" colspan="<?=$nroProc;?>"><?=$rowD["nom_proyecto"];?></td>
-					<td rowspan="6">&nbsp;</td>
-					<td rowspan="6">&nbsp;</td>
-					<td rowspan="6">&nbsp;</td>
-					<td rowspan="6">&nbsp;</td>
-					<td rowspan="6">&nbsp;</td>
-					<td rowspan="6">&nbsp;</td>
-					<td rowspan="6">&nbsp;</td>
-					<td rowspan="6">&nbsp;</td>
+<?
+				while($rowStatusCuenta=mysql_fetch_array($resStatusCuenta)){
+?>
+					<td rowspan="6" style="border: 1px solid #000;background: #CCC;text-align: center;font-weight: bold;"><?=$rowStatusCuenta["nom_status"];?>&nbsp;</td>
+<?
+				}
+				while($rowStatusCuenta1=mysql_fetch_array($resStatusCuenta1)){
+?>
+					<td rowspan="6" style="border: 1px solid #000;background: #CCC;text-align: center;font-weight: bold;"><?=$rowStatusCuenta1["nom_status"];?>&nbsp;</td>
+<?
+				}
+?>
+
+					<td rowspan="6" style="border: 1px solid #000;background: #CCC;text-align: center;font-weight: bold;">Total&nbsp;</td>
+					<td rowspan="6" style="border: 1px solid #000;background: #CCC;text-align: center;font-weight: bold;">P&nbsp;</td>
+					<td rowspan="6" style="border: 1px solid #000;background: #CCC;text-align: center;font-weight: bold;">C&nbsp;</td>
 					<td rowspan="6">&nbsp;</td>
 				</tr>
 				<tr>
@@ -266,6 +282,8 @@
 				</tr>
 <?
 			$n=0;//contador renglones
+			$arrayTotalS=array(0,0,0);
+
 			while($rowDR=mysql_fetch_array($resDR)){
 				$fechaB=explode("-",$rowDR['fecha']);						
 				$diaSeg=date("w",mktime(0,0,0,$fechaB[1],$fechaB[2],$fechaB[0]));
@@ -278,12 +296,11 @@
 					<td style="text-align: left;"><? echo $dias[$diaSeg];?></td>
 					<td style="text-align: center;"><? echo $rowDR["fecha"];?></td>
 <?
-				$arrayTotalS=array(0,0,0);
 				for($i=0;$i<$nroProc;$i++){				
 					if($arrayIds[$i]==$rowDR["id_proceso"]){//si el id de los arrays es igual al proceso se escriben los valores
 						$arrayValorStatusDetalle=$rowDR["status"];//se prepara la info de los status
 						$arrayValorStatusDetalle=explode(",",$arrayValorStatusDetalle);
-						
+						$this->cantidadNumeroStatus=count($arrayValorStatusDetalle);
 ?>
 					<td style="text-align: center;">
 <?
@@ -304,11 +321,44 @@
 <?
 					}
 				}
+				//columnas adicionales
+				$sqlStatusCuenta="SELECT *
+				FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status
+				WHERE id_actividad = '".$idActividad."'";
+				$resColumnasAd=mysql_query($sqlStatusCuenta,$this->conectarBd());
+				$resColumnasAd1=mysql_query($sqlStatusCuenta,$this->conectarBd());
+				/*********************************************/
+				$sqlCantStatus="SELECT status
+					FROM `detalle_captura_registro`
+					WHERE fecha = '".$rowDR["fecha"]."' AND no_empleado = '".$noEmpleado."' AND id_actividad = '".$idActividad."' ORDER BY fecha";
+				$resCantStatus=mysql_query($sqlCantStatus,$this->conectarBd());
+				$rowCantStatus=mysql_fetch_array($resCantStatus);
+				$cantStatus=$rowCantStatus["status"];
+				$cantStatus=explode(",",$cantStatus);
+				$s=0;
+				while($rowStatusCuenta2=mysql_fetch_array($resColumnasAd)){
+					
 ?>
+					<td><input type="text" name="" id="" style="width: 60px;text-align: center;font-size: 10px;" value="<?=$cantStatus[$s];?>"></td>
+<?
+					$s+=1;
+				}
+				while($rowStatusCuenta3=mysql_fetch_array($resColumnasAd1)){
+?>
+					<td><input type="text" name="" id="" style="width: 60px;"><?=$rowDR["fecha"];?></td>
+<?
+				}
+?>
+					
+					<td><input type="text" name="" id="" style="width: 60px;"></td>
+					<td><input type="text" name="" id="" style="width: 60px;"></td>
+					<td><input type="text" name="" id="" style="width: 60px;"></td>
+					
 				</tr>
 <?
 				$n+=1;
-			}
+				
+			}			
 ?>
 				<tr>
 					<td>&nbsp;</td>
@@ -320,7 +370,7 @@
 					<td style="text-align: center;">
 <?
 						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
-							$nombreDatosDetalleTotal="caja_"."proceso_total_".$arrayIds[$i]."_".$n."_".$l;
+							$nombreDatosDetalleTotal="cantidadTotalxStatus_".$i."_".$l;
 ?>
 						<input type="text" name="<?=$nombreDatosDetalleTotal;?>" id="<?=$nombreDatosDetalleTotal;?>" value="<?=$arrayTotalS[$l]?>" style='width:50px;font-size: 10px;text-align:center;'>
 <?
@@ -328,6 +378,16 @@
 ?>
 					</td>
 <?					
+				}
+				//columnas adicionales
+				$sqlStatusCuenta="SELECT *
+				FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status
+				WHERE id_actividad = '".$idActividad."'";
+				$resColumnasTot=mysql_query($sqlStatusCuenta,$this->conectarBd());
+				while($rowColumnasTot=mysql_fetch_array($resColumnasTot)){
+?>
+					<td><input type="text" name="" id="" style="width: 60px;"></td>
+<?
 				}
 ?>					
 				</tr>
@@ -338,7 +398,26 @@
 <?
 				for($i=0;$i<$nroProc;$i++){
 ?>
-					<td>&nbsp;</td>
+					<td style="text-align: center;">
+<?
+						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
+							$nombreDatosDetalleTotal="cajaTiempoTotalXStatus".$l;
+?>
+						<input type="text" name="<?=$nombreDatosDetalleTotal;?>" id="<?=$nombreDatosDetalleTotal;?>" value="0" style='width:50px;font-size: 10px;text-align:center;'>
+<?
+						}
+?>
+					</td>
+<?
+				}
+				//columnas adicionales
+				$sqlStatusCuenta="SELECT *
+				FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status
+				WHERE id_actividad = '".$idActividad."'";
+				$resColumnasTot1=mysql_query($sqlStatusCuenta,$this->conectarBd());
+				while($rowColumnasTot1=mysql_fetch_array($resColumnasTot1)){
+?>
+					<td><input type="text" name="" id="" style="width: 60px;"></td>
 <?
 				}
 ?>					
@@ -348,6 +427,7 @@
 			<input type="hidden" name="hdnCantidadElementos" id="hdnCantidadElementos" value="<?=$nroProc?>">
 			<input type="hidden" name="hdnCantidadStatusTiempo" id="hdnCantidadStatusTiempo" value="<?=$cantidadStatusActividad?>">
 			<input type="hidden" name="hdnContadoStatusPorMin" id="hdnContadoStatusPorMin" value="<?=$n;?>">
+			<input type="hidden" name="hdnCantidadNumeroStatus" id="hdnCantidadNumeroStatus" value="<?=$this->cantidadNumeroStatus;?>">
 <?
 			
 			
