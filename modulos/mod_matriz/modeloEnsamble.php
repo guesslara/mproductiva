@@ -290,13 +290,16 @@
 				$mesSeg=date("n",mktime(0,0,0,$fechaB[1],$fechaB[2],$fechaB[0]));
 				$dias= array("Domingo","Lunes","Martes","Miercoles","Jueves","Viernes","S&aacute;bado");
 				$meses= array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");//<?=$rowBitacora["descripcion"].$rowBitacora["f_registro"];>
+				
 ?>
 				<tr>
 					<td>&nbsp;</td>
 					<td style="text-align: left;"><? echo $dias[$diaSeg];?></td>
 					<td style="text-align: center;"><? echo $rowDR["fecha"];?></td>
 <?
-				for($i=0;$i<$nroProc;$i++){				
+				$nC=0;
+				for($i=0;$i<$nroProc;$i++){
+					
 					if($arrayIds[$i]==$rowDR["id_proceso"]){//si el id de los arrays es igual al proceso se escriben los valores
 						$arrayValorStatusDetalle=$rowDR["status"];//se prepara la info de los status
 						$arrayValorStatusDetalle=explode(",",$arrayValorStatusDetalle);
@@ -305,12 +308,16 @@
 					<td style="text-align: center;">
 <?
 						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
+							$cajaMatriz="cajaMatriz_".$n."_".$nC;
+							
 							$nombreDatosDetalle="caja_"."proceso_".$arrayIds[$i]."_".$n."_".$l;
 ?>
-						<input type="text" name="<?=$nombreDatosDetalle;?>" id="<?=$nombreDatosDetalle;?>" value="<? echo $arrayValorStatusDetalle[$l];?>" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;'>
+						<!--<input type="text" name="<?=$nombreDatosDetalle;?>" id="<?=$nombreDatosDetalle;?>" value="<? echo $arrayValorStatusDetalle[$l];?>" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;'>-->
+						<input type="text" name="<?=$cajaMatriz;?>" id="<?=$cajaMatriz;?>" value="<? echo $arrayValorStatusDetalle[$l];?>" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;'>
 						
 <?
 							$arrayTotalS[$l]=$arrayTotalS[$l]+$arrayValorStatusDetalle[$l];
+							$nC+=1;
 						}
 ?>
 					</td>
@@ -320,9 +327,12 @@
 					<td style="text-align: center;">
 <?
 						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
+							$cajaMatriz="cajaMatriz_".$n."_".$nC;
+							
 ?>
-						<input type="text" name="" id="" value="0" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;'>
+						<input type="text" name="<?=$cajaMatriz;?>" id="<?=$cajaMatriz;?>" value="0" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;'>
 <?
+							$nC+=1;
 						}
 ?>
 					</td>
