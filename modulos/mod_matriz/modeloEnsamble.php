@@ -1,10 +1,12 @@
 <?
 	/*
-	 *No me interesa con quien estuviste en el pasado. Solo quiero ser tu presente y que juntos formemos el futuro.
+	 *
 	*/
 	session_start();	
 	class modeloEnsamble{
 		private $cantidadNumeroStatus;
+		private $nc=0;
+		private $nF=0;
 
 		private function conectarBd(){
 			require("../../includes/config.inc.php");
@@ -121,7 +123,7 @@
 							$k=0;
 							while($rowAS=mysql_fetch_array($resAS)){
 								$cantidadJornada="cantidadJornada".$m;
-								echo "<input type='text' name='".$cantidadJornada."' id='".$cantidadJornada."' value='' style='width:50px;' />";
+								echo "<input type='text' name='".$cantidadJornada."' id='".$cantidadJornada."' value='' style='width:50px;text-align:center;background: #FFF;color: #000;border: 1px solid #CCC;' />";
 								$k+=1;
 								$m+=1;
 							}							
@@ -313,7 +315,7 @@
 							$nombreDatosDetalle="caja_"."proceso_".$arrayIds[$i]."_".$n."_".$l;
 ?>
 						<!--<input type="text" name="<?=$nombreDatosDetalle;?>" id="<?=$nombreDatosDetalle;?>" value="<? echo $arrayValorStatusDetalle[$l];?>" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;'>-->
-						<input type="text" name="<?=$cajaMatriz;?>" id="<?=$cajaMatriz;?>" value="<? echo $arrayValorStatusDetalle[$l];?>" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;'>
+						<input type="text" name="<?=$cajaMatriz;?>" id="<?=$cajaMatriz;?>" value="<? echo $arrayValorStatusDetalle[$l];?>" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;border: 1px solid #CCC;'>
 						
 <?
 							$arrayTotalS[$l]=$arrayTotalS[$l]+$arrayValorStatusDetalle[$l];
@@ -330,7 +332,7 @@
 							$cajaMatriz="cajaMatriz_".$n."_".$nC;
 							
 ?>
-						<input type="text" name="<?=$cajaMatriz;?>" id="<?=$cajaMatriz;?>" value="0" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;'>
+						<input type="text" name="<?=$cajaMatriz;?>" id="<?=$cajaMatriz;?>" value="0" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;border: 1px solid #CCC;'>
 <?
 							$nC+=1;
 						}
@@ -339,6 +341,10 @@
 <?
 					}
 				}
+				/*Se mandan los valores hacia las columnas*/
+				$this->nc=$nC;
+				/*Fin de la escritura de valores de columnas*/
+				
 				//columnas adicionales
 				$sqlStatusCuenta="SELECT *
 				FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status
@@ -386,15 +392,19 @@
 					<td>&nbsp;</td>
 					<td>Cantidad Total por Status</td>
 <?
+				$aa=0;
 				for($i=0;$i<$nroProc;$i++){					
 ?>
 					<td style="text-align: center;">
 <?
 						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
-							$nombreDatosDetalleTotal="cantidadTotalxStatus_".$i."_".$l;
+							//$nombreDatosDetalleTotal="cantidadTotalxStatus_".$i."_".$l;
+							$nombreDatosDetalleTotal="cantidadTotalxStatus_".$aa;
 ?>
-						<input type="text" name="<?=$nombreDatosDetalleTotal;?>" id="<?=$nombreDatosDetalleTotal;?>" value="<?=$arrayTotalS[$l]?>" style='width:50px;font-size: 10px;text-align:center;'>
+						<!--<input type="text" name="<=$nombreDatosDetalleTotal;?>" id="<=$nombreDatosDetalleTotal;?>" value="<=$arrayTotalS[$l]?>" style='width:50px;font-size: 10px;text-align:center;'>-->
+						<input type="text" name="<?=$nombreDatosDetalleTotal;?>" id="<?=$nombreDatosDetalleTotal;?>" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;border: 1px solid #CCC;'>
 <?
+						$aa+=1;
 						}
 ?>
 					</td>
@@ -417,15 +427,17 @@
 					<td>&nbsp;</td>
 					<td>Tiempo Total por Status</td>
 <?
+				$aa=0;
 				for($i=0;$i<$nroProc;$i++){
 ?>
 					<td style="text-align: center;">
 <?
 						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
-							$nombreDatosDetalleTotal="cajaTiempoTotalXStatus".$l;
+							$nombreDatosDetalleTotal="cajaTiempoTotalXStatus".$aa;
 ?>
-						<input type="text" name="<?=$nombreDatosDetalleTotal;?>" id="<?=$nombreDatosDetalleTotal;?>" value="0" style='width:50px;font-size: 10px;text-align:center;'>
+						<input type="text" name="<?=$nombreDatosDetalleTotal;?>" id="<?=$nombreDatosDetalleTotal;?>" value="0" style='width:50px;font-size: 10px;text-align:center;background: #FFF;color: #000;border: 1px solid #CCC;'>
 <?
+							$aa+=1;
 						}
 ?>
 					</td>
@@ -449,6 +461,7 @@
 			<input type="hidden" name="hdnCantidadStatusTiempo" id="hdnCantidadStatusTiempo" value="<?=$cantidadStatusActividad?>">
 			<input type="hidden" name="hdnContadoStatusPorMin" id="hdnContadoStatusPorMin" value="<?=$n;?>">
 			<input type="hidden" name="hdnCantidadNumeroStatus" id="hdnCantidadNumeroStatus" value="<?=$this->cantidadNumeroStatus;?>">
+			<input type="hidden" name="hdnNumeroColumnas" id="hdnNumeroColumnas" value="<?=$this->nc;?>">
 <?
 			
 			

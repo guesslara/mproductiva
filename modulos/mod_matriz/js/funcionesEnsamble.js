@@ -83,6 +83,12 @@ function calcularDatosMatriz(){
 		
 		
 		var hdnCantidadNumeroStatus=$("#hdnCantidadNumeroStatus").val();
+		/*Filas y Columnas*/
+		var numeroColumnas=$("#hdnNumeroColumnas").val();
+		var numeroFilas=contadoStatusPorMin;
+		var sumaFilas=0;
+		var sumaColumnas=0;
+		/*Fin filas y columnas*/
 		
 		tiemposPorStatus=arrayTiempoStatus.split(",");
 		
@@ -100,16 +106,56 @@ function calcularDatosMatriz(){
 		/*
 		 *Forma para contabilizar los totales
 		*/
+		
+		for(var i=0;i<numeroColumnas;i++){
+			for(var j=0;j<numeroFilas;j++){
+				var caja="#cajaMatriz_"+j+"_"+i;//se arma el nombre de la caja				
+				var valCaja=parseFloat($(caja).val())//se obtiene su valor
+				sumaColumnas=sumaColumnas+valCaja;//se suma al acumulador				
+			}
+			var cajaRes="#cantidadTotalxStatus_"+i//se arma la caja del resultado
+			//alert(cajaRes);
+			$(cajaRes).attr("value","");
+			$(cajaRes).attr("value",sumaColumnas);
+			$(cajaRes).css("background","white");
+			sumaColumnas=0;//la variable se iguala a cero
+		}
+		
+		for(var i=0;i<numeroColumnas;i++){
+			for(var j=0;j<numeroFilas;j++){
+				var caja="#cajaMatriz_"+i+"_"+j;//se arma el nombre de la caja				
+				var valCaja=parseFloat($(caja).val())//se obtiene su valor
+				sumaFilas=sumaFilas+valCaja;//se suma al acumulador
+			}
+			//alert(sumaFilas);//se manda el la variable a la primera casilla
+			sumaFilas=0;//la variable se iguala a cero
+		}
+		
+		
+		for(var i=0;i<numeroColumnas;i++){			
+			var variableCantidadXStatus="#cantidadTotalxStatus_"+i;   //se arma el nombre de la caja de texto a extraer
+			var valor1=parseFloat($(variableCantidadXStatus).val());  //se recupera el valor
+			var variableTiempoXStatus="#tiempoXStatusMin"+i;  //se recupera el tiempo X status (min)
+			var valor2=parseFloat($(variableTiempoXStatus).val());  //se recupera el valor
+			var tiempoTotalPorStatus=(parseFloat(valor1) * parseFloat(valor2)) / 60;  //se efectua la operacion
+			var variableTiempototalXStatus="#cajaTiempoTotalXStatus"+i;  //se arma la caja del resultado
+			$(variableTiempototalXStatus).attr("value",tiempoTotalPorStatus);  //se manda el resultado a la caja del resultado
+		}
+		
+		
+		
+		
+		
+		
+		
+		
+		/*
 		for(var i=0;i<cantidadElementos;i++){
 			for(var j=0;j<hdnCantidadNumeroStatus;j++){			
 				var variableCantidadTotalXStatus="#cantidadTotalxStatus_"+i+"_"+j;//se recupera la Cantidad Total x Status
-				var valor1=$(variableCantidadTotalXStatus).val();//se recupera el valor
-				//alert("Valor 1 "+valor1);
-				/*******************************************************/
+				var valor1=$(variableCantidadTotalXStatus).val();//se recupera el valor		
 				var variableTiempoXStatusMin="#tiempoXStatusMin"+j;//se recupera el Tiempo X Status (min)
-				var valor2=$(variableTiempoXStatusMin).val();//se recupera el valor
-				//alert("Valor 2 "+valor2);
-				/*******************************************************/
+				var valor2=$(variableTiempoXStatusMin).val();//se recupera el valor				
 				//Se efectua la operacion
 				var tiempoTotalPorStatus=(parseFloat(valor1) * parseFloat(valor2)) / 60;
 				//se manda el resultado de la operacion			
@@ -119,13 +165,12 @@ function calcularDatosMatriz(){
 				
 			}
 		}
+		*/
+		
 		/*Datos extra en las columnas*/
+		/*
 		valoresStatusMin=arrayTiempoStatus.split(",");
-		/*for(var i=0;i<cantidadElementos;i++){
-			for(var j=0;j<hdnCantidadNumeroStatus;j++){
-				
-			}
-		}*/
+		
 		for(var i=1;i<=contadoStatusPorMin;i++){
 			for(var j=0;j<cantidadElementos;j++){
 				for(var k=0;k<hdnCantidadNumeroStatus;k++){
@@ -144,7 +189,8 @@ function calcularDatosMatriz(){
 				}
 			}
 		}
-		//alert(contadoStatusPorMin);
+		*/
+		
 		
 	}catch(err){
 		alert("Error en la Aplicacion");
