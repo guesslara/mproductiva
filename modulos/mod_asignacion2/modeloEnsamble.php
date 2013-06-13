@@ -80,12 +80,17 @@
 		}
 		
 		public function actualizarStatusActividad($valores){
-			//2,6|5,7
 			$arrayClaves=explode("|",$valores);			
 			for($i=0;$i<count($arrayClaves);$i++){
 				$arrayClaves2=explode(",",$arrayClaves[$i]);				
 				//se arma la consulta
-				$sqlActAct="UPDATE ACTIVIDAD_STATUS SET tiempo='".$arrayClaves2[0]."' WHERE id_act_status='".$arrayClaves2[1]."'";
+				if($arrayClaves2[1]=="mas"){
+					$arrayClaves2[1]="+";
+				}else{
+					$arrayClaves2[1]="-";
+				}
+
+				$sqlActAct="UPDATE ACTIVIDAD_STATUS SET tiempo='".$arrayClaves2[0]."', operador='".$arrayClaves2[1]."' WHERE id_act_status='".$arrayClaves2[2]."'";
 				$resActAct=mysql_query($sqlActAct,$this->conectarBd());
 				if($resActAct){
 					echo "<br>&nbsp;&nbsp;Actualizacion Realizada";
@@ -103,26 +108,29 @@
 			$rowNAct=mysql_fetch_array($resNAct);
 			$sqlStatus="SELECT * FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status WHERE id_actividad='".$ultimoId."'";
 			$resStatus=mysql_query($sqlStatus,$this->conectarBd());
-			if(mysql_num_rows($resStatus)==0){
+			$CuentaStatus=mysql_num_rows($resStatus);
+			if($CuentaStatus==0){
 				echo "No existe Informacion a mostrar";
 			}else{
+				$toF=$CuentaStatus+2;
 ?>
 			<table border="0" cellpadding="1" cellspacing="1" width="580" style="margin: 5px;font-size: 10px;">
 				<tr>
-					<td colspan="3" style="background: #666;color: #FFF;font-weight: bold;height: 15px;padding: 5px;">M&eacute;trica - &nbsp;<?=$rowNAct["nom_actividad"];?></td>
+					<td colspan="5" style="background: #666;color: #FFF;font-weight: bold;height: 15px;padding: 5px;">M&eacute;trica - &nbsp;<?=$rowNAct["nom_actividad"];?></td>
 				</tr>
 				<tr>
-					<td colspan="3">
+					<td colspan="5">
 						<div style="height: 15px;padding: 5px;background: #CCC;font-weight: bold;">NOTA: El tiempo de la metrica debe ser expresado en minutos</div>
 					</td>
 				</tr>
 				<tr>
 					<td rowspan="2" style="text-align: left;border: 1px solid #CCC;background: #f0f0f0;">Status</td>
-					<td colspan="2" style="text-align: center;border: 1px solid #CCC;background: #f0f0f0;">M&eacute;trica</td>					
+					<td colspan="4" style="text-align: center;border: 1px solid #CCC;background: #f0f0f0;">M&eacute;trica</td>					
 				</tr>
-				<tr>
+				<tr>	
 					<td style="text-align: center;border: 1px solid #CCC;background: #f0f0f0;">Pz</td>
 					<td style="text-align: center;border: 1px solid #CCC;background: #f0f0f0;">Tiempo</td>
+					<td style="text-align: center;border: 1px solid #CCC;background: #f0f0f0;">Operación</td>
 				</tr>
 <?
 			$i=0;
@@ -130,21 +138,23 @@
 				$nombreStatus="status".$i;
 				$nombreStatus1="txtStatus".$i;
 				$nombreIdStatus="txtIdStatus".$i;
+				$nombreButt="button".$i;
 ?>
 				<tr>
-					<td width="280" style="text-align: left;border-bottom: 1px solid #CCC;">&nbsp;<?=$rowMetricas["nom_status"]?><input type="hidden" name="<?=$nombreIdStatus;?>" id="<?=$nombreIdStatus;?>" value="<?=$rowMetricas["id_act_status"];?>"></td>
-					<td width="100" style="text-align: center;border-bottom: 1px solid #CCC;"><input type="text" name="<?=$nombreStatus;?>" id="<?=$nombreStatus;?>" value="1 PZ" style="text-align: center;width: 50px;"></td>
+					<td width="150" style="text-align: left;border-bottom: 1px solid #CCC;">&nbsp;<?=$rowMetricas["nom_status"]?><input type="hidden" name="<?=$nombreIdStatus;?>" id="<?=$nombreIdStatus;?>" value="<?=$rowMetricas["id_act_status"];?>"></td>
+					<td width="100" style="text-align: center;border-bottom: 1px solid #CCC;"><input type="text" name="<?=$nombreStatus;?>" id="<?=$nombreStatus;?>" value="1 PZ" style="text-align: center;width: 50px;" readonly></td>
 					<td width="100" style="text-align: center;border-bottom: 1px solid #CCC;"><input type="text" name="<?=$nombreStatus1;?>" id="<?=$nombreStatus1;?>" value="" style="text-align: center;width: 50px;"></td>
+					<td width="100" style="text-align: center;border-bottom: 1px solid #CCC;"><input type="button" id="<?=$nombreButt;?>" name="<?=$nombreButt;?>" value="+" style="text-align: center;width: 20px;" onclick="cambiaOpe('<?=$nombreButt;?>');"/></td>
 				</tr>
 <?
 				$i+=1;
 			}
 ?>
 				<tr>
-					<td colspan="3"><hr style="background: #666;"><input type="hidden" id="hdnContadorResp" name="hdnContadorResp" value="<?=$i;?>"></td>
+					<td colspan="5"><hr style="background: #666;"><input type="hidden" id="hdnContadorResp" name="hdnContadorResp" value="<?=$i;?>"></td>
 				</tr>
 				<tr>
-					<td colspan="3" style="text-align: right;"><input type="button" value="Guardar Datos" onclick="guardarDatosExtraActividad()"></td>
+					<td colspan="5" style="text-align: right;"><input type="button" value="Guardar Datos" onclick="guardarDatosExtraActividad()"></td>
 				</tr>
 			</table>
 <?
@@ -530,19 +540,22 @@
 			echo "<div class='divNombre'><a href='#' onclick=\"eliminaResponsable('".$no_empleado."','".$origen."','".$idOrigen."','".$idOrigen1."')\"><img src='../../img/icon_delete.gif' border='0' /></a>&nbsp;".$rowResp1["nombres"]." ".$rowResp1["a_paterno"]." ".$rowResp1["a_materno"]."</div>";
 		}	
 		
-		public function listarActividades($id_proceso){
+		public function listarActividades($id_proceso,$opt){
 			$sqlProc="SELECT * FROM SAT_PROCESO WHERE id_proceso='".$id_proceso."'";
 			$resProc=mysql_query($sqlProc,$this->conectarBd());
 			$rowProc=mysql_fetch_array($resProc);
 			$status="Activo";
+
 ?>
 			<div id="barraA" style="height: 36px;background: #666;padding: 3px;">
 				<div class="opcionesEnsamble" onclick="nuevaActividad('<?=$id_proceso;?>')" title="Nuevo">Nueva Actividad</div>				
+				<div class="opcionesEnsamble" onclick="listarActividades('<?=$id_proceso;?>','modifica')" title="Modifica Actividad">Modificar Actividad</div>				
 			</div>
 			<input type="hidden" name="hdntxtAccion" id="hdntxtAccion" value="actividades">
 			<input type="hidden" name="hdntxtValor" id="hdntxtValor" value="<?=$id_proceso;?>">
 			<div style="clear: both;"></div>
 			<div style="height: 15px;padding: 5px;font-size: 12px;text-align: left;margin-bottom: 5px;">Actividades del Proceso: <strong><?=$rowProc["nom_proceso"];?></strong></div>
+			<div style="height: 15px;padding: 5px;font-size: 12px;text-align: center;margin-bottom: 5px;"><strong><?=strtoupper($opt);?> ACTIVIDADES</strong></div>
 			<div id="nuevaActividad" style="border: 1px solid #CCC;margin: 3px;background: #f0f0f0;margin-bottom: 10px;"></div>
 			
 <?
@@ -558,12 +571,22 @@
 					$resResp=mysql_query($sqlResp,$this->conectarBd());
 					$sqlResp1="SELECT * FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status WHERE id_actividad='".$row["id_actividad"]."'";
 					$resResp1=mysql_query($sqlResp1,$this->conectarBd());
+					if($opt=="consulta"){
+						$title="";
+						$funOnC="";
+					}else{
+						$title="Da clic para modificar la actividad";
+						$funOnC="modAct('".$row['id_actividad']."')";
+					}
 ?>
-					<div class="resultadosAvisos" style="margin: 3px;height: auto; background: <?=$color?>;" title="" onclick="ver();">
+					<div class="resultadosAvisos" style="margin: 3px;height: auto; background: <?=$color?>;" title="<?=$title?>" onclick="<?=$funOnC?>">
 						<table border="0" cellpadding="1" cellspacing="1" width="98%" style="font-size: 10px;">
 							<tr>
 								<td width="10%">Actividad:</td>
 								<td width="88%"><?=substr($row["nom_actividad"],0,30)."..."; ?></td>
+								<?//}else{?>
+								<!--<td width="88%"><input type="text" name="nomAc" id="nomAc" value="<?=$row["nom_actividad"]?>"/></td>-->
+								<?//}?>
 							</tr>
 							<tr>
 								<td>Descripcion:</td>
@@ -581,7 +604,7 @@
 							echo "<br>No existen Status Asociados";
 						}else{
 							while($rowResp1=mysql_fetch_array($resResp1)){
-								echo "<strong>".$rowResp1["nom_status"]."</strong><br>";
+								echo "<strong>".$rowResp1["operador"]." ".$rowResp1["nom_status"]."</strong><br>";
 							}
 						}
 ?>
@@ -637,8 +660,9 @@
 				while($row = mysql_fetch_array($resulta)){
 					$sqlResp="SELECT * FROM ASIG_PROC WHERE id_proceso='".$row["id_proceso"]."' AND status='Activo'";
 					$resResp=mysql_query($sqlResp,$this->conectarBd());
+					
 ?>
-					<div class="resultadosAvisos" style="height: auto;margin: 3px; background: <?=$color?>;" title="Ver Actividades del Proceso" onclick="listarActividades(<?=$row['id_proceso']?>);">
+					<div class="resultadosAvisos" style="height: auto;margin: 3px; background: <?=$color?>;" title="Ver Actividades del Proceso" onclick="listarActividades('<?=$row['id_proceso']?>','consulta');">
 						<table border="0" cellpadding="1" cellspacing="1" width="98%" style="font-size: 10px;">
 							<tr>
 								<td width="10%">Proceso:</td>
@@ -724,6 +748,91 @@
 			($color=="#FFF") ? $color="#EEEEEE" : $color="#FFF";}
 		      
 			} 
+		}
+
+	public function formActuaAct($idAct){
+				$sqlResp1="SELECT * FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status WHERE id_actividad='".$idAct."'";
+				$resResp1E=mysql_query($sqlResp1,$this->conectarBd());
+				$sqlSat="SELECT * FROM SAT_ACTIVIDAD WHERE id_actividad='".$idAct."'";
+				$exeSat=mysql_query($sqlSat,$this->conectarBd());
+				$row=mysql_fetch_array($exeSat);
+				$idP=$row["id_producto"];
+				$sqlProducto="SELECT * FROM SAT_PRODUCTO WHERE id_producto != $idP ";
+				$resProducto=mysql_query($sqlProducto,$this->conectarBd());
+				$sqlP="SELECT * FROM SAT_PRODUCTO WHERE id_producto = $idP ";
+				$resP=mysql_query($sqlP,$this->conectarBd());
+				$ROWp=mysql_fetch_array($resP);
+				$sqlStatus="SELECT * FROM SAT_STATUS";
+				$resStatus=mysql_query($sqlStatus,$this->conectarBd());
+				?><form name="modActF" id="modActF"><table border="0" cellpadding="1" cellspacing="1" width="98%" style="font-size: 10px;">
+							<tr>
+								<td width="10%">Actividad:</td>
+								<td width="88%"><input type="text" name="actName" id="actName" value="<?=$row["nom_actividad"]?>"/></td>
+							</tr>
+							<tr>
+								<td>Descripcion:</td>
+								<td><input type="text" name="desAct" id="desAct" value="<?=$row["descripcion"];?>"/></td>
+							</tr>
+							<tr>
+								<td>Producto</td>
+								<td><div id="divProductoS" style="float: left;">
+<?
+							 			if(mysql_num_rows($resProducto)==0){
+								    		echo "No hay productos Capturados";
+										 }else{
+			?>
+									    <select name="cboProductoActividad" id="cboProductoActividad" style="width: 233px;">						       
+										     <option value="<?=$idP;?>"><?=$ROWp["nom_producto"]?></option>
+				<?
+									    while($rowProducto=mysql_fetch_array($resProducto)){
+				?>
+										     <option value="<?=$rowProducto["id_producto"];?>"><?=$rowProducto["nom_producto"]." ".$rowProducto["modelo"];?></option>  
+				<?
+									    }
+				?>
+									    </select>
+				<?
+								 }
+?>							
+							</div>&nbsp;<div style="float: left;margin-top: 3px;margin-left: 5px;">[ <a href="#" onclick="agregaProducto()" title="Agregra Producto" style="color: blue;">Nuevo Producto</a> ]</div>
+							</td>		
+						</tr>
+							<tr>
+								<td>Status</td>
+								<!--<td>
+<?
+						if(mysql_num_rows($resResp1E)==0){
+							echo "<br>No existen Status Asociados";
+						}else{
+							while($rowResp1=mysql_fetch_array($resResp1E)){
+								?>
+
+								<?
+								echo "<strong>".$rowResp1["operador"]." ".$rowResp1["nom_status"]."</strong><br>";
+							}
+						}
+?>
+								</td>-->
+								<td colspan="2">
+							<div id="statusExistentes" style="border: 1px solid #CCC;height: 100px;overflow: auto;background: #FFF;font-size: 10px;">
+<?
+					if(mysql_num_rows($resStatus)==0){
+						echo "No hay status Capturados";
+					}else{
+						$i=0;
+						while($rowStatus=mysql_fetch_array($resStatus)){
+							$id="cboStatus".$i;
+?>
+							<input type="checkbox" name="cboStatus" id="<?=$id;?>" value="<?=$rowStatus["id_status"];?>"><label for="<?=$id;?>"><?=$rowStatus["nom_status"];?></label><br>
+<?
+							$i+=1;
+						}
+					}
+?>
+							</div>
+						</td>
+							</tr>
+						</table></form><?
 		}
 		
 	}//fin de la clase

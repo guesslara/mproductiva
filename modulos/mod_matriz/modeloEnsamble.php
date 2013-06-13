@@ -296,8 +296,8 @@
 ?>
 				<tr>
 					<td>&nbsp;</td>
-					<td style="text-align: left;"><? echo $dias[$diaSeg];?></td>
-					<td style="text-align: center;"><? echo $rowDR["fecha"];?></td>
+					<td style="text-align: left;border-bottom: 1px solid #666;"><? echo $dias[$diaSeg];?></td>
+					<td style="text-align: center;border-bottom: 1px solid #666;"><? echo $rowDR["fecha"];?></td>
 <?
 				$nC=0;
 				for($i=0;$i<$nroProc;$i++){
@@ -307,7 +307,7 @@
 						$arrayValorStatusDetalle=explode(",",$arrayValorStatusDetalle);
 						$this->cantidadNumeroStatus=count($arrayValorStatusDetalle);						
 ?>
-					<td style="text-align: center;">
+					<td style="text-align: center;border-bottom: 1px solid #666;">
 <?
 						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
 							$cajaMatriz="cajaMatriz_".$n."_".$nC;
@@ -326,7 +326,7 @@
 <?
 					}else{
 ?>
-					<td style="text-align: center;">
+					<td style="text-align: center;border-bottom: 1px solid #666;">
 <?
 						for($l=0;$l<count($arrayValorStatusDetalle);$l++){
 							$cajaMatriz="cajaMatriz_".$n."_".$nC;

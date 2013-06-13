@@ -24,8 +24,8 @@ function listarProyectos(){
 function listarProcesos(idProyecto){
 	ajaxApp("contenido12","controladorEnsamble.php","action=listarProcesos&idProyecto="+idProyecto,"POST");
 }
-function listarActividades(idProceso){
-	ajaxApp("contenido13","controladorEnsamble.php","action=listarActividades&idProceso="+idProceso,"POST");
+function listarActividades(idProceso,opt){
+	ajaxApp("contenido13","controladorEnsamble.php","action=listarActividades&idProceso="+idProceso+"&opt="+opt,"POST");
 }
 function nuevoProceso(id_proyecto){
 	$("#formularioOpciones").show();
@@ -134,31 +134,45 @@ function agregarStatus(){
 	}
 }
 function actualizarStatus(){
-	ajaxApp("statusExistentes","controladorEnsamble.php","action=actualizarStatus","POST");
+	ajaxApp("statusExistentes","controladorEnsamble.php","action=																																																																																																																																																																																																									actualizarStatus","POST");
+}
+function cambiaOpe(name){
+	var valorB=$("#"+name).val();
+	if(valorB=="+"){
+		$("#"+name).val("-");
+	}else{
+		$("#"+name).val("+");
+	}
 }
 function guardarDatosExtraActividad(){
 	var cant=$("#hdnContadorResp").val();
 	var valores="";
 	for(var i=0;i<cant;i++){
+		
 		var cajaTiempo="#txtStatus"+i;
 		var idActStatus="#txtIdStatus"+i;
+		var operador="#button"+i;
 		var tiempoCaja=$(cajaTiempo).val();
 		var idStatusAct=$(idActStatus).val();
-		
-		if(valores==""){
-			valores=tiempoCaja+","+idStatusAct;
+		var operacion=$(operador).val();
+		if(operacion=="+"){
+			operacion="mas";
 		}else{
-			valores=valores+"|"+tiempoCaja+","+idStatusAct;
+			operacion="menos";
+		}
+		if(valores==""){
+			valores=tiempoCaja+","+operacion+","+idStatusAct;
+		}else{
+			valores=valores+"|"+tiempoCaja+","+operacion+","+idStatusAct;
 		}
 		
-		if(tiempoCaja=="" || tiempoCaja==0 || tiempoCaja==null || tiempoCaja==undefined){
+		if(tiempoCaja=="" || tiempoCaja==0 || tiempoCaja==null || tiempoCaja==undefined ||operacion==""){
 			alert("No deje espacios en blanco");
 			return;
 			break;
 		}
-	}
-	//alert(valores);
-	parametros="action=actualizarActividadStatus&valores="+valores;
+	}																												
+	parametros="action=actualizarActividadStatus&valores="+valores+" ";
 	ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php",parametros,"POST");
 }
 function agregaProducto(){
@@ -176,4 +190,8 @@ function guardarProducto(){
 }
 function actualizarListadoProductos(){
 	ajaxApp("divProductoS","controladorEnsamble.php","action=actualizaListadoProductos","POST");
+}
+function modAct(idAct){
+	$("#formularioOpciones").show();
+	ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=modAct&idAct="+idAct,"POST");
 }

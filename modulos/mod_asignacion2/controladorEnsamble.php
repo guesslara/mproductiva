@@ -10,7 +10,7 @@
 			$objAsig->listarProcesos($_POST["idProyecto"]);
 		break;
 		case "listarActividades":
-			$objAsig->listarActividades($_POST["idProceso"]);
+			$objAsig->listarActividades($_POST["idProceso"],$_POST["opt"]);
 		break;
 		case "nuevoProceso":
 			//print_r($_POST);
@@ -69,6 +69,9 @@
 		break;
 		case "actualizaListadoProductos":
 			$objAsig->actualizaListadoProductos();
+		break;
+		case "modAct":
+			$objAsig->formActuaAct($_POST["idAct"]);
 		break;
 	}
 ?>
