@@ -46,6 +46,8 @@ function guardarProceso(){
 }
 function nuevaActividad(id_proceso){
 	$("#formularioOpciones").show();
+	$("#barraTitulo1VentanaDialogoValidacion2").hide();
+	$("#barraTitulo1VentanaDialogoCapturaFinal").show();
 	ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=nuevoActividad&id_proceso="+id_proceso,"POST");
 }
 function cancelarCapturaActividad(){
@@ -191,7 +193,19 @@ function guardarProducto(){
 function actualizarListadoProductos(){
 	ajaxApp("divProductoS","controladorEnsamble.php","action=actualizaListadoProductos","POST");
 }
-function modAct(idAct){
+function modAct(idAct,idProceso){
 	$("#formularioOpciones").show();
-	ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=modAct&idAct="+idAct,"POST");
+	$("#barraTitulo1VentanaDialogoValidacion2").show();
+	$("#barraTitulo1VentanaDialogoCapturaFinal").hide();
+	ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=modAct&idAct="+idAct+"&idProceso="+idProceso,"POST");
+}
+function confGuarda(opcion){
+	if(!confirm("¿Esta seguro que desea modificar"+opcion+"?"))exit();
+}
+function guardaE(obj,idAct,campo,idProceso){
+	valor=$("#"+obj).val();
+	ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=guardaE&idAct="+idAct+"&campo="+campo+"&valor="+valor+"&idProceso="+idProceso,"POST");
+}
+function quitarStatus(idActSta,idAct){
+	ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=quitarStatus&idActSta="+idActSta+"&idAct="+idAct,"POST");
 }

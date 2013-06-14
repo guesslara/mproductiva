@@ -107,7 +107,9 @@
 
 <div id="formularioOpciones" class="transparenciaGeneral" style="display:none;">	
 	<div id="capturaCaja" class="ventanaDialogoCapturaFinal">
-    		<div id="barraTitulo1VentanaDialogoCapturaFinal">Formulario</div>
+		<div id="barraTitulo1VentanaDialogoCapturaFinal" style="display:block;">Formulario 2</div>
+		<!--<<div id="barraTitulo1VentanaDialogoValidacion" class="barraTitulo1VentanaDialogoValidacion">Formulario<div id="btnCerrarVentanaDialogo2" ><a href="#" onclick="cerrarVentana('formularioOpciones');" title="Cerrar Ventana"><img src="../../img/close.gif" border="0" /></a></div></div>-->
+		<div id="barraTitulo1VentanaDialogoValidacion2" class="barraTitulo1VentanaDialogoValidacion"style="display:none;">Formulario<div id="btnCerrarVentanaDialogo" ><a href="#" onclick="cerrarVentana('formularioOpciones');" title="Cerrar Ventana"><img src="../../img/close.gif" border="0" /></a></div></div>
 			<div id="contenidoFormularioOpciones" style="border: 0px solid #ff0000;height: 368px;width:598px;overflow: auto;"></div>
 		</div>
 	</div>

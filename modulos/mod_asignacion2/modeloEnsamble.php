@@ -576,7 +576,7 @@
 						$funOnC="";
 					}else{
 						$title="Da clic para modificar la actividad";
-						$funOnC="modAct('".$row['id_actividad']."')";
+						$funOnC="modAct('".$row['id_actividad']."','".$id_proceso."')";
 					}
 ?>
 					<div class="resultadosAvisos" style="margin: 3px;height: auto; background: <?=$color?>;" title="<?=$title?>" onclick="<?=$funOnC?>">
@@ -750,7 +750,7 @@
 			} 
 		}
 
-	public function formActuaAct($idAct){
+	public function formActuaAct($idAct,$idProceso){
 				$sqlResp1="SELECT * FROM ACTIVIDAD_STATUS INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status WHERE id_actividad='".$idAct."'";
 				$resResp1E=mysql_query($sqlResp1,$this->conectarBd());
 				$sqlSat="SELECT * FROM SAT_ACTIVIDAD WHERE id_actividad='".$idAct."'";
@@ -764,14 +764,15 @@
 				$ROWp=mysql_fetch_array($resP);
 				$sqlStatus="SELECT * FROM SAT_STATUS";
 				$resStatus=mysql_query($sqlStatus,$this->conectarBd());
+				$conStatusAc="SELECT * FROM ACTIVIDAD_STATUS WHERE id_actividad='".$idAct."'";
 				?><form name="modActF" id="modActF"><table border="0" cellpadding="1" cellspacing="1" width="98%" style="font-size: 10px;">
 							<tr>
 								<td width="10%">Actividad:</td>
-								<td width="88%"><input type="text" name="actName" id="actName" value="<?=$row["nom_actividad"]?>"/></td>
+								<td width="88%"><input type="text" name="actName" id="actName" value="<?=$row["nom_actividad"]?>" onchange="confGuarda('el nombre');guardaE('actName','<?=$idAct?>','nom_actividad','<?=$idProceso?>');"/></td>
 							</tr>
 							<tr>
 								<td>Descripcion:</td>
-								<td><input type="text" name="desAct" id="desAct" value="<?=$row["descripcion"];?>"/></td>
+								<td><input type="text" name="desAct" id="desAct" value="<?=$row["descripcion"];?>" onchange="confGuarda('la descripción');guardaE('desAct','<?=$idAct?>','descripcion','<?=$idProceso?>');"/></td>
 							</tr>
 							<tr>
 								<td>Producto</td>
@@ -781,7 +782,7 @@
 								    		echo "No hay productos Capturados";
 										 }else{
 			?>
-									    <select name="cboProductoActividad" id="cboProductoActividad" style="width: 233px;">						       
+									    <select name="cboProductoActividad" id="cboProductoActividad" style="width: 233px;" onchange="confGuarda('el producto');guardaE('cboProductoActividad','<?=$idAct?>','id_producto','<?=$idProceso?>');">						       
 										     <option value="<?=$idP;?>"><?=$ROWp["nom_producto"]?></option>
 				<?
 									    while($rowProducto=mysql_fetch_array($resProducto)){
@@ -798,42 +799,56 @@
 							</td>		
 						</tr>
 							<tr>
-								<td>Status</td>
-								<!--<td>
-<?
-						if(mysql_num_rows($resResp1E)==0){
-							echo "<br>No existen Status Asociados";
-						}else{
-							while($rowResp1=mysql_fetch_array($resResp1E)){
-								?>
-
-								<?
-								echo "<strong>".$rowResp1["operador"]." ".$rowResp1["nom_status"]."</strong><br>";
-							}
-						}
-?>
-								</td>-->
-								<td colspan="2">
+						<td colspan="2">Seleccione, Modifique o deseleccione los status relacionados a la actividad&nbsp;<a href="#" onclick="agregarMS('<?=$idAct?>')" title="Agregar Status" style="color: blue;"><img src="../../img/add.png" border="0" /></a></td>
+					</tr>
+					<tr>
+						<td colspan="2">
 							<div id="statusExistentes" style="border: 1px solid #CCC;height: 100px;overflow: auto;background: #FFF;font-size: 10px;">
 <?
 					if(mysql_num_rows($resStatus)==0){
 						echo "No hay status Capturados";
 					}else{
-						$i=0;
-						while($rowStatus=mysql_fetch_array($resStatus)){
-							$id="cboStatus".$i;
-?>
-							<input type="checkbox" name="cboStatus" id="<?=$id;?>" value="<?=$rowStatus["id_status"];?>"><label for="<?=$id;?>"><?=$rowStatus["nom_status"];?></label><br>
-<?
-							$i+=1;
+						$color="#EEE";
+						while($rowStaSe=mysql_fetch_array($resResp1E)){
+							if($color=="#FFF"){
+								$color="#EEE";
+							}else{
+								$color="#FFF";
+							}
+							$cNom="CnomS".$rowStaSe["id_act_status"];
+							$cTim="CtimS".$rowStaSe["id_act_status"];
+							$bOpe="BopSta".$rowStaSe["id_act_status"];
+							$bSaCa="opciones".$rowStaSe["id_act_status"];
+							?>
+							<div id="contenido" style="heigth:25px; width:90%;overflow:auto;clear:both;">
+								<div id="quita" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;"><a href="#" onclick="quitarStatus('<?=$rowStaSe["id_act_status"]?>','<?=$idAct?>')" title="Eliminar Status"><img src="../../img/icon_delete.gif" border="0" /></a></div>
+								<div id="edita" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;"><a href="#" onclick="editaStatus('<?=$rowStaSe["id_act_status"]?>','<?=$idAct?>')" title="Edita Status"><img src="../../img/icon_edit.png" border="0" /></a></div>
+								<div id="nomS" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;"><input type="text" style="font-size: 10px;background-color:transparent;border:none;width:60px;" name="<?=$cNom;?>" id="<?=$cNom;?>" value="<?=$rowStaSe["nom_status"]?>" readonly/></div>
+								<div id="timS" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;font-size: 10px;"><input type="text" style="font-size: 10px;background-color:transparent;border:none;width:80px;" name="<?=$cTim?>" id="<?=$cTim?>" value="<?=$rowStaSe["tiempo"]?>" readonly/>Min</div>
+								<div id="opSta" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;"><input type="button" style="background-color:transparent;border:none;width:30px; heigth:30px;" name="<?=$bOpe?>" id="<?=$bOpe?>" value="<?=$rowStaSe["operador"]?>" onclick="cambiaOpe('<?=$bOpe?>');"readonly/></div>
+								<div id="<?=$bSaCa;?>" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;display:none;"><input type="button" style="background-color:transparent;border:1px;" name="acept" id="acept" value="Modificar" onclick="guardarMod('<?=$rowStaSe['id_act_status']?>')"/><input type="button" name="cancl" id="cancl" value="Cancelar" onclick="canclMo('<?=$rowStaSe['id_act_status']?>')"/></div>
+
+							</div><?
+
+
 						}
 					}
 ?>
 							</div>
 						</td>
-							</tr>
+					</tr>
 						</table></form><?
 		}
+		public function guardaE($idAct,$campo,$valor,$idProceso){
+				$modA="UPDATE SAT_ACTIVIDAD SET $campo='".$valor."' where id_actividad='".$idAct."'";
+				$exeModA=mysql_query($modA,$this->conectarBd());
+				if(!$exeModA){
+					?><script type="text/javascript">alert("No se puedo modificar");</script><?
+				}else{
+					?><script type="text/javascript">listarActividades('<?=$idProceso?>','modificar');modAct('<?=$idAct?>');</script><?
+				}
+		}
+		//public function
 		
 	}//fin de la clase
 	//$objP=new modeloEnsamble();

@@ -71,7 +71,13 @@
 			$objAsig->actualizaListadoProductos();
 		break;
 		case "modAct":
-			$objAsig->formActuaAct($_POST["idAct"]);
+			$objAsig->formActuaAct($_POST["idAct"],$_POST["idProceso"]);
+		break;
+		case "guardaE":
+			$objAsig->guardaE($_POST["idAct"],$_POST["campo"],$_POST["valor"],$_POST["idProceso"]);
+		break;
+		case "quitarStatus":
+			$objAsig->quitarStatus($_POST["idActSta"],$_POST["idAct"]);
 		break;
 	}
 ?>
