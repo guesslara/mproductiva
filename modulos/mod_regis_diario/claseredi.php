@@ -124,6 +124,7 @@ class diario {
 		    echo "( 0 ) registros encontrados.";
 		}else{
 		    $valorStatus=explode(",",$rowRD["status"]);
+		    
 		    echo "<table width='350' border='0' cellpadding='1' cellspacing='1' style='font-size:10px;'>
 			    <tr>
 				<td width='250' class='cabeceraTitulosTabla'>Status</td>
@@ -131,6 +132,10 @@ class diario {
 			    </tr>";
 		    $i=0; $color="#E1E1E1";
 		    while($rowS=mysql_fetch_array($resS)){
+			//if($rowS['tiempo']!=0){
+			    
+			
+			
 			//se busca el nombre de los status
 			//echo $rowS["nom_status"]."<br>";
 			echo "<tr>
@@ -139,6 +144,7 @@ class diario {
 			    </tr>";
 			$i+=1;
 			($color=="#E1E1E1") ? $color="#FFF" : $color="#E1E1E1"; 
+		    //}
 		    }
 		    echo "<tr><td colspan='2'>&nbsp;</td></tr>";
 		    echo "</table>";
@@ -352,11 +358,16 @@ class diario {
 <?
 			$i=0;
 			while($rowStatusAct=mysql_fetch_array($resStatusAct)){
-			    $sqlNombreStatus="SELECT * FROM SAT_STATUS WHERE id_status='".$rowStatusAct['id_status']."'";
-			    $resNombreStatus=mysql_query($sqlNombreStatus,$this->conectar_matriz()) or die(mysql_error());
-			    $rowNombreStatus=mysql_fetch_array($resNombreStatus);
-			    $idTxt="txtStatus".$i;
-			    $divVal="divVal".$i;
+			    if($rowStatusAct['tiempo'] == 0){
+				?>
+				<input type="hidden" name="scrap" id="scrap" value="*" />
+			    <?}
+			    if($rowStatusAct['tiempo']!= 0){
+				$sqlNombreStatus="SELECT * FROM SAT_STATUS WHERE id_status='".$rowStatusAct['id_status']."'";
+				$resNombreStatus=mysql_query($sqlNombreStatus,$this->conectar_matriz()) or die(mysql_error());
+				$rowNombreStatus=mysql_fetch_array($resNombreStatus);
+				$idTxt="txtStatus".$i;
+				$divVal="divVal".$i;
 ?>		
 		<tr>
 		    <td><?=$rowNombreStatus['nom_status'];?></td>
@@ -364,7 +375,7 @@ class diario {
 		</tr>
 <?
 			    $i+=1;
-			}
+			}}
 ?>
 		<tr>
 		    <td colspan="2"><input type="hidden" name="hdnContador" id="hdnContador" value="<?=$i;?>"></td>
@@ -373,7 +384,8 @@ class diario {
 		    <td><hr style="background: #CCC;"></td>
 		</tr>
 		<tr>
-		    <td colspan="2" style="text-align: right;"><input type="reset" name="Cancelar" value="Cancelar" /><input type="button" name="Guardar" id="btnRegistroDiario" value="Guardar" onclick="guardarDatosRegistro()" onkeyup="guardarDatosRegistro()"/></td>
+		    <td colspan="2" style="text-align: right;"><input type="reset" name="Cancelar" value="Cancelar" />
+			<input type="button" name="Guardar" id="btnRegistroDiario" value="Guardar" onclick="guardarDatosRegistro()" onkeyup="guardarDatosRegistro()"/></td>
 		</tr>
 	    </table>
 	    <script type="text/javascript"> $("#txtStatus0").focus(); </script>

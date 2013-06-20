@@ -146,6 +146,14 @@
 <div id="cargadorGeneral" class="transparenciaGeneral" style="display: none;">
 	<div id="cargador" style=" display:block; text-align:center;position:absolute; width:150px; height:35px;z-index:1000;background:#FFF; color:#000; left:40%; top:300px; padding:10px;"><img src="../../img/cargador.gif" border="0"></div>
 </div>
+
+<div id="transparenciaGeneralSt" class="transparenciaGeneral" style="display:none;">	
+	<div id="divAgregaStatus" class="ventanaDialogosta">
+		<div id="barraTitulo1Status" class="barraTitulo1VentanaDialogoValidacion">Agregar Status<div id="btnCerrarVentanaDialogo" ><a href="#" onclick="cerrarVentana('transparenciaGeneralSt');" title="Cerrar Ventana"><img src="../../img/close.gif" border="0" /></a></div></div>
+			<div id="listadoStatus" style="border: 0px solid #ff0000;height: 268px;width:298px;overflow: auto; font-size:10px;"></div>
+		</div>
+	</div>
+</div>
 <div id="transparenciaGeneral10" class="transparenciaGeneral" style="display:none;">
 	<div id="divListadoCapturaFinalizacion" class="ventanaDialogoFinalizacion">
 		<div id="barraTitulo1VentanaDialogoValidacion" class="barraTitulo1VentanaDialogoValidacion">Informaci&oacute;n de la Captura<div id="btnCerrarVentanaDialogo"><a href="#" onclick="cerrarVentanaFinalizacion1()" title="Cerrar Ventana"><img src="../../img/close.gif" border="0" /></a></div></div>

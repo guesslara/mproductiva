@@ -18,8 +18,9 @@ html,body,document{position:absolute;margin:0px;height:100%; width:100%; margin:
 #barraTitulo1VentanaDialogo{ height:20px; padding:5px; color:#FFF; font-size:12px; background:#000;}
 #barraTitulo1VentanaDialogoCapturaFinal{ height:20px; padding:5px; color:#FFF; font-size:12px; background:#000;}
 .barraTitulo1VentanaDialogoValidacion{ height:20px; padding:5px; color:#FFF; font-size:12px; background:#000;}
-#btnCerrarVentanaDialogo{ float:right;}
+#btnCerrarVentanaDialogo{ float:right;}	
 .ventanaDialogo{border:1px solid #000;background-color:#FFF;height:600px;width:1000px;position:absolute;left:50%;top:50%;margin-left:-500px;margin-top:-300px;z-index:1;/*sombra*/-webkit-box-shadow:10px 10px 5px #CCC;-moz-box-shadow:10px 10px 5px #CCC;filter: shadow(color=#CCC, direction=135,strength=2);}
+.ventanaDialogosta{border:1px solid #000;background-color:#FFF;height:300px;width:300px;position:absolute;left:50%;top:50%;margin-left:-150px;margin-top:-150px;z-index:1;/*sombra*/-webkit-box-shadow:10px 10px 5px #CCC;-moz-box-shadow:10px 10px 5px #CCC;filter: shadow(color=#CCC, direction=135,strength=2);}
 .ventanaDialogoCapturaFinal{border:1px solid #000;background-color:#FFF;height:400px;width:600px;position:absolute;left:50%;top:50%;margin-left:-300px;margin-top:-200px;z-index:1;/*sombra*/-webkit-box-shadow:10px 10px 5px #CCC;-moz-box-shadow:10px 10px 5px #CCC;filter: shadow(color=#CCC, direction=135,strength=2);}
 .ventanaDialogoVerificacionEquipoEnviado{border:1px solid #000;background-color:#FFF;height:550px;width:600px;position:absolute;left:50%;top:50%;margin-left:-300px;margin-top:-225px;z-index:21;/*sombra*/-webkit-box-shadow:10px 10px 5px #CCC;-moz-box-shadow:10px 10px 5px #CCC;filter: shadow(color=#CCC, direction=135,strength=2);}
 .ventanaDialogoVerificacionEquipoValidacion{

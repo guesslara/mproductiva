@@ -45,21 +45,19 @@
 			$objAsig->guardarAsignacion($tabla,$idEmpleado,$accionForm,$valorForm,$parametroOpcional);
 		break;
 		case "eliminarResponsable":
-			//print_r($_POST);
 			$objAsig->eliminarResponsable($_POST["no_empleado"],$_POST["origen"],$_POST["idOrigen"],$_POST["idOrigen1"]);
 		break;
 		case "guardarNuevoStatus":
-			//print_r($_POST);
-			$objAsig->guardarNuevoStatus($_POST["status"]);
+			$objAsig->guardarNuevoStatus($_POST["status"],$_POST["div"]);
 		break;
 		case "actualizarStatus":
 			$objAsig->actualizarStatus();
 		break;
 		case "mostrarFormMetrica":
-			$objAsig->mostrarFormMetrica($_POST["ultimoId"]);
+			$objAsig->mostrarFormMetrica($_POST["ultimoId"],$_POST["idProceso"]);
 		break;
 		case "actualizarActividadStatus":
-			$objAsig->actualizarStatusActividad($_POST["valores"]);
+			$objAsig->actualizarStatusActividad($_POST["valores"],$_POST["idProceso"]);
 		break;
 		case "formNuevoProducto":
 			$objAsig->formNuevoProducto();
@@ -77,7 +75,16 @@
 			$objAsig->guardaE($_POST["idAct"],$_POST["campo"],$_POST["valor"],$_POST["idProceso"]);
 		break;
 		case "quitarStatus":
-			$objAsig->quitarStatus($_POST["idActSta"],$_POST["idAct"]);
+			$objAsig->quitarStatus($_POST["idActSta"],$_POST["idAct"],$_POST["idProceso"]);
+		break;
+		case "FormStat":
+			$objAsig->FormStat($_POST["idAct"],$_POST["idProceso"]);
+		break;
+		case "guardarNSA":
+			$objAsig->guardarNSA($_POST["idAct"],$_POST["status"],$_POST["idProceso"]);
+		break;
+		case "actualizaDE":
+			$objAsig->actualizaDE($_POST["idActSta"],$_POST["time"],$_POST["operador"],$_POST["idAct"],$_POST["idProceso"]);
 		break;
 	}
 ?>
