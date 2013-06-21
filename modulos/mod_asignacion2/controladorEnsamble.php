@@ -86,5 +86,8 @@
 		case "actualizaDE":
 			$objAsig->actualizaDE($_POST["idActSta"],$_POST["time"],$_POST["operador"],$_POST["idAct"],$_POST["idProceso"]);
 		break;
+		case "agregaSBA":
+			$objAsig->agregaSBA($_POST["status"],$_POST["idAct"],$_POST["idProceso"]);
+		break;
 	}
 ?>

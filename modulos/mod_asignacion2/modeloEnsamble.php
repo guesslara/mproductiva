@@ -622,7 +622,15 @@
 							echo "<br>No existen Status Asociados";
 						}else{
 							while($rowResp1=mysql_fetch_array($resResp1)){
-								echo "<strong>".$rowResp1["operador"]." ".$rowResp1["nom_status"]."</strong><br>";
+								if($rowResp1["id_status"]==1){
+									if($rowResp1["tiempo"]!=0.000|| $rowResp1["tiempo"]!=0){
+										?><strong><?=$rowResp1["operador"]?> <?=$rowResp1["nom_status"]?></strong><br><?
+									}
+									else{}
+										
+								}else{
+									echo "<strong>".$rowResp1["operador"]." ".$rowResp1["nom_status"]."</strong><br>";
+								}
 							}
 						}
 ?>
@@ -827,7 +835,7 @@
 <?
 					if(mysql_num_rows($resStatus)==0){
 						echo "No hay status Capturados";
-					}else{
+ 					}else{
 						$color="#EEE";
 						while($rowStaSe=mysql_fetch_array($resResp1E)){
 							if($color=="#FFF"){
@@ -843,24 +851,34 @@
 							?>
 							<div id="contenido" style="heigth:25px; width:90%;overflow:auto;clear:both;">
 								<?if($rowStaSe["id_status"]==1){?>
-									<?if($rowStaSe["tiempo"]!=0){?>
+									<?if($rowStaSe["tiempo"]!=0||$rowStaSe["tiempo"]!=0.000){?>
 										<div id="des" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;"><input type="checkbox" name="ASt" id="ASt" onclick="cACS('Desactivar','<?=$rowStaSe["id_act_status"]?>','<?=$idAct?>','<?=$idProceso?>');checkActivar('ASt','<?=$rowStaSe["id_act_status"]?>','<?=$rowStaSe["tiempo"]?>')" checked="checked"/></div>
+										<div id="<?=$divEdita?>" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px; display:block"><a href="#" onclick="editaStatus('<?=$rowStaSe["id_act_status"]?>','<?=$idAct?>','<?=$idProceso?>')" title="Edita Status"><img src="../../img/icon_edit.png" border="0" /></a></div>								
 									<?}else{
-										?><div id="des" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;"><input type="checkbox" name="ASt" id="ASt" onclick="cACS('Activar','<?=$rowStaSe["id_act_status"]?>','<?=$idAct?>','<?=$idProceso?>');checkActivar('ASt','<?=$rowStaSe["id_act_status"]?>','<?=$rowStaSe["tiempo"]?>')"/></div>
+										?><div id="des" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;"><input type="checkbox" name="ASt" id="ASt" onclick="cACS('Activar','<?=$rowStaSe["id_act_status"]?>','<?=$idAct?>','<?=$idProceso?>');checkActivar('ASt','<?=$rowStaSe["id_act_status"]?>','<?=$rowStaSe["tiempo"]?>')"/></div>								
+										<div id="divVacio" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px; display:block">&nbsp;&nbsp;&nbsp;&nbsp;</div>	
+										<div id="<?=$divEdita?>" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px; display:none"><a href="#" onclick="editaStatus('<?=$rowStaSe["id_act_status"]?>','<?=$idAct?>','<?=$idProceso?>')" title="Edita Status"><img src="../../img/icon_edit.png" border="0" /></a></div>								
 									<?}
 								}else{?>
-									<div id="quita" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;"><a href="#" onclick="confDelSta('<?=$rowStaSe["nom_status"]?>');quitarStatus('<?=$rowStaSe["id_act_status"]?>','<?=$idAct?>','<?=$idProceso?>')" title="Eliminar Status"><img src="../../img/icon_delete.gif" border="0" /></a></div>							
+									<div id="quita" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;"><a href="#" onclick="confDelSta('<?=$rowStaSe["nom_status"]?>');quitarStatus('<?=$rowStaSe["id_act_status"]?>','<?=$idAct?>','<?=$idProceso?>')" title="Eliminar Status"><img src="../../img/icon_delete.gif" border="0" /></a></div>		
+									<div id="<?=$divEdita?>" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px; display:block"><a href="#" onclick="editaStatus('<?=$rowStaSe["id_act_status"]?>','<?=$idAct?>','<?=$idProceso?>')" title="Edita Status"><img src="../../img/icon_edit.png" border="0" /></a></div>													
 								<?}?>
-								<div id="divVacio" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px; display:none">&nbsp;&nbsp;&nbsp;&nbsp;</div>	
-								<div id="<?=$divEdita?>" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px; display:block"><a href="#" onclick="editaStatus('<?=$rowStaSe["id_act_status"]?>','<?=$idAct?>','<?=$idProceso?>')" title="Edita Status"><img src="../../img/icon_edit.png" border="0" /></a></div>								
+								
 								<div id="nomS" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;"><input type="text" style="font-size: 10px;background-color:transparent;border:none;width:60px;" name="<?=$cNom;?>" id="<?=$cNom;?>" value="<?=$rowStaSe["nom_status"]?>" readonly/></div>
 								<div id="timS" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;font-size: 10px;"><input type="text" style="font-size: 10px;background-color:transparent;border:none;width:80px;" name="<?=$cTim?>" id="<?=$cTim?>" value="<?=$rowStaSe["tiempo"]?>" readonly/>Min</div>
 								<div id="opSta" style="heigth:20px; width:auto; background:<?=$color;?>;float:left;padding:5px;"><input type="button" style="background-color:transparent;border:none;width:30px; heigth:30px;" name="<?=$bOpe?>" id="<?=$bOpe?>" value="<?=$rowStaSe["operador"]?>" onclick="cambiaOpe('<?=$bOpe?>');" disabled="disabled"/></div>
-								<div id="<?=$bSaCa;?>" style="heigth:auto; width:auto; background:<?=$color;?>;float:left;padding:5px;display:none;"><input type="button" name="acept" id="acept" value="Modificar" onclick="guardarMod('<?=$rowStaSe['id_act_status']?>','<?=$idAct?>','<?=$idProceso?>')"/><input type="button" name="cancl" id="cancl" value="Cancelar" onclick="canclMo('<?=$rowStaSe['id_act_status']?>','<?=$idAct?>','<?=$idProceso?>')"/></div>
+								<?if($rowStaSe["id_status"]==1){
+									if($rowStaSe["tiempo"]!=0 || $rowStaSe["tiempo"]!=0.000){
+										?><div id="<?=$bSaCa;?>" style="heigth:auto; width:auto; background:<?=$color;?>;float:left;padding:5px;display:none;"><input type="button" name="acept" id="acept" value="Modificar" onclick="guardarMod('<?=$rowStaSe["nom_status"]?>','<?=$rowStaSe['id_act_status']?>','<?=$idAct?>','<?=$idProceso?>')"/><input type="button" name="cancl" id="cancl" value="Cancelar" onclick="canclMo('<?=$rowStaSe['id_act_status']?>','<?=$idAct?>','<?=$idProceso?>')"/></div><?
+									}else{
+										?><div id="<?=$bSaCa;?>" style="heigth:auto; width:auto; background:<?=$color;?>;float:left;padding:5px;display:none;"><input type="button" name="acept" id="acept" value="Modificar" onclick="guardarMod('<?=$rowStaSe["nom_status"]?>','<?=$rowStaSe['id_act_status']?>','<?=$idAct?>','<?=$idProceso?>')"/><input type="button" name="cancl" id="cancl" value="Cancelar" onclick="canclMo('<?=$rowStaSe['id_act_status']?>','<?=$idAct?>','<?=$idProceso?>');modAct('<?=$idAct?>','<?=$idProceso?>')"/></div><?
+									}
+								}else{
+									?><div id="<?=$bSaCa;?>" style="heigth:auto; width:auto; background:<?=$color;?>;float:left;padding:5px;display:none;"><input type="button" name="acept" id="acept" value="Modificar" onclick="guardarMod('<?=$rowStaSe["nom_status"]?>','<?=$rowStaSe['id_act_status']?>','<?=$idAct?>','<?=$idProceso?>')"/><input type="button" name="cancl" id="cancl" value="Cancelar" onclick="canclMo('<?=$rowStaSe['id_act_status']?>','<?=$idAct?>','<?=$idProceso?>')"/></div><?
+								}?>
+								
 
 							</div><?
-
-
 						}
 					}
 ?>
@@ -880,32 +898,33 @@
 				}
 		}
 		public function FormStat($idAct,$idProceso){
-			$bSta="SELECT * FROM SAT_STATUS WHERE status='activo'";
-			$exeB=mysql_query($bSta,$this->conectarBd());
+			$statusUsado= array();
 			$acS="SELECT * FROM ACTIVIDAD_STATUS WHERE id_actividad='".$idAct."'";
 			$exeAC=mysql_query($acS,$this->conectarBd());
-
+			while($row=mysql_fetch_array($exeAC)){
+				array_push($statusUsado,$row["id_status"]);
+			}
+			$statUsados=implode("','",$statusUsado);
+			$bSta="SELECT * FROM SAT_STATUS WHERE status='Activo' AND id_status NOT IN ('".$statUsados."')";
+			$exeB=mysql_query($bSta,$this->conectarBd());
 ?>
 					<form id="mS" name="mS"><table><tr>
-						<td colspan="2" style="font-size:10px;">Seleccione los status relacionados a la actividad&nbsp;[ <a href="#" onclick="agregarStatus('statusExistentesA')" title="Agregar Status" style="color: blue;">Nuevo Status</a>]</td>
+						<td colspan="2" style="font-size:10px;">Seleccione los status relacionados a la actividad&nbsp;[ <a href="#" onclick="agregaSBA('<?=$idAct?>','<?=$idProceso?>')" title="Agregar Status" style="color: blue;">Nuevo Status</a>]</td>
 					</tr>
 					<tr>
 						<td colspan="2">
 							<div id="statusExistentesA" style="border: 1px solid #CCC;height: 100px;overflow: auto;background: #FFF;font-size: 10px;">
 <?
 					if(mysql_num_rows($exeB)==0){
-						echo "No hay status Capturados";
+						echo "Actualmente tiene todos los Status en uso";
 					}else{
 						$i=0;
-						while($rowACS=mysql_fetch_array($exeAC)){
-							while($rowStatus=mysql_fetch_array($exeB)){
-								$id="cboStatus".$i;
-								if($rowACS["id_status"]==$rowStatus["id_status"]){}else{
-	?>
-								<input type="checkbox" name="cboStatus" id="<?=$id;?>" value="<?=$rowStatus["id_status"];?>"><label for="<?=$id;?>"><?=$rowStatus["nom_status"];?></label><br>
+						while($rowStatus=mysql_fetch_array($exeB)){
+							$id="cboStatus".$i;
+							if($rowACS["id_status"]==$rowStatus["id_status"]){}else{
+	?>								<input type="checkbox" name="cboStatus" id="<?=$id;?>" value="<?=$rowStatus["id_status"];?>"><label for="<?=$id;?>"><?=$rowStatus["nom_status"];?></label><br>
 	<?
-								$i+=1;
-								}
+							$i+=1;
 							}
 						}
 					}
@@ -930,20 +949,18 @@
 		}
 		public function guardarNSA($idAct,$status,$idProceso){
 			$status=explode(",",$status);						
-			if($res){
 				//se recupera el ultimo id insertado en la actividad				
 				for($i=0;$i<count($status);$i++){
 					$sqlActStatus="INSERT INTO ACTIVIDAD_STATUS (id_actividad,id_status) VALUES ('".$idAct."','".$status[$i]."')";//se ejecuta la consulta sql
 					$resActStatus=mysql_query($sqlActStatus,$this->conectarBd());
+					if($resActStatus==true){
 					echo "<script type='text/javascript'> mostrarFormMetrica('".$idAct."','".$idProceso."'); </script>";//se manda llamar al siguiente formulario
+					}
 					if($resActStatus==false){
 						echo "<script type='text/javascript'> alert('Ocurrio un error al guardar el status con la Actividad');</script>";	
 					}
 				}
-				echo "<script type='text/javascript'> alert('Actividad Guardada'); modAct('".$idAct."','".$idProceso."');</script>";	
-			}else{
-				echo "<script type='text/javascript'> alert('Error al Guardar al Proceso'); </script>";	
-			}
+				echo "<script type='text/javascript'> alert('status Agregado'); cerrarVentana('transparenciaGeneralSt');modAct('".$idAct."','".$idProceso."');</script>";	
 			
 		}
 		public function quitarStatus($idActSta,$idAct,$idProceso){
@@ -968,6 +985,15 @@
 				}else{
 						?><script type="text/javascript">alert('Error al Actualizar el Registro');listarActividades('<?=$idProceso?>','modifica');modAct('<?=$idAct?>','<?=$idProceso?>');</script><?
 				}
+		}
+		public function agregaSBA($status,$idAct,$idProceso){
+			$sqlStatus="INSERT INTO SAT_STATUS (nom_status,status) VALUES ('".strtoupper($status)."','Activo')";
+			$resStatus=mysql_query($sqlStatus,$this->conectarBd());
+			if($resStatus){
+				echo "<script type='text/javascript'> alert('Status Guardado'); agregarMS('".$idAct."','".$idProceso."')</script>";
+			}else{
+				echo "<script type='text/javascript'> alert('Error al Guardar el Status'); </script>";
+			}
 		}
 
 	}//fin de la clase

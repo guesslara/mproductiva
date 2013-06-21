@@ -132,20 +132,27 @@ class diario {
 			    </tr>";
 		    $i=0; $color="#E1E1E1";
 		    while($rowS=mysql_fetch_array($resS)){
-			//if($rowS['tiempo']!=0){
-			    
+			if($valorStatus[$i]=="*"){
+			    echo "<tr>
+			    <td style='background:<?=$color;?>;' class='resultadosTablaBusqueda'>".$rowS["nom_status"]."</td>
+			    <td style='background:<?=$color;?>;' class='resultadosTablaBusqueda'> <font color='red'> No aplica</font></td>
+			    </tr>";
 			
+			$i+=1;
+			($color=="#E1E1E1") ? $color="#FFF" : $color="#E1E1E1"; 
 			
-			//se busca el nombre de los status
-			//echo $rowS["nom_status"]."<br>";
-			echo "<tr>
+			}else{
+			    //se busca el nombre de los status
+			    //echo $rowS["nom_status"]."<br>";
+			    echo "<tr>
 				<td style='background:<?=$color;?>;' class='resultadosTablaBusqueda'>".$rowS["nom_status"]."</td>
 				<td style='background:<?=$color;?>;' class='resultadosTablaBusqueda'>".$valorStatus[$i]."</td>
 			    </tr>";
-			$i+=1;
-			($color=="#E1E1E1") ? $color="#FFF" : $color="#E1E1E1"; 
-		    //}
-		    }
+			
+			    $i+=1;
+			    ($color=="#E1E1E1") ? $color="#FFF" : $color="#E1E1E1"; 
+			}}
+		    
 		    echo "<tr><td colspan='2'>&nbsp;</td></tr>";
 		    echo "</table>";
 		}

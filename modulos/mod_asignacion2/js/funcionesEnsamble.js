@@ -170,12 +170,12 @@ function guardarDatosExtraActividad(idProceso){
 			valores=valores+"|"+tiempoCaja+","+operacion+","+idStatusAct;
 		}
 		if(idSta1=="1"){
-			if(tiempoCaja==""||tiempoCaja==null || tiempoCaja==undefined){
+			if(tiempoCaja==""||tiempoCaja==null || tiempoCaja==undefined || tiempoCaja==0.000 || tiempoCaja==0){
 			alert("No deje espacios en blanco 1");
 			return;
 			break;
 		}}else{
-		if(tiempoCaja==""|| tiempoCaja==0|| tiempoCaja==null || tiempoCaja==undefined ||operacion==""){
+		if(tiempoCaja==""|| tiempoCaja==0|| tiempoCaja==null || tiempoCaja==undefined){
 			alert("No deje espacios en blanco 2");
 			return;
 			break;
@@ -254,9 +254,12 @@ function editaStatus(idActSta,idAct,idProceso){
 	timeStatus="CtimS"+idActSta;
 	opSta="BopSta"+idActSta;
 	opcionesB="opciones"+idActSta;
+	botonEdita="edita"+idActSta;
 	$("#"+opcionesB).show();	
 	$("#"+timeStatus).removeAttr("readOnly");
 	$("#"+opSta).removeAttr("disabled");
+	$("#"+botonEdita).show();
+	$("#divVacio").hide();
 	/*$("#"+timeStatus).removeAttr("style");
 	$("#"+opSta).removeAttr("style");*/
 	$("#"+ timeStatus).css("border","1px solid #CCC");
@@ -303,12 +306,47 @@ function checkActivar(obj,cajaT,tim){
 	}
 }
 function cACS(opS,idActSta,idAct,id_proceso){
- 	if(confirm("Esta seguro que desea "+opS+" el Status SCRAP?")){
+ 	if(confirm("¿Esta seguro que desea "+opS+" el Status SCRAP?")){
  		if(opS=="Desactivar"){
- 			ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=actualizaDE&idActSta="+idActSta+"&time=0&operador=mas&idAct="+idAct+"&id_proceso="+id_proceso,"POST");
+ 			ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=actualizaDE&idActSta="+idActSta+"&time=0&operador=mas&idAct="+idAct+"&idProceso="+id_proceso,"POST");
  		}else{
- 			editaStatus(idActSta,idAct,idProceso);
+ 			editaStatus(idActSta,idAct,id_proceso);
  		}
- 	}else{exit();}
+ 	}else{
+ 		$("#formularioOpciones").show();
+		$("#barraTitulo1VentanaDialogoValidacion2").show();
+		$("#barraTitulo1VentanaDialogoCapturaFinal").hide();
+		ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=modAct&idAct="+idAct+"&idProceso="+id_proceso,"POST");
+		return;
+ 	}
 }
+function guardarMod(opS,idActSta,idAct,id_proceso){
+	if(confirm("¿Esta seguro que desea modificar el status: "+opS+"?")){
+		var cTim="#CtimS"+idActSta;
+		var bOpe="#BopSta"+idActSta;
+		var tiempo=$(cTim).val();
+		var op=$(bOpe).val();
+		if(op=="+"){
+			operador="mas";
+		}else{
+			operador="menos";
+		}
+		ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=actualizaDE&idActSta="+idActSta+"&time="+tiempo+"&operador="+operador+"&idAct="+idAct+"&idProceso="+id_proceso,"POST");
+	}else{
+		$("#formularioOpciones").show();
+		$("#barraTitulo1VentanaDialogoValidacion2").show();
+		$("#barraTitulo1VentanaDialogoCapturaFinal").hide();
+		ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=modAct&idAct="+idAct+"&idProceso="+id_proceso,"POST");
+		return;
+	}
 
+}
+function agregaSBA(idAct,idProceso){
+	var status=prompt("Introduzca el Nombre del Status a Agregar");
+		if(status=="" || status==undefined || status==null){
+			alert("Valor no valido para el Status");
+		}else{
+			$("#transparenciaGeneralSt").show();
+			ajaxApp("listadoStatus","controladorEnsamble.php","action=agregaSBA&status="+status+"&idAct="+idAct+"&idProceso="+idProceso,"POST");
+		}
+}
