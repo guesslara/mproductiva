@@ -29,7 +29,239 @@
 			}				
     			return $conexion;
 		}
-		
+	public function creaTabla($noEmpleado,$fechaini,$fechafin,$mlxj){
+		$minlaborables=$mlxj;
+		$id_empleado=$noEmpleado;
+		$fecha_inicio=date($fechaini);
+		$fecha_fin=date($fechafin);
+		$fecha1 = explode('-',$fecha_inicio);
+		$fecha_inicio1 = mktime(0,0,0,$fecha1[1],$fecha1[2],$fecha1[0]);
+		$fecha = explode('-',$fecha_fin);
+		$fecha_fin1 = mktime(23,59,59,$fecha[1],$fecha[2],$fecha[0]);
+		$filas=round(abs(($fecha_fin1-$fecha_inicio1)/(60 * 60 * 24)));
+		for($q=0;$q<$filas;$q++)
+			$date[$q][0]=date("Y-m-d", mktime(0,0,0,$fecha1[1],$fecha1[2]+$q,$fecha1[0]));
+		$cont=1;$poper=0;$sumaH=0;$sumaV=0;$operador=array();$x=1;$scrap=array();$mas=array();$menos=array();
+		$tresmas=array();
+		$CabezaAct="SELECT SAT_ACTIVIDAD.id_actividad, SAT_ACTIVIDAD.nom_actividad
+				FROM ASIG_ACT
+				INNER JOIN SAT_ACTIVIDAD ON ASIG_ACT.id_actividad = SAT_ACTIVIDAD.id_actividad
+				WHERE id_empleado = '".$id_empleado."'";
+		$resResp=mysql_query($CabezaAct,$this->conectarBd());
+		$stat=array();$au=1;$act=0;$propio=1;
+		$columnas=array();$txs=array();
+		$columnas['']=array('Fecha');
+		while($rowResp=mysql_fetch_array($resResp)){
+			$CabezaStatus="SELECT SAT_STATUS.nom_status, ACTIVIDAD_STATUS.operador, ACTIVIDAD_STATUS.tiempo
+				FROM ACTIVIDAD_STATUS
+				INNER JOIN SAT_STATUS ON ACTIVIDAD_STATUS.id_status = SAT_STATUS.id_status
+				WHERE ACTIVIDAD_STATUS.id_actividad = '".$rowResp['id_actividad']."'";
+			$resResp2=mysql_query($CabezaStatus,$this->conectarBd());
+			$numsta=mysql_num_rows($resResp2);
+			while($rowResp2=mysql_fetch_array($resResp2)){
+				if($rowResp2['tiempo']!=0){
+					if($rowResp2['nom_status']=="SCRAP"){
+						//echo $rowResp2['nom_status'];
+						array_push($scrap, $propio);
+					}else{
+						if($rowResp2['operador']=="+"){
+							//echo $rowResp2['operador'];
+							array_push($mas, $propio);
+						}else{
+							//echo $rowResp2['operador'];
+							array_push($menos, $propio);
+						}
+					}
+					//echo"--$propio--<br />";
+					$stat['status'.$au]=$rowResp2['nom_status'];
+					$txs[$propio]=$rowResp2['tiempo'];$propio++;
+					$operador[$au-1]=$rowResp2['operador'];$au++;
+				}
+			}
+			$datos="SELECT fecha, detalle_captura_registro.status
+			FROM (
+				detalle_captura_registro
+				INNER JOIN SAT_ACTIVIDAD ON detalle_captura_registro.id_actividad = SAT_ACTIVIDAD.id_actividad
+			)
+			INNER JOIN SAT_PROCESO ON SAT_ACTIVIDAD.id_proceso = SAT_PROCESO.id_proceso
+			WHERE fecha
+			BETWEEN '".$fecha_inicio."'
+			AND '".$fecha_fin."'
+			AND no_empleado = '".$id_empleado."'
+			AND detalle_captura_registro.id_actividad = '".$rowResp['id_actividad']."'";
+			$Mandadatos=mysql_query($datos,$this->conectarBd());
+			while($ResDatos2=mysql_fetch_array($Mandadatos)){
+				if($act<1){
+					for($yy=0;$yy<$filas;$yy++){
+						if($ResDatos2['fecha']==$date[$yy][0]){
+							$x=1;
+							$ca=explode(",",$ResDatos2['status']);
+							for($t=0;$t<count($ca);$t++){
+								if($ca[$t] != "*"){
+									$date[$yy][$x]=$operador[$poper].$ca[$t];
+									$x++;$poper++;
+								}
+							}
+							$aux=$x;$poper=0;
+						}
+					}
+				}else{
+					
+					for($yy=0;$yy<$filas;$yy++){
+						if($ResDatos2['fecha']==$date[$yy][0]){
+							$x=$aux;
+							$ca=explode(",",$ResDatos2['status']);
+							for($t=0;$t<count($ca);$t++){
+								if($ca[$t] != "*"){
+									$date[$yy][$x]=$operador[$poper].$ca[$t];
+									$x++;$poper++;
+								}
+							}
+							$poper=0;
+						}
+					}
+				}
+			}
+			$columnas[$rowResp['nom_actividad']]=$stat;
+			$stat=array();$au=1;$act++;$operador=array();
+			$aux=$x;
+		}
+		$tresmas['Tiempo x Status']=$txs;
+		//$tresmas['Tiempo x Status (min)']=array();
+		$tresmas['cant. x Jornada']=array();$cadtxs="";
+		for($k=0;$k<=count($txs);$k++){
+			if($tresmas['Tiempo x Status'][$k]!=null){
+				$tresmas['cant. x Jornada'][$k]=round($minlaborables/$tresmas['Tiempo x Status'][$k],2);
+				$cadtxs=$cadtxs.",".$tresmas['Tiempo x Status'][$k];
+			}
+		}
+		$cont=0;$i=0;$si=0;
+		foreach($columnas as $nombre => $valor){
+			$colspan[$i]=count($columnas[$nombre]);
+			$i++;
+		}$i=0;$cadtodo="";$ttxs=array();
+		//print_r($mas);
+		?>
+		<table border="2" style="text-align: center;" class="tab">
+			<tr>
+				<?foreach($columnas as $nombre => $valor){?>
+				<td colspan="<?=$colspan[$i]?>">
+					<?print $nombre;?>
+				</td>
+				<?$i++;}?>
+			</tr>
+			<tr>
+				<?foreach($columnas as $nombre => $valor){
+					foreach($valor as $status){
+						?><td><?=$status;$cont++;?></td><?
+					}
+				}?>
+			</tr>
+			<?foreach($tresmas as $nombre => $valor){?>
+			<tr>
+				<?for($k=0;$k<$cont;$k++){?>
+				<td>
+					<?
+					if($k==0){
+						echo $nombre;
+					}else{
+						echo $tresmas[$nombre][$k];
+					}
+					?>
+				</td>
+				<?}if($nombre=="Tiempo x Status"){?>
+				<td rowspan="2">Total</td>
+				<td rowspan="2">P</td>
+				<td rowspan="2">C</td>
+				<?}?>
+			</tr>
+		<?}for($j=0;$j<$filas;$j++){?>
+			<tr>
+			<?for($k=0;$k<($cont+3);$k++){?>
+				<td>
+					<?if($date[$j][$k]==null && $k<$cont){
+						echo($date[$j][$k]=0);
+					}else{
+						echo$date[$j][$k];
+					}
+					$cadtodo=$cadtodo."".$date[$j][$k].",";
+					if($k>=$cont){
+						echo"<input type='text' id='".$j."res".$k."' name='".$j."res".$k."' readonly='' value='' style='width: 60px;' />";
+					}
+					?>
+				</td>
+			<?}
+			$cadtodo=substr($cadtodo, 0, -2);
+			$cadtodo=$cadtodo."*";
+			$sumaH=0;?>
+			</tr>
+		<?}
+		$cadctxs="";$smas=0;$smenos=0;$sscrap=0;$masttxs=0;
+		for($k=1;$k<$cont;$k++){
+			for($j=0;$j<$filas;$j++){
+				$sumaV+=$date[$j][$k];
+			}
+			$sumaVA[$k]=$sumaV;
+			$cadctxs=$cadctxs.",".$sumaV;
+			$ttxs[$k]=($sumaVA[$k]*$tresmas['Tiempo x Status'][$k])/60;
+			
+			for($o=0;$o<count($mas);$o++){
+				if($k==$mas[$o]){
+					$smas+=$sumaVA[$k];
+					$masttxs+=$ttxs[$k];
+				}
+			}
+			for($o=0;$o<count($menos);$o++){
+				if($k==$menos[$o]){
+					$smenos+=$sumaVA[$k];
+					$menosttxs+=$ttxs[$k];
+				}
+			}
+			for($o=0;$o<count($scrap);$o++){
+				if($k==$scrap[$o]){
+					$sscrap+=$sumaVA[$k];
+					$scrapttxs+=$ttxs[$k];
+				}
+			}
+			$sumaV=0;
+		}
+		?>
+			<input type="hidden" name="txtbx61" id="txtbx61" value="<?=$smas;?>">
+			<input type="hidden" name="txtbz61" id="txtbz61" value="<?=$smenos;?>">
+			<input type="hidden" name="txtby61" id="txtby61" value="<?=$sscrap;?>">
+			<input type="hidden" name="txtbx62" id="txtbx62" value="<?=$masttxs;?>">
+			<input type="hidden" name="txtbz62" id="txtbz62" value="<?=$menosttxs;?>">
+			<input type="hidden" name="txtby62" id="txtby62" value="<?=$scrapttxs;?>">
+			<tr>
+				<td>Cantidad Total x Status</td>
+				<?for($k=1;$k<$cont;$k++){?>
+					<td id="res-<?=$k;?>">
+						<?=$sumaVA[$k];?>
+					</td>
+				<?}?>				
+			</tr>
+			<tr>
+				<td>Tiempo Total x Status</td>
+				<?for($k=1;$k<$cont;$k++){?>
+					<td>
+						<?=round($ttxs[$k],2);?>
+					</td>
+				<?}?>	
+			</tr>
+			<tr>
+				<td colspan="<?=$cont?>">Suma del Total</td>
+				<td><input type='text' id='tdlt' name='tdlt' readonly="" value='' style='width: 60px;' /></td>
+			</tr>
+			<tr>
+				<td colspan="<?=$cont?>">Totales del Rango</td>
+				<td><input type='text' id='cont' name='cont' readonly="" value='' style='width: 60px;' /></td>
+				<td><input type='text' id='sump' name='sump' readonly="" value='' style='width: 60px;' /></td>
+				<td><input type='text' id='sumc' name='sumc' readonly="" value='' style='width: 60px;' /></td>
+			</tr>
+		</table>
+		<input type="button" value="calcular" onclick="cambioAj('<?=$cadtxs?>','<?=$cadctxs?>','<?=$cadtodo?>','<?=$grups?>');" />
+		<?
+	}
 		public function armaDetalleMatriz($noEmpleado,$fecha1,$fecha2,$idActividad){
 			echo "<br>Consulta 1 ".$sqlD="SELECT SAT_ACTIVIDAD.id_actividad, SAT_ACTIVIDAD.nom_actividad, SAT_PROCESO.id_proceso, SAT_PROCESO.nom_proceso, SAT_PROYECTO.id_proyecto, SAT_PROYECTO.nom_proyecto
 			FROM (SAT_ACTIVIDAD INNER JOIN SAT_PROCESO ON SAT_ACTIVIDAD.id_proceso = SAT_PROCESO.id_proceso) INNER JOIN SAT_PROYECTO ON SAT_PROCESO.id_proyecto = SAT_PROYECTO.id_proyecto WHERE id_actividad ='".$idActividad."'";
@@ -70,7 +302,7 @@
 			}
 			
 ?>
-			<input type="button" value="Calcular Matriz" onclick="calcularDatosMatriz()" style="width: 120px;height: 25px;padding: 5px;">
+			<input type="button" value="Ver Matriz" onclick="calcularDatosMatriz()" style="width: 120px;height: 25px;padding: 5px;">
 			<table border="0" cellpadding="1" cellspacing="1" width="<?=$anchoTabla?>" style="font-size: 10px;border: 1px solid #CCC;background:#f0f0f0;">
 				<tr>
 					<td>&nbsp;</td>
@@ -502,8 +734,9 @@
 ?>
 					<input type="hidden" name="<?=$hdnNoEmpleado;?>" id="<?=$hdnNoEmpleado;?>" value="<?=$noEmpleado;?>">
 					<input type="hidden" name="txtHdnFecha1" id="txtHdnFecha1" value="<?=$fecha1;?>">
+					<input type="hidden" name="txtHlabxMes" id="txtHlabxMes" value="<?=$horasLaboradasMes;?>">
 					<input type="hidden" name="txtHdnFecha2" id="txtHdnFecha2" value="<?=$fecha2;?>">
-					<input type="hidden" name="txtHdnMes" id="txtHdnMes" value="<?=$meses[$fecha1x[1]-1];?>"_
+					<input type="hidden" name="txtHdnMes" id="txtHdnMes" value="<?=$meses[$fecha1x[1]-1];?>">
 					<input type="hidden" name="txtHdnJornadaLaboral" id="txtHdnJornadaLaboral" value="<?=$rowCapMes["jorna_lab"];?>">
 					<input type="hidden" name="txtHdnDiasLaborables" id="txtHdnDiasLaborables" value="<?=$rowCapMes["dias_lab"];?>">
 					<input type="hidden" name="txtHdnDiasLicencia" id="txtHdnDiasLicencia" value="<?=$rowCapMes["dias_li"];?>">
@@ -557,31 +790,31 @@
 						</tr>
 						<tr>
 							<td style="background: yellow;color: #000;">Cumplimiento</td>
-							<td>&nbsp;</td>
+							<td>&nbsp;<input type="text" id="cumpli" name="cumpli" readonly="" value="" style="width: 60px;" /></td>
 						</tr>
 						<tr>
 							<td style="background: yellow;color: #000;">TE (Hrs)</td>
-							<td>&nbsp;</td>
+							<td>&nbsp;<input type="text" id="te" name="te" readonly="" value="" style="width: 60px;" /></td>
 						</tr>
 						<tr>
 							<td style="background: yellow;color: #000;">Productividad por Dia</td>
-							<td>&nbsp;</td>
+							<td>&nbsp;<input type="text" id="pxd" name="pxd" readonly="" value="" style="width: 60px;" /></td>
 						</tr>
 						<tr>
 							<td style="background: yellow;color: #000;">Productividad por Mes</td>
-							<td>&nbsp;</td>
+							<td>&nbsp;<input type="text" id="pxm" name="pxm" readonly="" value="" style="width: 60px;" /></td>
 						</tr>
 						<tr>
 							<td style="background: yellow;color: #000;">Rendimiento</td>
-							<td>&nbsp;</td>
+							<td>&nbsp;<input type="text" id="rendi" name="rendi" readonly="" value="" style="width: 60px;" /></td>
 						</tr>
 						<tr>
 							<td style="background: yellow;color: #000;">% de Scrap en el Mes</td>
-							<td>&nbsp;</td>
+							<td>&nbsp;<input type="text" id="scrapxr" name="scrapxr" readonly="" value="" style="width: 60px;" /></td>
 						</tr>
 						<tr>
 							<td style="background: yellow;color: #000;">% de Rechazo en el Mes</td>
-							<td>&nbsp;</td>
+							<td>&nbsp;<input type="text" id="rechazoxr" name="rechazoxr" readonly="" value="" style="width: 60px;" /></td>
 						</tr>
 					</table>
 <?
@@ -596,18 +829,9 @@
 						$nombreCombo="cboActividadMatriz".$tabMatrizDetalle;
 ?>
 					<div style="height: 20px;padding: 5px;background: #f0f0f0;border: 1px solid #CCC;">
-						&nbsp;&nbsp;Seleccione la Actividad:<select name="<?=$nombreCombo;?>" id="<?=$nombreCombo;?>" onchange="cargarCapturasMatriz('<?=$tabMatrizDetalle;?>')">
-						<option value="">Selecciona:</option>
-<?
-						while($rowAct=mysql_fetch_array($resAct)){
-?>
-						<option value="<?=$rowAct["id_actividad"];?>"><?=$rowAct["nom_actividad"];?></option>
-<?
-						}
-?>
-						</select>
+						<input type="button" value="Ver Matriz" onclick="crear();" />
 					</div>
-					<div id="<?=$tabMatrizDetalle;?>" style="border: 1px solid #CCC;margin: 5px;"></div>
+					<div id="tabMatrizDetalle2" style="border: 1px solid #CCC;margin: 5px;"></div>
 			
 <?
 					}

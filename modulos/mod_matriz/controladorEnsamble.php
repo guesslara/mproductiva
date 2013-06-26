@@ -20,5 +20,9 @@
 			//print_r($_POST);
 			$objMatriz->armaDetalleMatriz($_POST["noEmpleado"],$_POST["fecha1"],$_POST["fecha2"],$_POST["idActividad"]);
 		break;
+		case "creaTabla":
+			//print_r($_POST);
+			$objMatriz->creaTabla($_POST["noEmpleado"],$_POST["fecha1"],$_POST["fecha2"],$_POST["mlxj"]);
+		break;
 	}
 ?>

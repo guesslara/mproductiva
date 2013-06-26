@@ -19,6 +19,89 @@ function ajaxApp(divDestino,url,parametros,metodo){
 	error:function() { $("#"+divDestino).show().html('<center>Error: El servidor no responde. <br>Por favor intente mas tarde. </center>'); }
 	});
 }
+function crear(){
+	var noEmpleado=$("#txtBNoEmpleado").val();
+	var fecha1=$("#busquedaRegistro1").val();
+	var fecha2=$("#busquedaRegistro2").val();
+	var mlxj=$("#hdnMinutosLaborablesJornada").val();
+	parametros="action=creaTabla&noEmpleado="+noEmpleado+"&fecha1="+fecha1+"&fecha2="+fecha2+"&mlxj="+mlxj;
+	ajaxApp("tabMatrizDetalle2","controladorEnsamble.php",parametros,"POST");
+}
+function cambioAj(arrtxs,arrctxs,arrtodo,grupos){
+	var ctxs = arrctxs.split(",");
+	var csyd=0, cont=0, hrsext=0;
+	var ajcp=100;var sump=0;
+	var res=0;var sumc=0;var sumt=0;
+	var divg=grupos.split("/");
+	var meta=parseInt($("#txtHdnMetaProd").val());
+	var bx61=parseFloat($("#txtbx61").val());
+	var by61=parseFloat($("#txtby61").val());
+	var bz61=parseFloat($("#txtbz61").val());
+	var bx62=parseFloat($("#txtbx62").val());
+	var by62=parseFloat($("#txtby62").val());
+	var bz62=parseFloat($("#txtbz62").val());	
+	var jorlab=parseFloat($("#txtHdnJornadaLaboral").val());
+	var HdnTiempoExtra=parseFloat($("#txtHdnTiempoExtra").val());
+	var linea = arrtodo.split("*");
+	var txs = arrtxs.split(",");
+	bz61=bz61*(-1);
+	bz62=bz62*(-1);
+	rendi=100-(((by62+bz62)/bx62)*100);
+	$("#rendi").attr("value","%"+(Math.round(rendi)));
+	scrapxr=(by61/bx61)*100;
+	$("#scrapxr").attr("value","%"+(Math.round(scrapxr)));
+	rechazoxr=(bz61/bx61)*100;
+	$("#rechazoxr").attr("value","%"+(Math.round(rechazoxr)));
+	for(var j=0; j<(linea.length-1);j++){
+		var dato=linea[j].split(",");
+		fecha=dato[0].split("-");
+		mifecha=new Date(fecha[0],(fecha[1]-1),fecha[2]);
+		dia=mifecha.getDay();
+		for(var i=1;i<txs.length;i++){
+			txsmin=Math.round(ajcp*txs[i])/100;
+			if(j<1)
+				$("#txsm"+i).attr("value",txsmin);
+			res=res+(dato[i]*txsmin);
+			ttxs=Math.round((ctxs[i]*txsmin/60)*100)/100;
+			if(j<1)
+				$("#ttxs"+i).attr("value",ttxs);
+		}
+		t=res/60;
+		$("#"+j+"res"+i).attr("value",Math.round(t));
+		sumt=sumt+t;
+		p=Math.round((t/jorlab)*100);
+		$("#"+j+"res"+(i+1)).attr("value","% "+p);
+		sump=sump+p;
+		c=Math.round((p/meta)*100);
+		$("#"+j+"res"+(i+2)).attr("value","% "+c);
+		sumc=sumc+c;
+		if(t!=0)
+			cont++;
+		res=0;
+		if(dia==6 || dia==0){
+			if(t!=0)
+				csyd++;
+			hrsext=hrsext+t;
+		}
+	}
+	if(hrsext!=0){
+		te=(((hrsext/meta)*100)/HdnTiempoExtra)*100;
+		$("#te").attr("value","%"+(Math.round(te)));
+	}
+	if(cont>0){
+		$("#tdlt").attr("value",Math.round(sumt*100)/100);
+		$("#sumc").attr("value","%"+(Math.round(sumc/cont)));
+		$("#sump").attr("value","%"+(Math.round(sump/cont)));
+		$("#pxd").attr("value","%"+(Math.round(sump/cont)));
+		$("#cont").attr("value",cont);
+	}
+	var labxMes=parseInt($("#txtHlabxMes").val());
+	pxm=(sumt/labxMes)*100;
+	$("#pxm").attr("value","%"+Math.round(pxm));
+	cumpli=(pxm/meta)*100;
+	$("#cumpli").attr("value","%"+Math.round(cumpli));
+	return 1;
+}
 function abrir(div,opcion){
 	$("#"+div).show("fast");
 	if(div=="buscarEmpleado"){

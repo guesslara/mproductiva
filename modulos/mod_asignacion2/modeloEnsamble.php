@@ -831,7 +831,7 @@
 					</tr>
 					<tr>
 						<td colspan="2">
-							<div id="statusExistentesM" style="border: 1px solid #CCC;height: 100px;overflow: auto;background: #FFF;font-size: 10px;">
+							<div id="statusExistentesM" style="border: 1px solid #CCC;height: 230px;overflow: auto;background: #FFF;font-size: 10px;">
 <?
 					if(mysql_num_rows($resStatus)==0){
 						echo "No hay status Capturados";

@@ -94,7 +94,7 @@
 							button         :    "lanzadorB2"   // el id del botón que lanzará el calendario
 						    });
 						</script>&nbsp;&nbsp;&nbsp;
-						<input type="button" value="Buscar..." onclick="buscarDatosMatriz()" />
+						<input type="button" value="Buscar..." onclick="buscarDatosMatriz();" />
 					</td>
 				</tr>
 				<tr>

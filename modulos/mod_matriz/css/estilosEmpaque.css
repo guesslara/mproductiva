@@ -97,6 +97,20 @@ html,body,document{position:absolute;margin:0px;height:100%; width:100%; margin:
 	-moz-box-shadow:10px 10px 5px #CCC;
 	filter: shadow(color=#CCC, direction=135,strength=2);
 }
+.tab {
+	border-collapse: separate;
+	border-spacing: 0px;
+}
+.tab th:first-child {
+	-moz-border-radius: 6px 0px 0px 0px;
+	-webkit-border-radius: 6px 0px 0px 0px;
+	border-radius: 6px 0px 0px 0px;
+}
+.tab th:last-child {    
+	-moz-border-radius: 0px 6px 0px 0px;    
+	-webkit-border-radius: 0px 6px 0px 0px;    
+	border-radius: 0px 6px 0px 0px;
+}
 .msgVentanaDialogo{height:92%; overflow:auto;z-index: 22;}
 .divNombre{height:10px;padding:5px;margin-bottom:3px;width: auto;}
 .divNombre:hover{border-left: 1px solid #666;}
