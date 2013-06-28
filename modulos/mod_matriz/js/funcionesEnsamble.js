@@ -19,6 +19,9 @@ function ajaxApp(divDestino,url,parametros,metodo){
 	error:function() { $("#"+divDestino).show().html('<center>Error: El servidor no responde. <br>Por favor intente mas tarde. </center>'); }
 	});
 }
+function arriba(fila){
+	//$("fila").removeClass();
+} 
 function crear(){
 	var noEmpleado=$("#txtBNoEmpleado").val();
 	var fecha1=$("#busquedaRegistro1").val();
@@ -59,12 +62,8 @@ function cambioAj(arrtxs,arrctxs,arrtodo,grupos){
 		dia=mifecha.getDay();
 		for(var i=1;i<txs.length;i++){
 			txsmin=Math.round(ajcp*txs[i])/100;
-			if(j<1)
-				$("#txsm"+i).attr("value",txsmin);
 			res=res+(dato[i]*txsmin);
 			ttxs=Math.round((ctxs[i]*txsmin/60)*100)/100;
-			if(j<1)
-				$("#ttxs"+i).attr("value",ttxs);
 		}
 		t=res/60;
 		$("#"+j+"res"+i).attr("value",Math.round(t));

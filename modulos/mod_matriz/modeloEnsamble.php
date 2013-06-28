@@ -140,26 +140,22 @@
 			$colspan[$i]=count($columnas[$nombre]);
 			$i++;
 		}$i=0;$cadtodo="";$ttxs=array();
-		//print_r($mas);
+		//echo"AKAKAKA $propio<pre>";
+		/*print_r($tresmas);
+		echo"</pre>";*/
 		?>
-		<table border="2" style="text-align: center;" class="tab">
-			<tr>
+		<table id="mytabla" class="tablita" cellspacing="1" cellpadding="1" border="1" style="font-size: 10px;margin: 5px; text-align: center;">
+			<tr class="cabezas">
 				<?foreach($columnas as $nombre => $valor){?>
 				<td colspan="<?=$colspan[$i]?>">
 					<?print $nombre;?>
 				</td>
 				<?$i++;}?>
 			</tr>
-			<tr>
-				<?foreach($columnas as $nombre => $valor){
-					foreach($valor as $status){
-						?><td><?=$status;$cont++;?></td><?
-					}
-				}?>
-			</tr>
+			
 			<?foreach($tresmas as $nombre => $valor){?>
-			<tr>
-				<?for($k=0;$k<$cont;$k++){?>
+			<tr class="cabezitas">
+				<?for($k=0;$k<$propio;$k++){?>
 				<td>
 					<?
 					if($k==0){
@@ -169,14 +165,22 @@
 					}
 					?>
 				</td>
-				<?}if($nombre=="Tiempo x Status"){?>
+				<?}if($nombre=="cant. x Jornada"){?>
 				<td rowspan="2">Total</td>
 				<td rowspan="2">P</td>
 				<td rowspan="2">C</td>
 				<?}?>
-			</tr>
-		<?}for($j=0;$j<$filas;$j++){?>
+			</tr>	
+		<?}?>
 			<tr>
+				<?$cont=0;foreach($columnas as $nombre => $valor){
+					foreach($valor as $status){
+						?><td <?if($cont==0){echo"class='cabezitas'";}else{echo"class='cabezas'";}?>><?=$status;$cont++;?></td><?
+					}
+				}?>
+			</tr>
+		<?for($j=0;$j<$filas;$j++){?>
+			<tr class="enlace">
 			<?for($k=0;$k<($cont+3);$k++){?>
 				<td>
 					<?if($date[$j][$k]==null && $k<$cont){
@@ -232,7 +236,7 @@
 			<input type="hidden" name="txtbx62" id="txtbx62" value="<?=$masttxs;?>">
 			<input type="hidden" name="txtbz62" id="txtbz62" value="<?=$menosttxs;?>">
 			<input type="hidden" name="txtby62" id="txtby62" value="<?=$scrapttxs;?>">
-			<tr>
+			<tr class="enlace">
 				<td>Cantidad Total x Status</td>
 				<?for($k=1;$k<$cont;$k++){?>
 					<td id="res-<?=$k;?>">
@@ -240,7 +244,7 @@
 					</td>
 				<?}?>				
 			</tr>
-			<tr>
+			<tr class="enlace">
 				<td>Tiempo Total x Status</td>
 				<?for($k=1;$k<$cont;$k++){?>
 					<td>
@@ -248,11 +252,11 @@
 					</td>
 				<?}?>	
 			</tr>
-			<tr>
+			<tr class="enlace">
 				<td colspan="<?=$cont?>">Suma del Total</td>
 				<td><input type='text' id='tdlt' name='tdlt' readonly="" value='' style='width: 60px;' /></td>
 			</tr>
-			<tr>
+			<tr class="enlace">
 				<td colspan="<?=$cont?>">Totales del Rango</td>
 				<td><input type='text' id='cont' name='cont' readonly="" value='' style='width: 60px;' /></td>
 				<td><input type='text' id='sump' name='sump' readonly="" value='' style='width: 60px;' /></td>
@@ -722,7 +726,7 @@
 						
 						$meses=array("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
 						//se empiezan a hacer los calculos
-						$diasLaboradorAdmin=$rowCapMes["dias_lab"]-$rowCapMes["dias_li"]+($rowCapMes["tiem_ex"]/$rowCapMes["dias_lab"]);
+						$diasLaboradorAdmin=$rowCapMes["dias_lab"]-$rowCapMes["dias_li"]+($rowCapMes["tiem_ex"]/$rowCapMes["jorna_lab"]);
 						//$diasLaboradosOper=
 						$minutosLaborablesxJornada=(($rowCapMes["jorna_lab"] * 60) * $rowCapMes["meta_pro"]) / 100;
 						$horasLaboradasMes=$rowCapMes["jorna_lab"] * ( $rowCapMes["dias_lab"] + ( $rowCapMes["tiem_ex"] / $rowCapMes["jorna_lab"] ) - $rowCapMes["dias_li"] );
@@ -770,7 +774,7 @@
 						</tr>
 						<tr>
 							<td>Dias Laborados (Admin)</td>
-							<td>&nbsp;<? echo $diasLaboradorAdmin; ?></td>
+							<td>&nbsp;<? echo round($diasLaboradorAdmin,2); ?></td>
 						</tr>
 						<tr>
 							<td>Dias Laborados Operativamente</td>
@@ -891,5 +895,5 @@
 		}
 	}//fin de la clase
 	//$objP=new modeloEnsamble();
-	//$objP->prueba();
+	//$objP->armaDetalleMatriz();
 ?>

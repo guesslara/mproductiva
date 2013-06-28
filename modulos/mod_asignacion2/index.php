@@ -17,10 +17,15 @@
 <script type="text/javascript" src="../../recursos/grid/grid.js"></script>
 <link rel="stylesheet" type="text/css" href="../../recursos/grid/grid.css" />
 <!--fin inclusion grid-->
+<link rel="stylesheet" type="text/css" media="all" href="js/calendar-green.css"  title="win2k-cold-1" />
+<link rel="stylesheet" type="text/css" media="all" href="css/estilos.css" />  
+<script type="text/javascript" src="js/calendar.js"></script><!-- librería principal del calendario -->  
+<script type="text/javascript" src="js/calendar-es.js"></script><!-- librería para cargar el lenguaje deseado -->   
+<script type="text/javascript" src="js/calendar-setup.js"></script><!-- librería que declara la función Calendar.setup, que ayuda a generar un calendario en-->
 <script type="text/javascript">
 	$(document).ready(function(){
 		redimensionar();
-		listarProyectos();
+		listarProyectos('<?=$_SESSION[$txtApp['session']['idUsuario']];?>','consulta');
 		//mostrarFormMetrica(9);
 	});
 	
@@ -65,7 +70,7 @@
 		</div>
 		<div id="infoEnsamble3">
 			<div id="contenido1" style="float: left;border:1px solid #e1e1e1;background:#fff; height:95%;width:32%;font-size:12px;margin:3px;">
-				<div class="tituloDivNuevo">Proyectos <div style="float: right;margin-right: 3px;margin-top: 3px;">Nuevo Proyecto</div></div>
+				<div class="tituloDivNuevo">Proyectos</div><!-- <div style="float: right;margin-right: 3px;margin-top: 3px;">Nuevo Proyecto</div>-->
 				<div id="contenido11" style="overflow: auto;"></div>
 			</div>
 			<div id="contenido2" style="float: left;border:1px solid #e1e1e1;background:#fff; height:95%;width:32%;font-size:12px;margin:3px;">
