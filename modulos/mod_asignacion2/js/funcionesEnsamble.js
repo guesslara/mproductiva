@@ -399,7 +399,7 @@ function formActPry(idProyecto,idUsuario){
 	$("#contenidoFormularioOpciones").html("");	
 	ajaxApp("contenidoFormularioOpciones","controladorEnsamble.php","action=formActPry&idProyecto="+idProyecto+"&idUsuario="+idUsuario,"POST");
 }
-function ActualizarProyecto(idProyecto,idUsuario){
+function ActualizarProyecto(idProyecto,idUsuario,statActual){
 	var nombre=$("#nomPryA").val();
 	var fechaInicio=$("#fechaInicioA").val();
 	var fechaFin=$("#fechaFinA").val();
@@ -410,6 +410,6 @@ function ActualizarProyecto(idProyecto,idUsuario){
 	if(nombre=="" || stat==""|| pais==""||descPry==""){
 		alert("Error debe llenar todos los campos");
 	}else{
-		ajaxApp("nuevoProyecto","controladorEnsamble.php","action=ActualizarProyecto&nombre="+nombre+"&descPry="+descPry+"&fechaInicio="+fechaInicio+"&fechaFin="+fechaFin+"&stat="+stat+"&pais="+pais+"&obsPry="+obsPry+"&idUsuario="+idUsuario+"&idProyecto="+idProyecto,"POST");
+		ajaxApp("nuevoProyecto","controladorEnsamble.php","action=ActualizarProyecto&nombre="+nombre+"&descPry="+descPry+"&fechaInicio="+fechaInicio+"&fechaFin="+fechaFin+"&stat="+stat+"&pais="+pais+"&obsPry="+obsPry+"&idUsuario="+idUsuario+"&idProyecto="+idProyecto+"&statActual="+statActual,"POST");
 	}	
 }

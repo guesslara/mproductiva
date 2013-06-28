@@ -5,6 +5,8 @@ html,body,document{position:absolute;margin:0px;height:100%; width:100%; margin:
 #barraOpcionesEnsamble{height:33px;padding:5px;background:#f0f0f0;border:1px solid #CCC;}
 .opcionesEnsamble{border:1px solid #000;background:#FFF;height:20px;padding:5px;width:100px;text-align:center;float:left;margin-left:3px;font-size: 10px;}
 .opcionesEnsamble:hover{background:#e1e1e1;cursor:pointer;}
+.opcionesEnsambleter{border:1px solid #FF0000;color:black;background:#F5A9BC;height:20px;padding:5px;width:140px;text-align:center;float:left;margin-left:3px;font-size: 10px;}
+.opcionesEnsambleter:hover{background:#F8E0E6;cursor:pointer;}
 .ventanaEnsambleContenido{background:#fff;border:1px solid #CCC;overflow:auto; float:left;}
 #barraInferiorEnsamble{height:33px;padding:5px;background:#f0f0f0;border:1px solid #CCC;}
 #opcionFlex{border:1px solid #CCC;font-size:12px;font-weight:bold;background:#FFF;height:20px;padding:5px;width:100px;text-align:center;float:left;margin-left:3px;}

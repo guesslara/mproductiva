@@ -568,9 +568,8 @@
 			$status="Activo";
 
 ?>
-		<?if($idUsuario==1||$idUsuario==0){?>
-			<div id="barraA" style="height: 36px;background: #666;padding: 3px;">
-				<div class="opcionesEnsamble" onclick="listarActividades('<?=$id_proceso;?>','consulta','<?=$idUsuario?>')" title="Consultar Actividad">Consultar Actividad</div>				
+		<?if($idUsuario==1 && $opt=="consulta"||$idUsuario==0 && $opt=="consulta"){?>
+			<div id="barraA" style="height: 36px;background: #666;padding: 3px;">				
 				<div class="opcionesEnsamble" onclick="nuevaActividad('<?=$id_proceso;?>','<?=$idUsuario?>');" title="Nuevo">Nueva Actividad</div>				
 				<div class="opcionesEnsamble" onclick="listarActividades('<?=$id_proceso;?>','modifica','<?=$idUsuario?>')" title="Modifica Actividad">Modificar Actividad</div>				
 			</div>
@@ -580,11 +579,21 @@
 			<div style="clear: both;"></div>
 			<div style="height: 15px;padding: 5px;font-size: 12px;text-align: left;margin-bottom: 5px;">Actividades del Proceso: <strong><?=$rowProc["nom_proceso"];?></strong></div>
 			<div style="height: 15px;padding: 5px;font-size: 12px;text-align: center;margin-bottom: 5px;"><strong><?=strtoupper($opt);?> ACTIVIDADES</strong></div>
+			<?if($opt=="modifica"){
+			?><div id="barraTer" style="height: 36px;background: #fff;padding: 3px;clear:both;">
+					<div class="opcionesEnsambleter" onclick="listarActividades('<?=$id_proceso;?>','consulta','<?=$idUsuario?>')" title="Consultar Actividad">Terminar Edición</div>	
+			</div>
+			<?}?>
 			<div id="nuevaActividad" style="border: 1px solid #CCC;margin: 3px;background: #f0f0f0;margin-bottom: 10px;"></div>
 			
 <?
 			//echo $sqlConsult="SELECT * FROM SAT_ACTIVIDAD where id_proceso='".$id_proceso."' AND status='".$status."'";
-			$sqlConsult="SELECT * FROM SAT_ACTIVIDAD INNER JOIN SAT_PRODUCTO ON SAT_ACTIVIDAD.id_producto = SAT_PRODUCTO.id_producto WHERE id_proceso = '".$id_proceso."' AND STATUS = '".$status."'";
+			if($opt=="consulta"){
+				$sqlConsult="SELECT * FROM SAT_ACTIVIDAD INNER JOIN SAT_PRODUCTO ON SAT_ACTIVIDAD.id_producto = SAT_PRODUCTO.id_producto WHERE id_proceso = '".$id_proceso."' AND STATUS = '".$status."'";				
+			}
+			else{
+				$sqlConsult="SELECT * FROM SAT_ACTIVIDAD INNER JOIN SAT_PRODUCTO ON SAT_ACTIVIDAD.id_producto = SAT_PRODUCTO.id_producto WHERE id_proceso = '".$id_proceso."'";
+			}
 			$resulta=@mysql_query($sqlConsult,$this->conectarBd()) or die(mysql_error());
 			if(mysql_num_rows($resulta)==0){
 				   echo "<br>( 0 ) Registros encontrados.<br>";
@@ -674,21 +683,31 @@
 			$sqlP="SELECT * FROM SAT_PROYECTO WHERE id_proyecto='".$id_proyecto."'";//se extrae el nombre del proyecto
 			$resP=mysql_query($sqlP,$this->conectarBd());
 			$rowP=mysql_fetch_array($resP);
-			$sqlConsult="SELECT * FROM SAT_PROCESO where id_proyecto='".$id_proyecto."' AND status='".$status."'";
+			if($optPc=="consulta"){
+				$sqlConsult="SELECT * FROM SAT_PROCESO where id_proyecto='".$id_proyecto."' AND status='".$status."'";
+			}else{
+				$sqlConsult="SELECT * FROM SAT_PROCESO where id_proyecto='".$id_proyecto."'";
+			}
 			$resulta=@mysql_query($sqlConsult,$this->conectarBd()) or die(mysql_error());
-			if($idUsuario==1||$idUsuario==0){
+			if($idUsuario==1 && $optPc=="consulta" ||$idUsuario==0 && $optPc=="consulta" ){
 ?>
-			<div id="barraA" style="height: 36px;background: #666;padding: 3px;">
-				<div class="opcionesEnsamble" onclick="limpiaconDiv('contenido13');listarProcesos('<?=$id_proyecto;?>','<?=$idUsuario?>','consulta')" title="Consultar">Consultar Proceso</div>	
+			<div id="barraAPc" style="height: 36px;background: #666;padding: 3px;display:block">
 				<div class="opcionesEnsamble" onclick="limpiaconDiv('contenido13');nuevoProceso('<?=$id_proyecto;?>','<?=$idUsuario?>')" title="Nuevo">Nuevo Proceso</div>				
 				<div class="opcionesEnsamble" onclick="limpiaconDiv('contenido13');listarProcesos('<?=$id_proyecto;?>','<?=$idUsuario?>','modifica')" title="Modificar">Modificar Proceso</div>	
 			</div>
 			<?}?>
+			<div style="clear: both;"></div>
 			<div style="height: 15px;padding: 5px;font-size: 12px;text-align: left;margin-bottom: 5px;">Procesos del proyecto: <strong><?=$rowP["nom_proyecto"];?></strong></div>
 			<input type="hidden" name="hdntxtAccion" id="hdntxtAccion" value="procesos">
 			<input type="hidden" name="hdntxtValor" id="hdntxtValor" value="<?=$id_proyecto;?>">
 			<div style="clear: both;"></div>	
 			<div id="tituloHacer" style="height:15px; width:98%;font-size:12px;text-align:center;margin-button:5px;clear:both;font-weight: bold;"><?=strtoupper($optPc);?> PROCESOS</div>			
+			<?
+			if($optPc=="modifica"){
+				?><div id="barraTer" style="height: 36px;background: #fff;padding: 3px;clear:both;text-align:center;">
+					<div class="opcionesEnsambleter" onclick="limpiaconDiv('contenido13');listarProcesos('<?=$id_proyecto;?>','<?=$idUsuario?>','consulta')" title="Consultar">Terminar Edición</div>	
+			</div>
+			<?}?>
 			<div id="nuevoProceso" style="border: 1px solid #CCC;margin: 3px;background: #f0f0f0;margin-bottom: 10px;"></div>	
 <?
 			if(mysql_num_rows($resulta)==0){
@@ -742,18 +761,28 @@
 		}
 		
 		public function listarProyectos($idUsuario,$opProy){
-			$sqlConsult="SELECT * FROM SAT_PROYECTO INNER JOIN SAT_PAIS ON SAT_PROYECTO.id_pais = SAT_PAIS.id_pais WHERE SAT_PROYECTO.status = 'Activo' ORDER BY id_proyecto DESC";
+			if($opProy=='consulta'){
+				$sqlConsult="SELECT * FROM SAT_PROYECTO INNER JOIN SAT_PAIS ON SAT_PROYECTO.id_pais = SAT_PAIS.id_pais WHERE SAT_PROYECTO.status = 'Activo' ORDER BY id_proyecto DESC";	
+			}else{
+				$sqlConsult="SELECT * FROM SAT_PROYECTO INNER JOIN SAT_PAIS ON SAT_PROYECTO.id_pais = SAT_PAIS.id_pais ORDER BY id_proyecto DESC";
+			}
+			
 			$resulta=@mysql_query($sqlConsult,$this->conectarBd()) or die(mysql_error());
-			if($idUsuario==1||$idUsuario==0){
+			if($idUsuario==1 && $opProy=="consulta"||$idUsuario==0 && $opProy=="consulta"){
 ?>
-			<div id="barraA" style="height: 36px;background: #666;padding: 3px;">
-				<div class="opcionesEnsamble" onclick="limpiaDivs('contenido12','contenido13');listarProyectos('<?=$idUsuario?>','consulta')" title="Consultar">Consultar Proyecto</div>	
+			<div id="barraAPry" style="height: 36px;background: #666;padding: 3px;display:block;">
 				<div class="opcionesEnsamble" onclick="limpiaDivs('contenido12','contenido13');nuevoProyecto('<?=$idUsuario?>')" title="Nuevo">Nuevo Proyecto</div>				
-				<div class="opcionesEnsamble" onclick="limpiaDivs('contenido12','contenido13');listarProyectos('<?=$idUsuario?>','modifica')" title="Modificar">Modificar Proyecto</div>	
-			</div>
+				<div class="opcionesEnsamble" onclick="limpiaDivs('contenido12','contenido13');listarProyectos('<?=$idUsuario?>','modifica');" title="Modificar">Modificar Proyecto</div>	
+			</div><?}?>
 			<div id="tituloHacer" style="height:15px; width:98%;font-size:12px;text-align:center;margin-button:5px;clear:both;font-weight: bold;"><?=strtoupper($opProy);?> PROYECTOS</div>			
 			<div id="nuevoProyecto" style="border: 1px solid #CCC;margin: 3px;background: #f0f0f0;margin-bottom: 10px;"></div>	
-			<?}
+			<?
+			if($opProy=="modifica"){
+				?><div id="barraTer" style="height: 36px;background: #fff;padding: 3px;clear:both;">
+					<div class="opcionesEnsambleter" onclick="limpiaDivs('contenido12','contenido13');listarProyectos('<?=$idUsuario?>','consulta')" title="Consultar">Terminar Edición</div>	
+			</div>
+				<?
+			}
 			if(mysql_num_rows($resulta)==0){
 				   echo "<br>( 0 ) Registros encontrados.<br>";
 			}else{
@@ -1219,7 +1248,7 @@
 				<tr>
 					<td>Status:</td>
 					<td><select name="statA" id="statA" style="width:200px; font-size:15px;">
-						<option value="<?=$fetPry["status"]?>"><?=$fetPry["fecha_inicio"]?></option>
+						<option value="<?=$fetPry["status"]?>"><?=$fetPry["status"]?></option>
 						<option value="Activo">Activo</option>
 						<option value="Inactivo">Inactivo</option>
 					</select></td>
@@ -1255,7 +1284,7 @@
 				</tr>
 				<tr>
 					<td style="text-align: right" colspan=2>
-						<input type="button" onclick="cancelarCapturaProceso()" value="Cancelar"><input type="button" onclick="ActualizarProyecto('<?=$idProyecto?>','<?=$idUsuario;?>')" value="Actualizar Proyecto">
+						<input type="button" onclick="cancelarCapturaProceso()" value="Cancelar"><input type="button" onclick="ActualizarProyecto('<?=$idProyecto?>','<?=$idUsuario;?>','<?=$fetPry['status']?>')" value="Actualizar Proyecto">
 					</td>
 				</tr>
 				<tr>
@@ -1265,12 +1294,39 @@
 <?
 		}
 
-		public function ActualizarProyecto($nomPry,$descPry,$fechaIni,$fechaFin,$pais,$stat,$obsPry,$idUsuario,$idProyecto){
+		public function ActualizarProyecto($nomPry,$descPry,$fechaIni,$fechaFin,$pais,$stat,$obsPry,$idUsuario,$idProyecto,$statActual){
 			$actPry="UPDATE SAT_PROYECTO SET nom_proyecto='".$nomPry."', descripcion='".$descPry."',fecha_inicio='".$fechaIni."',fecha_fin='".$fechaFin."',status='".$stat."',id_pais='".$pais."',observaciones='".$obsPry."' WHERE id_proyecto='".$idProyecto."'";
 			$exeActPry=mysql_query($actPry,$this->conectarBd());
 			if($exeActPry==false){
 				?><script type="text/javascript">alert("El proyecto no pudo ser actualizado");cancelarCapturaProceso();listarProyectos('<?=$idUsuario?>','consulta');</script><?
 			}else{
+				if($statActual!=$stat){
+					if($stat=="Activo"){
+						$msj="Activado";
+					}else{$msj="Desactivado";}
+						$consPrc="SELECT * FROM SAT_PROCESO WHERE id_proyecto='".$idProyecto."'";
+						$exeConPrc=mysql_query($consPrc,$this->conectarBd());
+						$cuentaProcesos=mysql_num_rows($exeConPrc);
+						if($cuentaProcesos>0){
+							$actuaStatProc="UPDATE SAT_PROCESO SET status='".$stat."' WHERE id_proyecto='".$idProyecto."'";
+							print($actuaStatProc);
+							$exeAcSPc=mysql_query($actuaStatProc,$this->conectarBd());
+							if($exeAcSPc==true){
+								$aPc=array();
+								while($rowPc=mysql_fetch_array($exeConPrc)){
+									array_push($aPc, $rowPc["id_proceso"]);
+								}
+								$idProcesos=implode(",", $aPc);
+								$actStatAct="UPDATE SAT_ACTIVIDAD SET status='".$stat."' where id_proceso in ($idProcesos)";
+								$exeASa=mysql_query($actStatAct,$this->conectarBd());
+								if($exeASa==true){
+									?><script type="text/javascript">alert("Se han <?=$msj?> los Procesos y Actividades derivados del Proyecto <?=$nomPry?>");</script><?
+								}
+
+							}
+						}
+					
+				}
 				?><script type="text/javascript">alert("Proyecto modificado con exito");cancelarCapturaProceso();listarProyectos('<?=$idUsuario?>','consulta');</script><?				
 			}
 		}

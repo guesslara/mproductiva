@@ -50,29 +50,29 @@ function cambioAj(arrtxs,arrctxs,arrtodo,grupos){
 	bz61=bz61*(-1);
 	bz62=bz62*(-1);
 	rendi=100-(((by62+bz62)/bx62)*100);
-	$("#rendi").attr("value","%"+(Math.round(rendi)));
+	$("#rendi").attr("value",(Math.round(rendi))+" %");
 	scrapxr=(by61/bx61)*100;
-	$("#scrapxr").attr("value","%"+(Math.round(scrapxr)));
+	$("#scrapxr").attr("value",(Math.round(scrapxr))+" %");
 	rechazoxr=(bz61/bx61)*100;
-	$("#rechazoxr").attr("value","%"+(Math.round(rechazoxr)));
+	$("#rechazoxr").attr("value",(Math.round(rechazoxr))+" %");
 	for(var j=0; j<(linea.length-1);j++){
 		var dato=linea[j].split(",");
-		fecha=dato[0].split("-");
+		fecha=dato[1].split("-");
 		mifecha=new Date(fecha[0],(fecha[1]-1),fecha[2]);
 		dia=mifecha.getDay();
 		for(var i=1;i<txs.length;i++){
 			txsmin=Math.round(ajcp*txs[i])/100;
-			res=res+(dato[i]*txsmin);
+			res=res+(dato[i+1]*txsmin);
 			ttxs=Math.round((ctxs[i]*txsmin/60)*100)/100;
 		}
 		t=res/60;
 		$("#"+j+"res"+i).attr("value",Math.round(t));
 		sumt=sumt+t;
 		p=Math.round((t/jorlab)*100);
-		$("#"+j+"res"+(i+1)).attr("value","% "+p);
+		$("#"+j+"res"+(i+1)).attr("value",p+" %");
 		sump=sump+p;
 		c=Math.round((p/meta)*100);
-		$("#"+j+"res"+(i+2)).attr("value","% "+c);
+		$("#"+j+"res"+(i+2)).attr("value",c+" %");
 		sumc=sumc+c;
 		if(t!=0)
 			cont++;
@@ -85,20 +85,20 @@ function cambioAj(arrtxs,arrctxs,arrtodo,grupos){
 	}
 	if(hrsext!=0){
 		te=(((hrsext/meta)*100)/HdnTiempoExtra)*100;
-		$("#te").attr("value","%"+(Math.round(te)));
+		$("#te").attr("value",(Math.round(te))+" %");
 	}
 	if(cont>0){
 		$("#tdlt").attr("value",Math.round(sumt*100)/100);
-		$("#sumc").attr("value","%"+(Math.round(sumc/cont)));
-		$("#sump").attr("value","%"+(Math.round(sump/cont)));
-		$("#pxd").attr("value","%"+(Math.round(sump/cont)));
+		$("#sumc").attr("value",(Math.round(sumc/cont))+" %");
+		$("#sump").attr("value",(Math.round(sump/cont))+" %");
+		$("#pxd").attr("value",(Math.round(sump/cont))+" %");
 		$("#cont").attr("value",cont);
 	}
 	var labxMes=parseInt($("#txtHlabxMes").val());
 	pxm=(sumt/labxMes)*100;
-	$("#pxm").attr("value","%"+Math.round(pxm));
+	$("#pxm").attr("value",Math.round(pxm)+" %");
 	cumpli=(pxm/meta)*100;
-	$("#cumpli").attr("value","%"+Math.round(cumpli));
+	$("#cumpli").attr("value",Math.round(cumpli)+" %");
 	return 1;
 }
 function abrir(div,opcion){

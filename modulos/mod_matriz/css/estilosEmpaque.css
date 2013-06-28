@@ -128,7 +128,18 @@ table{
 	white-space: nowrap;
 	font-family: verdana,arial,helvetica,sans-serif;
 }
-tr.enlace {
+col:nth-child(2n+1) {
+background:  #F5F8FA;
+}
+col:hover:nth-child(2n+1){
+background:  #FFFFFF;
+}
+tr.cabeza:hover {
+	text-decoration: none;
+	background: #77AADD;
+}
+tr.cabeza {
+	background: #A7E2FB;
 	color: #0000D9;
 	width: 100%;
 	height: 100%;
@@ -137,6 +148,12 @@ tr.enlace {
 tr.enlace:hover {
 	text-decoration: none;
 	background: #77AADD;
+}
+tr.enlace {
+	color: #0000D9;
+	width: 100%;
+	height: 100%;
+	text-decoration: none;
 }
 .ultimas{
 	background: #6F6FBA;

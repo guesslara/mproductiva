@@ -18,7 +18,6 @@
 				return $link;
 			}				
 		}
-		
 		public function conectar_cat_personal(){
 			require("../../includes/config.inc.php");
 			$conexion=@mysql_connect($host,$usuario,$pass) or die ("no se pudo conectar al servidor<br>".mysql_error());
@@ -39,6 +38,7 @@
 		$fecha = explode('-',$fecha_fin);
 		$fecha_fin1 = mktime(23,59,59,$fecha[1],$fecha[2],$fecha[0]);
 		$filas=round(abs(($fecha_fin1-$fecha_inicio1)/(60 * 60 * 24)));
+		$dias=array(0=>"Domingo", 1=>"Lunes", 2=>"Martes", 3=>"Miercoles", 4=>"Jueves", 5=>"Viernes", 6=>"Sabado");
 		for($q=0;$q<$filas;$q++)
 			$date[$q][0]=date("Y-m-d", mktime(0,0,0,$fecha1[1],$fecha1[2]+$q,$fecha1[0]));
 		$cont=1;$poper=0;$sumaH=0;$sumaV=0;$operador=array();$x=1;$scrap=array();$mas=array();$menos=array();
@@ -50,7 +50,7 @@
 		$resResp=mysql_query($CabezaAct,$this->conectarBd());
 		$stat=array();$au=1;$act=0;$propio=1;
 		$columnas=array();$txs=array();
-		$columnas['']=array('Fecha');
+		$columnas['']=array('Fecha/Status');
 		while($rowResp=mysql_fetch_array($resResp)){
 			$CabezaStatus="SELECT SAT_STATUS.nom_status, ACTIVIDAD_STATUS.operador, ACTIVIDAD_STATUS.tiempo
 				FROM ACTIVIDAD_STATUS
@@ -140,11 +140,16 @@
 			$colspan[$i]=count($columnas[$nombre]);
 			$i++;
 		}$i=0;$cadtodo="";$ttxs=array();
-		//echo"AKAKAKA $propio<pre>";
-		/*print_r($tresmas);
+		/*echo"<pre>";
+		print_r($date);
 		echo"</pre>";*/
+		for($q=0;$q<$filas;$q++){
+			$dia=date("w", mktime(0,0,0,$fecha1[1],$fecha1[2]+$q,$fecha1[0]));
+			$date[$q][0]=$dias[$dia].", ".date("Y-m-d", mktime(0,0,0,$fecha1[1],$fecha1[2]+$q,$fecha1[0]));
+		}
 		?>
 		<table id="mytabla" class="tablita" cellspacing="1" cellpadding="1" border="1" style="font-size: 10px;margin: 5px; text-align: center;">
+			<col><col><col><col><col><col><col><col><col><col><col><col>
 			<tr class="cabezas">
 				<?foreach($columnas as $nombre => $valor){?>
 				<td colspan="<?=$colspan[$i]?>">
@@ -179,8 +184,9 @@
 					}
 				}?>
 			</tr>
-		<?for($j=0;$j<$filas;$j++){?>
-			<tr class="enlace">
+		<?for($j=0;$j<$filas;$j++){
+			$dpc=explode(",",$date[$j][0]);?>
+			<tr <?if($dpc[0]=="Sabado" || $dpc[0]=="Domingo"){echo"class='cabeza'";}else{echo"class='enlace'";}?>>
 			<?for($k=0;$k<($cont+3);$k++){?>
 				<td>
 					<?if($date[$j][$k]==null && $k<$cont){

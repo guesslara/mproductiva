@@ -106,7 +106,7 @@
 			$objAsig->formActPry($_POST["idProyecto"],$_POST["idUsuario"]);                                                                                                              
 		break;
 		case "ActualizarProyecto":
-			$objAsig->ActualizarProyecto($_POST["nombre"],$_POST["descPry"],$_POST["fechaInicio"],$_POST["fechaFin"],$_POST["pais"],$_POST["stat"],$_POST["obsPry"],$_POST["idUsuario"],$_POST["idProyecto"]);
+			$objAsig->ActualizarProyecto($_POST["nombre"],$_POST["descPry"],$_POST["fechaInicio"],$_POST["fechaFin"],$_POST["pais"],$_POST["stat"],$_POST["obsPry"],$_POST["idUsuario"],$_POST["idProyecto"],$_POST["statActual"]);
 		break;
 
 	}
